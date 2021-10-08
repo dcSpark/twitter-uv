@@ -1,0 +1,24 @@
+{
+  "name": "urbit-visor-twitter-extension",
+  "version": "0.1.0",
+  "description": "Browser Extension to provide Urbit Visor integration to Twitter.com",
+  "scripts": {
+    "build": "esbuild src/content.ts --bundle --outfile=out.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "urbit",
+    "twitter",
+    "urbit-visor"
+  ],
+  "author": "dcSpark.io",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/chrome": "0.0.158",
+    "typescript": "^4.4.3"
+  },
+  "dependencies": {
+    "esbuild": "^0.13.4",
+    "urbit-visor-utils": "file:../library"
+  }
+}
