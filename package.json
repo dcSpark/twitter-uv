@@ -1,8 +1,9 @@
 {
   "name": "urbit-visor-twitter-extension",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Browser Extension to provide Urbit Visor integration to Twitter.com",
   "scripts": {
+    "start": "esbuild src/content.ts --outfile=out.js --bundle --watch",
     "build": "esbuild src/content.ts --bundle --outfile=out.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -18,7 +19,11 @@
     "typescript": "^4.4.3"
   },
   "dependencies": {
+    "@dcspark/uv-core": "^0.2.9",
     "esbuild": "^0.13.4",
-    "urbit-visor-utils": "file:../library"
+    "html2canvas": "^1.3.2",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "uv-components": "file:../urbit-visor/uv-components"
   }
 }
