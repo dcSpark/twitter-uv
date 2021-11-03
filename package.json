@@ -21,9 +21,7 @@
   "dependencies": {
     "@dcspark/uv-core": "^0.2.9",
     "esbuild": "^0.13.4",
-    "html2canvas": "^1.3.2",
     "react": "^17.0.2",
-    "react-dom": "^17.0.2",
-    "uv-components": "file:../urbit-visor/uv-components"
+    "react-dom": "^17.0.2"
   }
 }
