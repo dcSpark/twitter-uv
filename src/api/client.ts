@@ -84,6 +84,10 @@ function scrubURLS(entities: any): URL[] {
   entities.urls.forEach(m => list.push(new URL(m.url)));
   if (entities.media) entities.media.forEach(m => list.push(new URL(m.url)));
   return list
+};
+
+function addFullURL(entities: any){
+  return `\n${entities.urls.reduce((acc, item) => acc + item.expanded_url, "")}\n`
 }
 
 export async function getThread(id: string) {
@@ -98,7 +102,7 @@ function processThread(data: any): Tweet {
   else {
     console.log(data, "tweet")
     const tweet = data.legacy;
-    const time = translateDate(tweet.created_at);
+    const time = dateString(translateDate(tweet.created_at));
     const author = processAuthor(data.core.user.legacy);
     const pics = findPics(tweet.entities);
     console.log(pics, "pics")
@@ -106,23 +110,23 @@ function processThread(data: any): Tweet {
     console.log(video, "video")
     const redundant_urls = scrubURLS(tweet.entities);
     console.log(redundant_urls, "redundant_urls")
-    const text = redundant_urls.reduce((acc, i) => acc.replace(i, "").trim(), tweet.full_text);
+    const text = (redundant_urls.reduce((acc, i) => acc.replace(i, "").trim(), tweet.full_text)) + addFullURL(tweet.entities);
     console.log(text, "text")
     // some quotes are "disabled" so they only show as urls on tweet.quoted_status_permalink
     const quote = processThread(data?.quoted_status_result?.result);
     console.log(quote, "quote")
     const poll = processPoll(data?.card?.legacy);
     console.log(poll, "poll")
-    return { time: time, author: author, pics: pics, video: video, text: text, quote: quote, poll: poll }
+    return { index: parseInt(tweet.id_str), time: time, author: author, pics: pics, video: video, text: text, quote: quote, poll: poll }
   }
-}
+};
 function processAuthor(user: any): TweetAuthor{
   return {
     name: user.name,
     handle: user.screen_name,
     avatar: new URL(user.profile_image_url_https)
   }
-}
+};
 
 function processPoll(poll: any): Poll{
   console.log(poll, "poll")
@@ -135,24 +139,25 @@ function processPoll(poll: any): Poll{
       return Object.assign(acc, obj);
     }, {});
   }
-}
+};
 
 export interface Tweet { 
-  time: Date, 
+  time: string, 
   author: TweetAuthor, 
   pics: URL[], 
   video: URL, 
   text: string, 
   quote: Tweet, 
-  poll: Poll 
-}
+  poll: Poll,
+  index: number 
+};
 
 interface TweetAuthor {
   name: string,
   handle: string,
   avatar: URL
-}
-interface Poll{
+};
+export interface Poll{
   card_url: string,
   api: string,
   last_updated_datetime_utc: string,
@@ -163,8 +168,11 @@ interface Poll{
   choice2_label: string,
   choice2_count: string,
   choice3_label?: string,
-  choice3_counts?: string,
+  choice3_count?: string,
   choice4_label?: string,
-  choice4_counts?: string
-  
-}
+  choice4_count?: string
+};
+
+function dateString(date: Date){
+  return date.toLocaleString()
+};

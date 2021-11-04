@@ -22,6 +22,7 @@
     "@dcspark/uv-core": "^0.2.9",
     "esbuild": "^0.13.4",
     "react": "^17.0.2",
-    "react-dom": "^17.0.2"
+    "react-dom": "^17.0.2",
+    "urbit-ob": "^5.0.1"
   }
 }
