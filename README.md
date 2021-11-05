@@ -17,5 +17,6 @@ Click on a channel and it will post the tweet URL to the channel.
 ## Develop
 This is a very bare-bones setup, no background script, no popup page, just a content script injecting code to twitter.com
 At present we're using esbuild to build the extension.
-No live-reload, after any changes run `npm run build` and reload the extension as the browser menu.
+Run `npm start` to start a dev server and build the extension, add the root folder to your chrome extensions.
+Remember to reload the extension at your extensions page, then reload the Twitter.com after any update.
 esbuild doesn't check types, run `tsc --noemit` for that.
