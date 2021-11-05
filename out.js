@@ -27104,7 +27104,7 @@ ${entities.urls.reduce((acc, item) => acc + item.expanded_url, "")}
     const node = {};
     const point = (0, import_urbit_ob.patp2dec)(recipient);
     console.log(point, "point");
-    const index = `/${point}/9`;
+    const index = `/${point}/${makeIndex()}`;
     node[index] = {
       children: null,
       post: {
@@ -27126,6 +27126,12 @@ ${entities.urls.reduce((acc, item) => acc + item.expanded_url, "")}
         }
       }
     };
+  }
+  function makeIndex() {
+    const DA_UNIX_EPOCH = BigInt("170141184475152167957503069145530368000");
+    const DA_SECOND = BigInt("18446744073709551616");
+    const timeSinceEpoch = BigInt(Date.now()) * DA_SECOND / BigInt(1e3);
+    return (DA_UNIX_EPOCH + timeSinceEpoch).toString();
   }
 
   // src/react/Channels.tsx
