@@ -27252,8 +27252,10 @@ ${entities.urls.reduce((acc, item) => acc + item.expanded_url, "")}
     function unselect(key) {
       const newlist = selected.filter((k) => !(k.group === key.group && k.name === key.name));
       setSelected(newlist);
-      setOptions([...options, key]);
-      setChannels([...channels, key]);
+      if (key.group !== "DM") {
+        setOptions([...options, key]);
+        setChannels([...channels, key]);
+      }
     }
     const containerStyles = {
       display: "flex",

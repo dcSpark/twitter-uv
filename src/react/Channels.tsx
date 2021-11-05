@@ -141,8 +141,8 @@ export function ChannelSelectBox({ payload }: ChannelBoxProps) {
     }
 
     function select(key) {
-        const newchans = channels.filter(k => !(k.group === key.group &&　k.name === key.name));
-        const newlist = options.filter(k => !(k.group === key.group &&　k.name === key.name));
+        const newchans = channels.filter(k => !(k.group === key.group && k.name === key.name));
+        const newlist = options.filter(k => !(k.group === key.group && k.name === key.name));
         setChannels(newchans);
         setOptions(newlist);
         setDM(null);
@@ -153,8 +153,10 @@ export function ChannelSelectBox({ payload }: ChannelBoxProps) {
     function unselect(key) {
         const newlist = selected.filter(k => !(k.group === key.group && k.name === key.name));
         setSelected(newlist);
-        setOptions([...options, key]);
-        setChannels([...channels, key]);
+        if (key.group !== "DM") {
+            setOptions([...options, key]);
+            setChannels([...channels, key]);
+        }
     }
 
     const containerStyles = {
@@ -191,7 +193,7 @@ export function ChannelSelectBox({ payload }: ChannelBoxProps) {
                     <p>
                         {dm && "Send DM to:"}
                     </p>
-                    {dm && <p onClick={()=> select(dm)} style={keyStyles}>{dm.name}</p>}
+                    {dm && <p onClick={() => select(dm)} style={keyStyles}>{dm.name}</p>}
                 </div>
                 {filtering && <p>Filtering channels...</p>}
             </div>
