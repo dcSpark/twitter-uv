@@ -5,8 +5,8 @@
       "noEmitOnError": true,
       "removeComments": false,
       "sourceMap": true,
-      "target": "es6",
-      "module": "es6",
+      "target": "esnext",
+      "module": "esnext",
       "moduleResolution": "node",
       "allowSyntheticDefaultImports": true,
       "outDir": "dist"

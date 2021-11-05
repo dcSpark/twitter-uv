@@ -14,7 +14,7 @@ function Welcome(){
       padding: "1rem"
     }
     async function requestPerms(): Promise<void>{
-        await urbitVisor.requestPermissions(["scry", "subscribe", "shipName"]);
+        await urbitVisor.requestPermissions(["shipName","scry", "subscribe", "poke"]);
     }
     return (
         <div style={styles}>

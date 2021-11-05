@@ -1,8 +1,7 @@
 import React from 'react';
-import ReactDOM from "react-dom";
 import { useState, useEffect, useRef } from "react";
 import { urbitVisor } from "@dcspark/uv-core";
-
+import { liveCheckPatp, addDashes, buildDM, buildPost } from "../utils/utils";
 interface UrbitKey {
     ship: string,
     name: string
@@ -14,6 +13,9 @@ interface UrbitChannel {
     ship: string,
     name: string
 }
+
+
+
 const bg = "rgb(25,35,31)"
 const lightbg = "rgb(35,45,41)"
 const borderColor = "rgb(40,51,45)"
@@ -39,117 +41,188 @@ function referenceMetadata(channel: any, metadata: any): UrbitChannel {
 }
 
 interface ChannelBoxProps {
-    buttonName: string,
-    buttonLogic: (data: any) => void
+    payload: string
 }
 
-export function ChannelSelectBox(props: ChannelBoxProps){
+export function ChannelSelectBox({ payload }: ChannelBoxProps) {
 
-    async function scry(){
-      const keys = await urbitVisor.scry({app: "graph-store", path: "/keys"});
+
+    useEffect(() => {
+        readMetadata();
+    }, []);
+
+    async function readMetadata() {
+        let sub: number;
+        setLoading(true)
+        const subscription = urbitVisor.on("sse", ["metadata-update", "associations"], async (data: any) => {
+            const shipName = await urbitVisor.getShip();
+            console.log(shipName, "ship");
+            setShip(shipName.response);
+            const keys = await urbitVisor.scry({ app: "graph-store", path: "/keys" });
+            setLoading(false)
+            const list = keys.response["graph-update"].keys.map((channel: any) => referenceMetadata(channel, data));
+            const channels = list.filter(chan => chan.name !== "dm-inbox");
+            console.log(list, "list")
+            setChannels(channels);
+            setOptions(channels);
+            setLoading(false);
+            urbitVisor.unsubscribe(sub).then(res => console.log(res, "unsubscribed"))
+        });
+        urbitVisor.subscribe({ app: "metadata-store", path: "/all" }).then(res => sub = res.response);
+
     }
+    const [input, setInput] = useState("");
+    const [filtering, setFiltering] = useState(false);
     const [channels, setChannels] = useState<UrbitChannel[]>([]);
-    useEffect(()=>{
-      scry();
-      readMetadata();
-    },[]);
-  
-    async function readMetadata(){
-      setLoading(true)
-      const subscription = urbitVisor.on("sse", ["metadata-update", "associations"], async (data: any) => {
-        const keys = await urbitVisor.scry({app: "graph-store", path: "/keys"});
-        setLoading(false)
-        const list =  keys.response["graph-update"].keys.map((channel: any) => referenceMetadata(channel, data))
-        setChannels(list);
-        setLoading(false);
-      });
-      urbitVisor.subscribe({app: "metadata-store", path: "/all"}).then(res => console.log(res, "res"))
-  
-    }
     const [selected, setSelected] = useState<UrbitKey[]>([]);
     const [loading, setLoading] = useState(false);
-  
+    const [ship, setShip] = useState("");
+    const [dm, setDM] = useState(null);
+    const [options, setOptions] = useState(channels);
+
     const divStyles = {
-      width: "80%",
-      margin: "1rem auto",
-      borderRadius: "1rem",
-      padding: "1rem",
-      backgroundColor: bg,
-      height: "600px",
-      overflow: "auto",
-      color: "white"
+        width: "1000px",
+        margin: "1rem auto",
+        borderRadius: "1rem",
+        padding: "1rem",
+        backgroundColor: bg,
+        overflow: "auto",
+        color: "white"
     }
     const logoStyles = {
-      width: "100px"
+        width: "100px"
     }
     const titleStyles = {
-      margin: "auto",
-      textAlign: "center" as "center",
+        margin: "auto",
+        textAlign: "center" as "center",
     }
-    function addToSelection(channel: UrbitChannel) {
-      if (selected.find(ek => ek.ship === channel.ship && ek.name === channel.name))
-        setSelected(selected.filter(ek => ek.ship !== channel.ship || ek.name !== channel.name))
-      else
-        setSelected([...selected, channel])
-    }
-  
-    function handleClick(){
-      props.buttonLogic(selected)
-    }
-  
-    const containerStyles = {
-      display: "flex",
-      maxWidth: "100%",
-      flexWrap: "wrap" as any
-    }
-  
-  
-  
-    return (
-      <div style={divStyles} className="uv-channel-selector">
-        <div style={titleStyles} className="title">
-          <img style={logoStyles} src="https://github.com/dcSpark/urbit-visor/raw/main/assets/visor-logo.png" alt="" />
-          <p>Channel Selector</p>
-        </div>
-        {loading && <p>... loading ...</p>}
-        <div style={containerStyles} className="key-container">
-        {channels.map((k, index) => {
-          return (
-          <Key key={index} add={addToSelection} channel={k} />
-          )
-        })}
-        </div>
-        <button onClick={handleClick}>{props.buttonName}</button>
-      </div>);
-  
-  }
-  interface Keyprops {
-    channel: UrbitChannel
-    add: (key: UrbitChannel) => void,
-    key: number
-  }
-  function Key(props: Keyprops) {
-    const [bold, setBold] = useState(false);
-  
-    const styles = {
-      backgroundColor: lightbg,
-      border: bold ? "1px solid white" : "1px solid transparent",
-      borderRadius: "1rem",
-      padding: "0.5rem",
-      color: "white",
-      marginRight: "5px",
-      width: "47.5%",
-      cursor: "pointer"
-    }
-    const className = bold ? "bold" : ""
-    function select() {
-      setBold(!bold);
-      props.add(props.channel)
-    }
-    return (
-      <p style={styles} onClick={select} className={className} > {props.channel.group} - {props.channel.title} </p>
-    )
-  }
 
-  export default ChannelSelectBox
-  
+
+    async function handleClick() {
+        for (let channel of selected) {
+            let data;
+            console.log(channel, "channel")
+            if (channel.group === "DM") data = buildDM(ship, channel.name, payload)
+            else data = buildPost(ship, channel, payload)
+            console.log(data, "data")
+            const res = await urbitVisor.poke(data);
+            console.log(res, "poked")
+        }
+    }
+
+
+
+    function handleChange(e) {
+        const inp = e.target.value.toLowerCase();
+        setInput(e.target.value);
+        if (inp.length > 0) {
+            if (inp[0] === "~") {
+                setFiltering(false);
+                const patp = liveCheckPatp(inp);
+                if (patp) setDM({ group: "DM", title: addDashes(inp), name: addDashes(inp), ship: addDashes(inp) })
+                else setDM(null)
+            } else {
+                setFiltering(true);
+                const filtered = channels.filter(chan => {
+                    return (
+                        chan.name.includes(inp) ||
+                        chan.group.includes(inp) ||
+                        chan.title.includes(inp) ||
+                        chan.ship.includes(inp)
+                    )
+                })
+                setOptions(filtered);
+            }
+
+        } else {
+            setFiltering(false);
+            setOptions(channels)
+        }
+    }
+
+    function select(key) {
+        const newchans = channels.filter(k => !(k.group === key.group && k.name === key.name));
+        const newlist = options.filter(k => !(k.group === key.group && k.name === key.name));
+        setChannels(newchans);
+        setOptions(newlist);
+        setDM(null);
+        if (key.group === "DM") setInput("");
+        setSelected([...selected, key]);
+    }
+
+    function unselect(key) {
+        const newlist = selected.filter(k => !(k.group === key.group && k.name === key.name));
+        setSelected(newlist);
+        if (key.group !== "DM") {
+            setOptions([...options, key]);
+            setChannels([...channels, key]);
+        }
+    }
+
+    const containerStyles = {
+        display: "flex",
+        maxWidth: "100%",
+    }
+    const keyStyles = {
+        margin: "10px",
+        cursor: "pointer",
+        padding: "0.5rem",
+        backgroundColor: lightbg,
+        borderRadius: "1rem",
+        border: "1px solid transparent",
+        color: "white"
+    }
+
+
+    console.log(options, "options");
+    console.log(dm, "dm");
+    console.log(input, "input")
+
+
+
+    return (
+        <div style={divStyles} className="uv-channel-selector">
+            <div style={titleStyles} className="title">
+                <img style={logoStyles} src="https://github.com/dcSpark/urbit-visor/raw/main/assets/visor-logo.png" alt="" />
+                <p>Channel Selector</p>
+            </div>
+            <div className="searchbox">
+                <p>Search channels or DMs</p>
+                <div className="row2">
+                    <input onChange={handleChange} value={input} type="text" />
+                    <p>
+                        {dm && "Send DM to:"}
+                    </p>
+                    {dm && <p onClick={() => select(dm)} style={keyStyles}>{dm.name}</p>}
+                </div>
+                {filtering && <p>Filtering channels...</p>}
+            </div>
+            <div style={containerStyles} className="keys">
+
+                <div className="key-container">
+                    {loading && <p>... loading ...</p>}
+                    {!loading && <p>Choose a channel to share the Tweet:</p>}
+                    {options.map((k, index) => {
+                        const string = k.title.length ? `${k.group} - ${k.title}` : k.name
+                        return (
+                            <p style={keyStyles} key={string} onClick={() => select(k)}> {string}</p>
+                        )
+                    })}
+                </div>
+                <div className="key-container selected-container">
+                    <p>Share Tweet to:</p>
+                    {selected.map((k, index) => {
+                        const string = k.title.length ? `${k.group} - ${k.title}` : k.name
+                        return (
+                            <p onClick={() => unselect(k)} style={keyStyles} key={string} > {string}</p>
+                        )
+                    })}
+                    <button onClick={handleClick}>Send</button>
+                </div>
+            </div>
+
+        </div>);
+
+}
+
+export default ChannelSelectBox
