@@ -1,5 +1,4 @@
 import React from 'react';
-import ReactDOM from "react-dom";
 import { useState, useEffect, useRef } from "react";
 import { urbitVisor } from "@dcspark/uv-core";
 import { liveCheckPatp, addDashes, buildDM, buildPost } from "../utils/utils";
@@ -61,15 +60,19 @@ export function ChannelSelectBox({ payload }: ChannelBoxProps) {
             setShip(shipName.response);
             const keys = await urbitVisor.scry({ app: "graph-store", path: "/keys" });
             setLoading(false)
-            const list = keys.response["graph-update"].keys.map((channel: any) => referenceMetadata(channel, data))
-            setChannels(list);
-            setOptions(list);
+            const list = keys.response["graph-update"].keys.map((channel: any) => referenceMetadata(channel, data));
+            const channels = list.filter(chan => chan.name !== "dm-inbox");
+            console.log(list, "list")
+            setChannels(channels);
+            setOptions(channels);
             setLoading(false);
             urbitVisor.unsubscribe(sub).then(res => console.log(res, "unsubscribed"))
         });
         urbitVisor.subscribe({ app: "metadata-store", path: "/all" }).then(res => sub = res.response);
 
     }
+    const [input, setInput] = useState("");
+    const [filtering, setFiltering] = useState(false);
     const [channels, setChannels] = useState<UrbitChannel[]>([]);
     const [selected, setSelected] = useState<UrbitKey[]>([]);
     const [loading, setLoading] = useState(false);
@@ -93,19 +96,13 @@ export function ChannelSelectBox({ payload }: ChannelBoxProps) {
         margin: "auto",
         textAlign: "center" as "center",
     }
-    function addToSelection(channel: UrbitChannel) {
-        if (selected.find(ek => ek.ship === channel.ship && ek.name === channel.name))
-            setSelected(selected.filter(ek => ek.ship !== channel.ship || ek.name !== channel.name))
-        else
-            setSelected([...selected, channel])
-    }
-    console.log(selected, "selected")
+
 
     async function handleClick() {
         for (let channel of selected) {
             let data;
             console.log(channel, "channel")
-            if (channel.group === "DM") data = buildDM(ship, dm.name, payload)
+            if (channel.group === "DM") data = buildDM(ship, channel.name, payload)
             else data = buildPost(ship, channel, payload)
             console.log(data, "data")
             const res = await urbitVisor.poke(data);
@@ -113,43 +110,71 @@ export function ChannelSelectBox({ payload }: ChannelBoxProps) {
         }
     }
 
-    const containerStyles = {
-        display: "flex",
-        maxWidth: "100%",
-        flexWrap: "wrap" as any
-    }
+
 
     function handleChange(e) {
-        const input = e.target.value;
-        if (input.length > 0) {
-            if (input[0] === "~") {
-                const patp = liveCheckPatp(input);
-                if (patp) setDM({group: "DM", title: addDashes(input), name: addDashes(input), ship: addDashes(input)})
+        const inp = e.target.value.toLowerCase();
+        setInput(e.target.value);
+        if (inp.length > 0) {
+            if (inp[0] === "~") {
+                setFiltering(false);
+                const patp = liveCheckPatp(inp);
+                if (patp) setDM({ group: "DM", title: addDashes(inp), name: addDashes(inp), ship: addDashes(inp) })
                 else setDM(null)
             } else {
-              const filtered = channels.filter(chan => {
-                return (
-                    chan.name.includes(input) ||
-                    chan.group.includes(input) ||
-                    chan.title.includes(input) ||
-                    chan.ship.includes(input)
-                )
-              })
-              setOptions(filtered);
+                setFiltering(true);
+                const filtered = channels.filter(chan => {
+                    return (
+                        chan.name.includes(inp) ||
+                        chan.group.includes(inp) ||
+                        chan.title.includes(inp) ||
+                        chan.ship.includes(inp)
+                    )
+                })
+                setOptions(filtered);
             }
 
         } else {
+            setFiltering(false);
             setOptions(channels)
         }
-        console.log(input, "input");
     }
 
-    const keyStyles = {
-        padding: "0.5rem",
-        marginRight: "5px",
-        width: "47.5%",
-        cursor: "pointer"
+    function select(key) {
+        const newchans = channels.filter(k => !(k.group === key.group &&　k.name === key.name));
+        const newlist = options.filter(k => !(k.group === key.group &&　k.name === key.name));
+        setChannels(newchans);
+        setOptions(newlist);
+        setDM(null);
+        if (key.group === "DM") setInput("");
+        setSelected([...selected, key]);
     }
+
+    function unselect(key) {
+        const newlist = selected.filter(k => !(k.group === key.group && k.name === key.name));
+        setSelected(newlist);
+        setOptions([...options, key]);
+        setChannels([...channels, key]);
+    }
+
+    const containerStyles = {
+        display: "flex",
+        maxWidth: "100%",
+    }
+    const keyStyles = {
+        margin: "10px",
+        cursor: "pointer",
+        padding: "0.5rem",
+        backgroundColor: lightbg,
+        borderRadius: "1rem",
+        border: "1px solid transparent",
+        color: "white"
+    }
+
+
+    console.log(options, "options");
+    console.log(dm, "dm");
+    console.log(input, "input")
 
 
 
@@ -161,44 +186,41 @@ export function ChannelSelectBox({ payload }: ChannelBoxProps) {
             </div>
             <div className="searchbox">
                 <p>Search channels or DMs</p>
-                <input onChange={handleChange} type="text" />
-                {dm && <Key add={addToSelection} channel={dm}/>}
+                <div className="row2">
+                    <input onChange={handleChange} value={input} type="text" />
+                    <p>
+                        {dm && "Send DM to:"}
+                    </p>
+                    {dm && <p onClick={()=> select(dm)} style={keyStyles}>{dm.name}</p>}
+                </div>
+                {filtering && <p>Filtering channels...</p>}
             </div>
-            {loading && <p>... loading ...</p>}
-            <div style={containerStyles} className="key-container">
-                {options.map((k, index) => {
-                    return (
-                        <div style={keyStyles} key={k.name} className="key-wrapper">
-                            <Key add={addToSelection} channel={k} />
-                        </div>
-                    )
-                })}
+            <div style={containerStyles} className="keys">
+
+                <div className="key-container">
+                    {loading && <p>... loading ...</p>}
+                    {!loading && <p>Choose a channel to share the Tweet:</p>}
+                    {options.map((k, index) => {
+                        const string = k.title.length ? `${k.group} - ${k.title}` : k.name
+                        return (
+                            <p style={keyStyles} key={string} onClick={() => select(k)}> {string}</p>
+                        )
+                    })}
+                </div>
+                <div className="key-container selected-container">
+                    <p>Share Tweet to:</p>
+                    {selected.map((k, index) => {
+                        const string = k.title.length ? `${k.group} - ${k.title}` : k.name
+                        return (
+                            <p onClick={() => unselect(k)} style={keyStyles} key={string} > {string}</p>
+                        )
+                    })}
+                    <button onClick={handleClick}>Send</button>
+                </div>
             </div>
-            <button onClick={handleClick}>Share Tweet</button>
+
         </div>);
 
-}
-interface Keyprops {
-    channel: UrbitChannel
-    add: (key: UrbitChannel) => void,
-}
-function Key(props: Keyprops) {
-    const [bold, setBold] = useState(false);
-
-    const styles = {
-        backgroundColor: lightbg,
-        borderRadius: "1rem",
-        border: bold ? "1px solid white" : "1px solid transparent",
-        color: "white"
-    }
-    const className = bold ? "bold" : ""
-    function select() {
-        setBold(!bold);
-        props.add(props.channel)
-    }
-    return (
-        <p style={styles} onClick={select} className={className} > {props.channel.group} - {props.channel.title} </p>
-    )
 }
 
 export default ChannelSelectBox

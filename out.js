@@ -27164,13 +27164,17 @@ ${entities.urls.reduce((acc, item) => acc + item.expanded_url, "")}
         const keys = await urbitVisor.scry({ app: "graph-store", path: "/keys" });
         setLoading(false);
         const list = keys.response["graph-update"].keys.map((channel) => referenceMetadata(channel, data));
-        setChannels(list);
-        setOptions(list);
+        const channels2 = list.filter((chan) => chan.name !== "dm-inbox");
+        console.log(list, "list");
+        setChannels(channels2);
+        setOptions(channels2);
         setLoading(false);
         urbitVisor.unsubscribe(sub).then((res) => console.log(res, "unsubscribed"));
       });
       urbitVisor.subscribe({ app: "metadata-store", path: "/all" }).then((res) => sub = res.response);
     }
+    const [input, setInput] = (0, import_react7.useState)("");
+    const [filtering, setFiltering] = (0, import_react7.useState)(false);
     const [channels, setChannels] = (0, import_react7.useState)([]);
     const [selected, setSelected] = (0, import_react7.useState)([]);
     const [loading, setLoading] = (0, import_react7.useState)(false);
@@ -27193,19 +27197,12 @@ ${entities.urls.reduce((acc, item) => acc + item.expanded_url, "")}
       margin: "auto",
       textAlign: "center"
     };
-    function addToSelection(channel) {
-      if (selected.find((ek) => ek.ship === channel.ship && ek.name === channel.name))
-        setSelected(selected.filter((ek) => ek.ship !== channel.ship || ek.name !== channel.name));
-      else
-        setSelected([...selected, channel]);
-    }
-    console.log(selected, "selected");
     async function handleClick2() {
       for (let channel of selected) {
         let data;
         console.log(channel, "channel");
         if (channel.group === "DM")
-          data = buildDM(ship, dm.name, payload);
+          data = buildDM(ship, channel.name, payload);
         else
           data = buildPost(ship, channel, payload);
         console.log(data, "data");
@@ -27213,37 +27210,61 @@ ${entities.urls.reduce((acc, item) => acc + item.expanded_url, "")}
         console.log(res, "poked");
       }
     }
-    const containerStyles = {
-      display: "flex",
-      maxWidth: "100%",
-      flexWrap: "wrap"
-    };
     function handleChange(e) {
-      const input = e.target.value;
-      if (input.length > 0) {
-        if (input[0] === "~") {
-          const patp = liveCheckPatp(input);
+      const inp = e.target.value.toLowerCase();
+      setInput(e.target.value);
+      if (inp.length > 0) {
+        if (inp[0] === "~") {
+          setFiltering(false);
+          const patp = liveCheckPatp(inp);
           if (patp)
-            setDM({ group: "DM", title: addDashes(input), name: addDashes(input), ship: addDashes(input) });
+            setDM({ group: "DM", title: addDashes(inp), name: addDashes(inp), ship: addDashes(inp) });
           else
             setDM(null);
         } else {
+          setFiltering(true);
           const filtered = channels.filter((chan) => {
-            return chan.name.includes(input) || chan.group.includes(input) || chan.title.includes(input) || chan.ship.includes(input);
+            return chan.name.includes(inp) || chan.group.includes(inp) || chan.title.includes(inp) || chan.ship.includes(inp);
           });
           setOptions(filtered);
         }
       } else {
+        setFiltering(false);
         setOptions(channels);
       }
-      console.log(input, "input");
     }
-    const keyStyles = {
-      padding: "0.5rem",
-      marginRight: "5px",
-      width: "47.5%",
-      cursor: "pointer"
+    function select(key) {
+      const newchans = channels.filter((k) => !(k.group === key.group && k.name === key.name));
+      const newlist = options.filter((k) => !(k.group === key.group && k.name === key.name));
+      setChannels(newchans);
+      setOptions(newlist);
+      setDM(null);
+      if (key.group === "DM")
+        setInput("");
+      setSelected([...selected, key]);
+    }
+    function unselect(key) {
+      const newlist = selected.filter((k) => !(k.group === key.group && k.name === key.name));
+      setSelected(newlist);
+      setOptions([...options, key]);
+      setChannels([...channels, key]);
+    }
+    const containerStyles = {
+      display: "flex",
+      maxWidth: "100%"
     };
+    const keyStyles = {
+      margin: "10px",
+      cursor: "pointer",
+      padding: "0.5rem",
+      backgroundColor: lightbg,
+      borderRadius: "1rem",
+      border: "1px solid transparent",
+      color: "white"
+    };
+    console.log(options, "options");
+    console.log(dm, "dm");
+    console.log(input, "input");
     return /* @__PURE__ */ import_react6.default.createElement("div", {
       style: divStyles,
       className: "uv-channel-selector"
@@ -27256,46 +27277,39 @@ ${entities.urls.reduce((acc, item) => acc + item.expanded_url, "")}
       alt: ""
     }), /* @__PURE__ */ import_react6.default.createElement("p", null, "Channel Selector")), /* @__PURE__ */ import_react6.default.createElement("div", {
       className: "searchbox"
-    }, /* @__PURE__ */ import_react6.default.createElement("p", null, "Search channels or DMs"), /* @__PURE__ */ import_react6.default.createElement("input", {
+    }, /* @__PURE__ */ import_react6.default.createElement("p", null, "Search channels or DMs"), /* @__PURE__ */ import_react6.default.createElement("div", {
+      className: "row2"
+    }, /* @__PURE__ */ import_react6.default.createElement("input", {
       onChange: handleChange,
+      value: input,
       type: "text"
-    }), dm && /* @__PURE__ */ import_react6.default.createElement(Key, {
-      add: addToSelection,
-      channel: dm
-    })), loading && /* @__PURE__ */ import_react6.default.createElement("p", null, "... loading ..."), /* @__PURE__ */ import_react6.default.createElement("div", {
+    }), /* @__PURE__ */ import_react6.default.createElement("p", null, dm && "Send DM to:"), dm && /* @__PURE__ */ import_react6.default.createElement("p", {
+      onClick: () => select(dm),
+      style: keyStyles
+    }, dm.name)), filtering && /* @__PURE__ */ import_react6.default.createElement("p", null, "Filtering channels...")), /* @__PURE__ */ import_react6.default.createElement("div", {
       style: containerStyles,
+      className: "keys"
+    }, /* @__PURE__ */ import_react6.default.createElement("div", {
       className: "key-container"
-    }, options.map((k, index) => {
-      return /* @__PURE__ */ import_react6.default.createElement("div", {
+    }, loading && /* @__PURE__ */ import_react6.default.createElement("p", null, "... loading ..."), !loading && /* @__PURE__ */ import_react6.default.createElement("p", null, "Choose a channel to share the Tweet:"), options.map((k, index) => {
+      const string = k.title.length ? `${k.group} - ${k.title}` : k.name;
+      return /* @__PURE__ */ import_react6.default.createElement("p", {
         style: keyStyles,
-        key: k.name,
-        className: "key-wrapper"
-      }, /* @__PURE__ */ import_react6.default.createElement(Key, {
-        add: addToSelection,
-        channel: k
-      }));
-    })), /* @__PURE__ */ import_react6.default.createElement("button", {
+        key: string,
+        onClick: () => select(k)
+      }, " ", string);
+    })), /* @__PURE__ */ import_react6.default.createElement("div", {
+      className: "key-container selected-container"
+    }, /* @__PURE__ */ import_react6.default.createElement("p", null, "Share Tweet to:"), selected.map((k, index) => {
+      const string = k.title.length ? `${k.group} - ${k.title}` : k.name;
+      return /* @__PURE__ */ import_react6.default.createElement("p", {
+        onClick: () => unselect(k),
+        style: keyStyles,
+        key: string
+      }, " ", string);
+    }), /* @__PURE__ */ import_react6.default.createElement("button", {
       onClick: handleClick2
-    }, "Share Tweet"));
-  }
-  function Key(props) {
-    const [bold, setBold] = (0, import_react7.useState)(false);
-    const styles = {
-      backgroundColor: lightbg,
-      borderRadius: "1rem",
-      border: bold ? "1px solid white" : "1px solid transparent",
-      color: "white"
-    };
-    const className = bold ? "bold" : "";
-    function select() {
-      setBold(!bold);
-      props.add(props.channel);
-    }
-    return /* @__PURE__ */ import_react6.default.createElement("p", {
-      style: styles,
-      onClick: select,
-      className
-    }, " ", props.channel.group, " - ", props.channel.title, " ");
+    }, "Send"))));
   }
   var Channels_default = ChannelSelectBox;
 
