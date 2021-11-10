@@ -26454,7 +26454,7 @@ ${entities.urls.reduce((acc, item) => acc + item.expanded_url, "")}
     }), tweet.quote && /* @__PURE__ */ import_react4.default.createElement(Quote, {
       quote: tweet.quote
     })), /* @__PURE__ */ import_react4.default.createElement("div", {
-      id: "buttons"
+      id: "tweet-share-buttons"
     }, /* @__PURE__ */ import_react4.default.createElement("p", null, "What do you want to share?"), /* @__PURE__ */ import_react4.default.createElement("button", {
       onClick: setLink
     }, "Just the Link"), /* @__PURE__ */ import_react4.default.createElement("button", {

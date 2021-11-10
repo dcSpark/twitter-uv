@@ -109,7 +109,7 @@ function Preview(props: PreviewProps) {
                 {tweet.poll && <Poll poll={tweet.poll} />}
                 {tweet.quote && <Quote quote={tweet.quote} />}
             </div>
-            <div id="buttons">
+            <div id="tweet-share-buttons">
                 <p>What do you want to share?</p>
                 <button onClick={setLink}>Just the Link</button>
                 <button onClick={setText}>Full Tweet</button>
