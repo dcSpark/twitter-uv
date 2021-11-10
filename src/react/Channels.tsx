@@ -1,7 +1,7 @@
 import React from 'react';
 import { useState, useEffect, useRef } from "react";
 import { urbitVisor } from "@dcspark/uv-core";
-import { liveCheckPatp, addDashes, buildDM, buildPost } from "../utils/utils";
+import { liveCheckPatp, addDashes, buildDM, buildChatPost, buildCollectionPost, buildNotebookPost } from "../utils/utils";
 interface UrbitKey {
     ship: string,
     name: string
@@ -41,7 +41,7 @@ function referenceMetadata(channel: any, metadata: any): UrbitChannel {
 }
 
 interface ChannelBoxProps {
-    payload: string
+    payload: any
 }
 
 export function ChannelSelectBox({ payload }: ChannelBoxProps) {
@@ -63,7 +63,8 @@ export function ChannelSelectBox({ payload }: ChannelBoxProps) {
             const list = keys.response["graph-update"].keys.map((channel: any) => referenceMetadata(channel, data));
             const channels = list.filter(chan => chan.name !== "dm-inbox");
             console.log(list, "list")
-            setChannels(channels);
+            if (payload.type !== "url") setChannels(channels.filter(chan => chan.type !== "links"));
+            else setChannels(channels);
             setOptions(channels);
             setLoading(false);
             urbitVisor.unsubscribe(sub).then(res => console.log(res, "unsubscribed"))
@@ -102,8 +103,10 @@ export function ChannelSelectBox({ payload }: ChannelBoxProps) {
         for (let channel of selected) {
             let data;
             console.log(channel, "channel")
-            if (channel.group === "DM") data = buildDM(ship, channel.name, payload)
-            else data = buildPost(ship, channel, payload)
+            if (channel.group === "DM") data = buildDM(ship, channel.name, payload.contents)
+            else if (channel.type === "publish") data = buildNotebookPost(ship, channel, "Urbit Visor Share", payload.contents)
+            else if (channel.type === "link") data = buildCollectionPost(ship, channel, "Urbit Visor Share", payload.contents)
+            else if (channel.type === "chat") data = buildChatPost(ship, channel, payload.contents)
             console.log(data, "data")
             const res = await urbitVisor.poke(data);
             console.log(res, "poked")
