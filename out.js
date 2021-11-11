@@ -26287,31 +26287,37 @@ ${entities.urls.reduce((acc, item) => acc + item.expanded_url, "")}
   }
   async function getThread(id) {
     const res = await fetchThread(id);
+    console.log(res, "res");
     const tweets = res.data.threaded_conversation_with_injections.instructions.find((el) => el.type === "TimelineAddEntries");
-    const data = tweets.entries.find((el) => el.entryId.includes(id));
-    return processThread(data.content.itemContent.tweet_results.result);
+    const parent = tweets.entries.find((el) => el.entryId.includes(id));
+    const children = tweets.entries.filter((el) => el.entryId.includes("conversationthread"));
+    const threadChildren = children.find((subthread) => subthread.content.items.find((child) => child.item.itemContent.tweetDisplayType === "SelfThread"));
+    console.log(children, "has children");
+    console.log(threadChildren, "has children");
+    const processedParent = processThread(parent.content.itemContent.tweet_results.result);
+    let processedChildren = [];
+    if (threadChildren) {
+      processedChildren = threadChildren.content.items.filter((child) => child.item.itemContent.itemType === "TimelineTweet" && child.item.itemContent.tweetDisplayType === "SelfThread").map((child) => processThread(child.item.itemContent.tweet_results.result));
+    }
+    ;
+    return { parent: processedParent, children: processedChildren };
   }
   function processThread(data) {
     if (!data)
       return null;
     else {
-      console.log(data, "tweet");
       const tweet = data.legacy;
       const time = dateString(translateDate(tweet.created_at));
       const author = processAuthor(data.core.user.legacy);
       const pics = findPics(tweet.entities);
-      console.log(pics, "pics");
       const video = findVideo(tweet?.extended_entities);
-      console.log(video, "video");
       const redundant_urls = scrubURLS(tweet.entities);
-      console.log(redundant_urls, "redundant_urls");
       const text = redundant_urls.reduce((acc, i) => acc.replace(i, "").trim(), tweet.full_text) + addFullURL(tweet.entities);
-      console.log(text, "text");
       const quote = processThread(data?.quoted_status_result?.result);
-      console.log(quote, "quote");
       const poll = processPoll(data?.card?.legacy);
-      console.log(poll, "poll");
-      return { index: parseInt(tweet.id_str), time, author, pics, video, text, quote, poll };
+      const parent = tweet?.self_thread?.id_str || null;
+      const startsThread = parent && tweet.conversation_id_str === tweet.id_str;
+      return { index: tweet.id_str, startsThread, parent, time, author, pics, video, text, quote, poll };
     }
   }
   function processAuthor(user) {
@@ -26412,18 +26418,38 @@ ${entities.urls.reduce((acc, item) => acc + item.expanded_url, "")}
     });
     return options;
   }
+  function packThread(parent, children) {
+    console.log(parent, "packing parent");
+    console.log(children, "packing children");
+    return "";
+  }
   function Preview(props) {
     (0, import_react5.useEffect)(() => {
-      getThread(`${props.id}`).then((tweet2) => setTweet(tweet2));
+      getThread(`${props.id}`).then((tweet2) => {
+        setTweet(tweet2.parent);
+        setChildren(tweet2.children);
+      });
     }, []);
     const [tweet, setTweet] = (0, import_react5.useState)(placeholder);
+    const [children, setChildren] = (0, import_react5.useState)([]);
     console.log(tweet, "preview component");
+    console.log(children, "thread children");
     function setLink() {
       props.setPayload({ type: "url", contents: [{ url: props.url.href }] });
     }
     function setText() {
       const text = tweetToText(tweet);
       props.setPayload({ type: "text", contents: text });
+    }
+    function setThread() {
+      let output;
+      if (tweet.parent == tweet.index) {
+        output = packThread(tweet, children);
+      } else {
+        getThread(tweet.parent).then((res) => {
+          output = packThread(res.parent, res.children);
+        });
+      }
     }
     function quit() {
       props.setShow(false);
@@ -26459,7 +26485,9 @@ ${entities.urls.reduce((acc, item) => acc + item.expanded_url, "")}
       onClick: setLink
     }, "Just the Link"), /* @__PURE__ */ import_react4.default.createElement("button", {
       onClick: setText
-    }, "Full Tweet")));
+    }, "Full Tweet"), tweet.parent && /* @__PURE__ */ import_react4.default.createElement("button", {
+      onClick: setThread
+    }, "Unroll Thread")));
   }
   function Quote({ quote }) {
     return /* @__PURE__ */ import_react4.default.createElement("div", {
@@ -27490,7 +27518,6 @@ ${entities.urls.reduce((acc, item) => acc + item.expanded_url, "")}
   };
   async function handleClick(event) {
     const tweet = event.target.closest("article");
-    console.log(tweet, "tweet");
     const url = Array.from(tweet.closest("article").querySelectorAll("a")).map((el) => el.href).find((el) => el.includes("status"));
     const strings = url.split("/");
     const id = strings[strings.length - 1];

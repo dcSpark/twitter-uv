@@ -82,7 +82,6 @@ const createVisorButton = (
 
 async function handleClick(event) {
   const tweet = event.target.closest("article");
-  console.log(tweet, "tweet")
   const url = Array.from(tweet.closest("article").querySelectorAll("a")).map((el: HTMLAnchorElement) => el.href).find(el => el.includes("status"))
   const strings = url.split("/")
   const id = strings[strings.length - 1];

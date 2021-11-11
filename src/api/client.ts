@@ -92,32 +92,39 @@ function addFullURL(entities: any){
 
 export async function getThread(id: string) {
   const res = await fetchThread(id);
+  console.log(res, "res")
   const tweets = res.data.threaded_conversation_with_injections.instructions.find(el => el.type === "TimelineAddEntries");
-  const data = tweets.entries.find(el => el.entryId.includes(id));
-  return processThread(data.content.itemContent.tweet_results.result);
+  const parent = tweets.entries.find(el => el.entryId.includes(id));
+  const children = tweets.entries.filter(el => el.entryId.includes("conversationthread"));
+  const threadChildren = children.find(subthread => subthread.content.items.find(child => child.item.itemContent.tweetDisplayType === "SelfThread"));
+  console.log(children, "has children")
+  console.log(threadChildren, "has children")
+  const processedParent =  processThread(parent.content.itemContent.tweet_results.result);
+  let processedChildren = [];
+  if (threadChildren) {
+  processedChildren = 
+  threadChildren.content.items.filter(child => child.item.itemContent.itemType === "TimelineTweet" && child.item.itemContent.tweetDisplayType === "SelfThread")
+    .map(child => processThread(child.item.itemContent.tweet_results.result));
+  };
+  return {parent: processedParent, children: processedChildren}
 }
 
 function processThread(data: any): Tweet {
   if (!data) return null
   else {
-    console.log(data, "tweet")
     const tweet = data.legacy;
     const time = dateString(translateDate(tweet.created_at));
     const author = processAuthor(data.core.user.legacy);
     const pics = findPics(tweet.entities);
-    console.log(pics, "pics")
     const video = findVideo(tweet?.extended_entities);
-    console.log(video, "video")
     const redundant_urls = scrubURLS(tweet.entities);
-    console.log(redundant_urls, "redundant_urls")
     const text = (redundant_urls.reduce((acc, i) => acc.replace(i, "").trim(), tweet.full_text)) + addFullURL(tweet.entities);
-    console.log(text, "text")
     // some quotes are "disabled" so they only show as urls on tweet.quoted_status_permalink
     const quote = processThread(data?.quoted_status_result?.result);
-    console.log(quote, "quote")
     const poll = processPoll(data?.card?.legacy);
-    console.log(poll, "poll")
-    return { index: parseInt(tweet.id_str), time: time, author: author, pics: pics, video: video, text: text, quote: quote, poll: poll }
+    const parent = tweet?.self_thread?.id_str || null
+    const startsThread = parent && tweet.conversation_id_str === tweet.id_str
+    return { index: tweet.id_str, startsThread: startsThread, parent: parent, time: time, author: author, pics: pics, video: video, text: text, quote: quote, poll: poll }
   }
 };
 function processAuthor(user: any): TweetAuthor{
@@ -149,7 +156,9 @@ export interface Tweet {
   text: string, 
   quote: Tweet, 
   poll: Poll,
-  index: number 
+  index: string,
+  parent: string,
+  startsThread: boolean
 };
 
 interface TweetAuthor {

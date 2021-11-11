@@ -1,7 +1,7 @@
 import React from "react";
 import { useEffect, useState } from "react";
 import { TwitterProps } from "./App";
-import { getTweet, getThread, Tweet, Poll } from "../api/client";
+import { getThread, Tweet, Poll } from "../api/client";
 
 
 
@@ -74,20 +74,45 @@ function pollOptions(poll: Poll){
         return { label: poll[label], count: poll[count] }
     });
     return options
+};
+
+function packThread(parent, children): string{
+    console.log(parent, "packing parent")
+    console.log(children, "packing children")
+    return "";
 }
 
 function Preview(props: PreviewProps) {
     useEffect(() => {
-        getThread(`${props.id}`).then(tweet => setTweet(tweet))
+        getThread(`${props.id}`).then(tweet => {
+            setTweet(tweet.parent); 
+        setChildren(tweet.children);
+    });
     }, []);
     const [tweet, setTweet] = useState<Tweet>(placeholder);
-    console.log(tweet, "preview component")
+    const [children, setChildren] = useState<Tweet[]>([]);
+    console.log(tweet, "preview component");
+    console.log(children, "thread children")
     function setLink() {
         props.setPayload({type: "url", contents: [{ url: props.url.href }]});
     }
     function setText() {
         const text = tweetToText(tweet)
         props.setPayload({type: "text", contents: text});
+    }
+    function setThread(){
+        // TODO: cursors
+        // TODO: replies?
+        let output;
+        if (tweet.parent == tweet.index){
+          output = packThread(tweet, children);
+        //   props.setPayload({type: "unroll", contents: output})
+        } else {
+            getThread(tweet.parent).then(res => {
+                output = packThread(res.parent, res.children)
+                // props.setPayload({type: "unroll", contents: output});
+            })
+        }
     }
     function quit() {
         props.setShow(false)
@@ -113,6 +138,7 @@ function Preview(props: PreviewProps) {
                 <p>What do you want to share?</p>
                 <button onClick={setLink}>Just the Link</button>
                 <button onClick={setText}>Full Tweet</button>
+                {tweet.parent &&  <button onClick={setThread}>Unroll Thread</button>}
             </div>
         </div>
     )
