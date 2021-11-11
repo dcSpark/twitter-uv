@@ -26419,11 +26419,11 @@ ${entities.urls.reduce((acc, item) => acc + item.expanded_url, "")}
     const [tweet, setTweet] = (0, import_react5.useState)(placeholder);
     console.log(tweet, "preview component");
     function setLink() {
-      props.setPayload([{ url: props.url.href }]);
+      props.setPayload({ type: "url", contents: [{ url: props.url.href }] });
     }
     function setText() {
       const text = tweetToText(tweet);
-      props.setPayload(text);
+      props.setPayload({ type: "text", contents: text });
     }
     function quit() {
       props.setShow(false);
@@ -27076,7 +27076,7 @@ ${entities.urls.reduce((acc, item) => acc + item.expanded_url, "")}
     console.log(list.join("-"));
     return "~" + list.join("-");
   }
-  function buildPost(author, resource, contents) {
+  function buildChatPost(author, resource, contents) {
     return {
       app: "graph-push-hook",
       mark: "graph-update-3",
@@ -27096,6 +27096,91 @@ ${entities.urls.reduce((acc, item) => acc + item.expanded_url, "")}
               }
             }
           }
+        }
+      }
+    };
+  }
+  function buildNotebookPost(author, resource, title, contents) {
+    const node = {};
+    const index = `/${makeIndex()}`;
+    node[index] = {
+      children: {
+        "1": {
+          post: {
+            author: "~" + author,
+            contents: [],
+            hash: null,
+            index: index + "/1",
+            signatures: [],
+            "time-sent": Date.now()
+          },
+          children: {
+            "1": {
+              children: null,
+              post: {
+                author: "~" + author,
+                contents: [{ text: title }, ...contents],
+                hash: null,
+                index: index + "/1/1",
+                signatures: [],
+                "time-sent": Date.now()
+              }
+            }
+          }
+        },
+        "2": {
+          children: null,
+          post: {
+            author: "~" + author,
+            contents: [],
+            hash: null,
+            index: index + "/2",
+            signatures: [],
+            "time-sent": Date.now()
+          }
+        }
+      },
+      post: {
+        author: "~" + author,
+        contents: [],
+        hash: null,
+        index,
+        signatures: [],
+        "time-sent": Date.now()
+      }
+    };
+    return {
+      app: "graph-push-hook",
+      mark: "graph-update-3",
+      json: {
+        "add-nodes": {
+          resource: { name: resource.name, ship: "~" + resource.ship },
+          nodes: node
+        }
+      }
+    };
+  }
+  function buildCollectionPost(author, resource, title, url) {
+    const node = {};
+    const index = `/${makeIndex()}`;
+    node[index] = {
+      children: null,
+      post: {
+        author: "~" + author,
+        contents: [{ text: title }, ...url],
+        hash: null,
+        index,
+        signatures: [],
+        "time-sent": Date.now()
+      }
+    };
+    return {
+      app: "graph-push-hook",
+      mark: "graph-update-3",
+      json: {
+        "add-nodes": {
+          resource: { name: resource.name, ship: "~" + resource.ship },
+          nodes: node
         }
       }
     };
@@ -27172,7 +27257,10 @@ ${entities.urls.reduce((acc, item) => acc + item.expanded_url, "")}
         const list = keys.response["graph-update"].keys.map((channel) => referenceMetadata(channel, data));
         const channels2 = list.filter((chan) => chan.name !== "dm-inbox");
         console.log(list, "list");
-        setChannels(channels2);
+        if (payload.type !== "url")
+          setChannels(channels2.filter((chan) => chan.type !== "links"));
+        else
+          setChannels(channels2);
         setOptions(channels2);
         setLoading(false);
         urbitVisor.unsubscribe(sub).then((res) => console.log(res, "unsubscribed"));
@@ -27208,9 +27296,13 @@ ${entities.urls.reduce((acc, item) => acc + item.expanded_url, "")}
         let data;
         console.log(channel, "channel");
         if (channel.group === "DM")
-          data = buildDM(ship, channel.name, payload);
-        else
-          data = buildPost(ship, channel, payload);
+          data = buildDM(ship, channel.name, payload.contents);
+        else if (channel.type === "publish")
+          data = buildNotebookPost(ship, channel, "Urbit Visor Share", payload.contents);
+        else if (channel.type === "link")
+          data = buildCollectionPost(ship, channel, "Urbit Visor Share", payload.contents);
+        else if (channel.type === "chat")
+          data = buildChatPost(ship, channel, payload.contents);
         console.log(data, "data");
         const res = await urbitVisor.poke(data);
         console.log(res, "poked");

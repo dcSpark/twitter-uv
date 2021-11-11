@@ -83,11 +83,11 @@ function Preview(props: PreviewProps) {
     const [tweet, setTweet] = useState<Tweet>(placeholder);
     console.log(tweet, "preview component")
     function setLink() {
-        props.setPayload([{ url: props.url.href }]);
+        props.setPayload({type: "url", contents: [{ url: props.url.href }]});
     }
     function setText() {
         const text = tweetToText(tweet)
-        props.setPayload(text);
+        props.setPayload({type: "text", contents: text});
     }
     function quit() {
         props.setShow(false)

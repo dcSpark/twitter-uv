@@ -84,7 +84,7 @@ export function addDashes(p: string): string {
     return "~" + list.join("-")
 }
 
-export function buildPost(author, resource, contents) {
+export function buildChatPost(author, resource, contents) {
     return {
         app: "graph-push-hook", mark: "graph-update-3", json: {
             "add-nodes": {
@@ -103,6 +103,88 @@ export function buildPost(author, resource, contents) {
                     }
                 }
 
+            }
+        }
+    };
+}
+export function buildNotebookPost(author, resource, title, contents) {
+    const node = {};
+    const index = `/${makeIndex()}`;
+    node[index] =  {
+            children: {
+              "1":{
+                post: {
+                    author: "~" + author,
+                    contents: [],
+                    hash: null,
+                    index: index + "/1",
+                    signatures: [],
+                    "time-sent": Date.now()
+                },
+                children:{
+                    "1":{
+                        children: null,
+                        post: {
+                            author: "~" + author,
+                            contents: [{text: title}, ...contents],
+                            hash: null,
+                            index: index + "/1/1",
+                            signatures: [],
+                            "time-sent": Date.now()
+                        }
+
+                    }
+                }
+              },
+              "2":{
+                  children: null,
+                  post: {
+                    author: "~" + author,
+                    contents: [],
+                    hash: null,
+                    index: index + "/2",
+                    signatures: [],
+                    "time-sent": Date.now()
+                }
+              }
+            },
+            post: {
+                author: "~" + author,
+                contents: [],
+                hash: null,
+                index: index,
+                signatures: [],
+                "time-sent": Date.now()
+            }
+        }
+    return {
+        app: "graph-push-hook", mark: "graph-update-3", json: {
+            "add-nodes": {
+                resource: { name: resource.name, ship: "~" + resource.ship },
+                nodes: node
+            }
+        }
+    };
+}
+export function buildCollectionPost(author, resource, title, url) {
+    const node = {};
+    const index = `/${makeIndex()}`;
+    node[index] =  {
+            children: null,
+            post: {
+                author: "~" + author,
+                contents: [{text: title}, ...url],
+                hash: null,
+                index: index,
+                signatures: [],
+                "time-sent": Date.now()
+            }
+        }
+    return {
+        app: "graph-push-hook", mark: "graph-update-3", json: {
+            "add-nodes": {
+                resource: { name: resource.name, ship: "~" + resource.ship },
+                nodes: node
             }
         }
     };
