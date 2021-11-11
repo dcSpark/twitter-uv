@@ -24,6 +24,8 @@
 }
 #tweet-body{
     margin: 1rem 0 1rem 3rem;
+    height:550px;
+    overflow-y: scroll;
 }
 #tweet-text{
     margin-bottom: 1rem;
@@ -36,7 +38,8 @@
     text-align: center;
 }
 #tweet-pictures .img-1{
-    width: 100%;
+    width: auto;
+    max-height: 500px;
 }
 #tweet-pictures .img-2,
 #tweet-pictures .img-3,
@@ -64,4 +67,7 @@
 }
 .key-container{
     width: 50%;
+}
+#tweet-share-buttons{
+    margin-top: 0.5rem;
 }
