@@ -1342,7 +1342,7 @@
               }
             }
           }
-          function checkPropTypes(typeSpecs, values, location, componentName, element) {
+          function checkPropTypes(typeSpecs, values, location2, componentName, element) {
             {
               var has = Function.call.bind(Object.prototype.hasOwnProperty);
               for (var typeSpecName in typeSpecs) {
@@ -1350,23 +1350,23 @@
                   var error$1 = void 0;
                   try {
                     if (typeof typeSpecs[typeSpecName] !== "function") {
-                      var err = Error((componentName || "React class") + ": " + location + " type `" + typeSpecName + "` is invalid; it must be a function, usually from the `prop-types` package, but received `" + typeof typeSpecs[typeSpecName] + "`.This often happens because of typos such as `PropTypes.function` instead of `PropTypes.func`.");
+                      var err = Error((componentName || "React class") + ": " + location2 + " type `" + typeSpecName + "` is invalid; it must be a function, usually from the `prop-types` package, but received `" + typeof typeSpecs[typeSpecName] + "`.This often happens because of typos such as `PropTypes.function` instead of `PropTypes.func`.");
                       err.name = "Invariant Violation";
                       throw err;
                     }
-                    error$1 = typeSpecs[typeSpecName](values, typeSpecName, componentName, location, null, "SECRET_DO_NOT_PASS_THIS_OR_YOU_WILL_BE_FIRED");
+                    error$1 = typeSpecs[typeSpecName](values, typeSpecName, componentName, location2, null, "SECRET_DO_NOT_PASS_THIS_OR_YOU_WILL_BE_FIRED");
                   } catch (ex) {
                     error$1 = ex;
                   }
                   if (error$1 && !(error$1 instanceof Error)) {
                     setCurrentlyValidatingElement(element);
-                    error("%s: type specification of %s `%s` is invalid; the type checker function must return `null` or an `Error` but returned a %s. You may have forgotten to pass an argument to the type checker creator (arrayOf, instanceOf, objectOf, oneOf, oneOfType, and shape all require an argument).", componentName || "React class", location, typeSpecName, typeof error$1);
+                    error("%s: type specification of %s `%s` is invalid; the type checker function must return `null` or an `Error` but returned a %s. You may have forgotten to pass an argument to the type checker creator (arrayOf, instanceOf, objectOf, oneOf, oneOfType, and shape all require an argument).", componentName || "React class", location2, typeSpecName, typeof error$1);
                     setCurrentlyValidatingElement(null);
                   }
                   if (error$1 instanceof Error && !(error$1.message in loggedTypeFailures)) {
                     loggedTypeFailures[error$1.message] = true;
                     setCurrentlyValidatingElement(element);
-                    error("Failed %s type: %s", location, error$1.message);
+                    error("Failed %s type: %s", location2, error$1.message);
                     setCurrentlyValidatingElement(null);
                   }
                 }
@@ -9724,7 +9724,7 @@
               }
             }
           }
-          function checkPropTypes(typeSpecs, values, location, componentName, element) {
+          function checkPropTypes(typeSpecs, values, location2, componentName, element) {
             {
               var has2 = Function.call.bind(Object.prototype.hasOwnProperty);
               for (var typeSpecName in typeSpecs) {
@@ -9732,23 +9732,23 @@
                   var error$1 = void 0;
                   try {
                     if (typeof typeSpecs[typeSpecName] !== "function") {
-                      var err = Error((componentName || "React class") + ": " + location + " type `" + typeSpecName + "` is invalid; it must be a function, usually from the `prop-types` package, but received `" + typeof typeSpecs[typeSpecName] + "`.This often happens because of typos such as `PropTypes.function` instead of `PropTypes.func`.");
+                      var err = Error((componentName || "React class") + ": " + location2 + " type `" + typeSpecName + "` is invalid; it must be a function, usually from the `prop-types` package, but received `" + typeof typeSpecs[typeSpecName] + "`.This often happens because of typos such as `PropTypes.function` instead of `PropTypes.func`.");
                       err.name = "Invariant Violation";
                       throw err;
                     }
-                    error$1 = typeSpecs[typeSpecName](values, typeSpecName, componentName, location, null, "SECRET_DO_NOT_PASS_THIS_OR_YOU_WILL_BE_FIRED");
+                    error$1 = typeSpecs[typeSpecName](values, typeSpecName, componentName, location2, null, "SECRET_DO_NOT_PASS_THIS_OR_YOU_WILL_BE_FIRED");
                   } catch (ex) {
                     error$1 = ex;
                   }
                   if (error$1 && !(error$1 instanceof Error)) {
                     setCurrentlyValidatingElement(element);
-                    error("%s: type specification of %s `%s` is invalid; the type checker function must return `null` or an `Error` but returned a %s. You may have forgotten to pass an argument to the type checker creator (arrayOf, instanceOf, objectOf, oneOf, oneOfType, and shape all require an argument).", componentName || "React class", location, typeSpecName, typeof error$1);
+                    error("%s: type specification of %s `%s` is invalid; the type checker function must return `null` or an `Error` but returned a %s. You may have forgotten to pass an argument to the type checker creator (arrayOf, instanceOf, objectOf, oneOf, oneOfType, and shape all require an argument).", componentName || "React class", location2, typeSpecName, typeof error$1);
                     setCurrentlyValidatingElement(null);
                   }
                   if (error$1 instanceof Error && !(error$1.message in loggedTypeFailures)) {
                     loggedTypeFailures[error$1.message] = true;
                     setCurrentlyValidatingElement(element);
-                    error("Failed %s type: %s", location, error$1.message);
+                    error("Failed %s type: %s", location2, error$1.message);
                     setCurrentlyValidatingElement(null);
                   }
                 }
@@ -27351,31 +27351,50 @@ ${entities.urls.reduce((acc, item) => acc + item.expanded_url, "")}
   var App_default = App;
 
   // src/button/button.ts
+  var isThreadParent = (tweet) => {
+    if (!tweet || !location.pathname.includes("/status/")) {
+      return false;
+    }
+    const threadParent = tweet.querySelector("a[href*='how-to-tweet']");
+    if (!threadParent) {
+      return false;
+    }
+    return true;
+  };
   var createVisorButton = (tweet, hasUserActions) => {
-    const tipAction = document.createElement("div");
-    tipAction.className = "urbit-visor-share-tweet-action action-brave-tip";
-    tipAction.style.display = "inline-block";
-    tipAction.style.textAlign = hasUserActions ? "center" : "start";
-    tipAction.setAttribute("role", "button");
-    tipAction.setAttribute("tabindex", "0");
-    const tipButton = document.createElement("button");
-    tipButton.className = "urbit-visor-share-tweet-button";
-    tipButton.style.background = "transparent";
-    tipButton.style.border = "0";
-    tipButton.style.color = "#657786";
-    tipButton.style.cursor = "pointer";
-    tipButton.style.display = "inline-block";
-    tipButton.style.fontSize = "16px";
-    tipButton.style.lineHeight = "1";
-    tipButton.style.outline = "0";
-    tipButton.style.position = "relative";
-    tipButton.type = "button";
-    tipButton.innerHTML = `<svg width="24" height="24" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+    const shareAction = document.createElement("div");
+    shareAction.className = "urbit-visor-share-tweet-action action-brave-tip";
+    shareAction.style.display = "flex";
+    shareAction.style.textAlign = hasUserActions ? "center" : "start";
+    shareAction.style.cursor = "pointer";
+    shareAction.setAttribute("role", "button");
+    shareAction.setAttribute("tabindex", "0");
+    const urbitButton = document.createElement("button");
+    urbitButton.className = "urbit-visor-share-tweet-button";
+    urbitButton.style.background = "transparent";
+    urbitButton.style.border = "0";
+    urbitButton.style.color = "#657786";
+    urbitButton.style.display = "inline-block";
+    urbitButton.style.fontSize = "16px";
+    urbitButton.style.lineHeight = "1";
+    urbitButton.style.outline = "0";
+    urbitButton.style.position = "relative";
+    urbitButton.type = "button";
+    urbitButton.innerHTML = `<svg class="urbit-visor-share-tweet-button-img" width="24" height="24" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
      <circle cx="16" cy="16" r="13" fill="transparent" stroke="rgb(110, 118, 125)" stroke-width="1"/>
      <path d="M22 14.0488H19.6306C19.4522 15.0976 18.9936 15.7317 18.1783 15.7317C16.7006 15.7317 15.8599 14 13.5669 14C11.3503 14 10.1783 15.3659 10 17.9756H12.3694C12.5478 16.9024 13.0064 16.2683 13.8471 16.2683C15.3248 16.2683 16.1146 18 18.4586 18C20.6242 18 21.8217 16.6341 22 14.0488Z" fill="rgb(110, 118, 125)"/>`;
-    tipButton.onclick = handleClick;
-    tipAction.appendChild(tipButton);
-    return tipAction;
+    const shareText = document.createElement("p");
+    shareText.className = "urbit-visor-share-tweet-button-text";
+    shareText.innerText = "Share";
+    shareText.style.fontFamily = `Inter`;
+    if (tweet && isThreadParent(tweet)) {
+      urbitButton.style.marginTop = "12px";
+      shareText.style.marginTop = "19px";
+    }
+    shareAction.onclick = handleClick;
+    shareAction.appendChild(urbitButton);
+    shareAction.appendChild(shareText);
+    return shareAction;
   };
   async function handleClick(event) {
     const tweet = event.target.closest("article");
@@ -27400,8 +27419,8 @@ ${entities.urls.reduce((acc, item) => acc + item.expanded_url, "")}
       if (uvIcons.length === 0) {
         const numActions = actions.querySelectorAll(":scope > div").length || 0;
         const hasUserActions = numActions > 3;
-        const tipAction = createVisorButton(tweets[i], hasUserActions);
-        actions.appendChild(tipAction);
+        const shareAction = createVisorButton(tweets[i], hasUserActions);
+        actions.appendChild(shareAction);
       }
     }
     timeout = setTimeout(injectButtons, 3e3);

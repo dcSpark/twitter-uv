@@ -1,3 +1,8 @@
+.urbit-visor-share-tweet-button-text:hover{
+  text-decoration: underline;
+}
+
+
 #tweet-preview {
     width: 500px;
     border: 1px solid white;
