@@ -39,14 +39,15 @@ const baseVariables = {
   withUserResults: false,
   withVoice: true
 }
-const fetchThread = async (id: string) => {
-  const variables = encodeURIComponent(JSON.stringify(Object.assign(baseVariables, { focalTweetId: id })));
+const fetchThread = async (id: string, cursor:string = null) => {
+  let variables; 
+  if (cursor) variables = encodeURIComponent(JSON.stringify(Object.assign(baseVariables, { focalTweetId: id, cursor: cursor })));
+  else variables = encodeURIComponent(JSON.stringify(Object.assign(baseVariables, { focalTweetId: id })));
   const url = threadsURL + variables;
   const res = await fetch(url, headers());
   const json = await res.json();
   return json
 }
-
 export async function getTweet(id: string) {
   const res = await fetch(tweetURL + id, headers());
   const json = await res.json();
@@ -96,9 +97,17 @@ export async function getThread(id: string) {
   const tweets = res.data.threaded_conversation_with_injections.instructions.find(el => el.type === "TimelineAddEntries");
   const parent = tweets.entries.find(el => el.entryId.includes(id));
   const children = tweets.entries.filter(el => el.entryId.includes("conversationthread"));
-  const threadChildren = children.find(subthread => subthread.content.items.find(child => child.item.itemContent.tweetDisplayType === "SelfThread"));
+  const placeholder = {content: {items: []}};
+  const threadChildren = children.find(subthread => subthread.content.items.find(child => child.item.itemContent.tweetDisplayType === "SelfThread")) || placeholder;
   console.log(children, "has children")
-  console.log(threadChildren, "has children")
+  console.log(threadChildren, "has threadchildren")
+  // const cursorObject = tweets.entries.find(el => el.entryId.includes("cursor-bottom"));
+  // const cursorString = cursorObject?.content?.itemContent?.value;
+  const cursorObject2 = threadChildren.content.items.find(child => child.item.itemContent.itemType === "TimelineTimelineCursor");
+  const cursorString2 = cursorObject2?.item?.itemContent?.value;
+  // console.log(cursorObject, "cursorObject")
+  // console.log(cursorObject2, "cursorObject2")
+  const effectiveCursor = cursorString2  // || cursorString;
   const processedParent =  processThread(parent.content.itemContent.tweet_results.result);
   let processedChildren = [];
   if (threadChildren) {
@@ -106,7 +115,25 @@ export async function getThread(id: string) {
   threadChildren.content.items.filter(child => child.item.itemContent.itemType === "TimelineTweet" && child.item.itemContent.tweetDisplayType === "SelfThread")
     .map(child => processThread(child.item.itemContent.tweet_results.result));
   };
-  return {parent: processedParent, children: processedChildren}
+  let more = [];
+  if (effectiveCursor) {
+    const moreKids =  await getSubsequentChildren(id, effectiveCursor, []);
+    more = [...moreKids]
+  }
+  return {parent: processedParent, children: [...processedChildren, ...more]}
+}
+
+async function getSubsequentChildren(id:string, cursor:string, acc: any[]){
+  console.log(cursor, "passed cursor")
+  const res = await fetchThread(id, cursor);
+  const data = res.data.threaded_conversation_with_injections.instructions.find(el => el.type === "TimelineAddToModule");
+  console.log(data, "subsequent data")
+  const children = data.moduleItems.filter(el => el.entryId.includes("tweet") && el.item.itemContent.tweetDisplayType === "SelfThread");
+  const newCursor = data.moduleItems.find(el => el.entryId.includes("cursor"));
+  const cursorString = newCursor?.item?.itemContent?.value;
+  const processedChildren = children.map(child => processThread(child.item.itemContent.tweet_results.result));
+  if (cursorString) return getSubsequentChildren(id, cursorString, [...acc, ...processedChildren]);
+  else return [...acc, ...processedChildren]
 }
 
 function processThread(data: any): Tweet {
