@@ -1044,7 +1044,7 @@
             }
             return dispatcher.useContext(Context, unstable_observedBits);
           }
-          function useState5(initialState) {
+          function useState4(initialState) {
             var dispatcher = resolveDispatcher();
             return dispatcher.useState(initialState);
           }
@@ -1056,7 +1056,7 @@
             var dispatcher = resolveDispatcher();
             return dispatcher.useRef(initialValue);
           }
-          function useEffect5(create, deps) {
+          function useEffect4(create, deps) {
             var dispatcher = resolveDispatcher();
             return dispatcher.useEffect(create, deps);
           }
@@ -1626,13 +1626,13 @@
           exports.useCallback = useCallback;
           exports.useContext = useContext;
           exports.useDebugValue = useDebugValue;
-          exports.useEffect = useEffect5;
+          exports.useEffect = useEffect4;
           exports.useImperativeHandle = useImperativeHandle;
           exports.useLayoutEffect = useLayoutEffect;
           exports.useMemo = useMemo;
           exports.useReducer = useReducer;
           exports.useRef = useRef2;
-          exports.useState = useState5;
+          exports.useState = useState4;
           exports.version = ReactVersion;
         })();
       }
@@ -2440,11 +2440,11 @@
       if (true) {
         (function() {
           "use strict";
-          var React7 = require_react();
+          var React6 = require_react();
           var _assign = require_object_assign();
           var Scheduler = require_scheduler();
           var tracing = require_tracing();
-          var ReactSharedInternals = React7.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
+          var ReactSharedInternals = React6.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
           function warn(format) {
             {
               for (var _len = arguments.length, args = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
@@ -2476,7 +2476,7 @@
               Function.prototype.apply.call(console[level], console, argsWithFormat);
             }
           }
-          if (!React7) {
+          if (!React6) {
             {
               throw Error("ReactDOM was loaded before React. Make sure you load the React package before loading ReactDOM.");
             }
@@ -3692,7 +3692,7 @@
           var didWarnInvalidChild = false;
           function flattenChildren(children) {
             var content = "";
-            React7.Children.forEach(children, function(child) {
+            React6.Children.forEach(children, function(child) {
               if (child == null) {
                 return;
               }
@@ -3703,7 +3703,7 @@
           function validateProps(element, props) {
             {
               if (typeof props.children === "object" && props.children !== null) {
-                React7.Children.forEach(props.children, function(child) {
+                React6.Children.forEach(props.children, function(child) {
                   if (child == null) {
                     return;
                   }
@@ -10896,7 +10896,7 @@
           }
           var fakeInternalInstance = {};
           var isArray2 = Array.isArray;
-          var emptyRefsObject = new React7.Component().refs;
+          var emptyRefsObject = new React6.Component().refs;
           var didWarnAboutStateAssignmentForComponent;
           var didWarnAboutUninitializedState;
           var didWarnAboutGetSnapshotBeforeUpdateWithoutDidUpdate;
@@ -24847,12 +24847,13 @@ zodnecbudwessevpersutletfulpensytdurwepserwylsunrypsyxdyrnuphebpeglupdepdysputlu
     }
   });
 
-  // src/content.ts
-  var import_react_dom3 = __toModule(require_react_dom());
+  // src/button/button.ts
+  var import_react8 = __toModule(require_react());
+  var import_react_dom2 = __toModule(require_react_dom());
 
-  // src/react/Init.tsx
-  var import_react2 = __toModule(require_react());
-  var import_react3 = __toModule(require_react());
+  // src/react/App.tsx
+  var import_react6 = __toModule(require_react());
+  var import_react7 = __toModule(require_react());
 
   // node_modules/@dcspark/uv-core/dist/types.js
   var VISOR_ID = "oadimaacghcacmfipakhadejgalcaepg";
@@ -26145,59 +26146,9 @@ zodnecbudwessevpersutletfulpensytdurwepserwylsunrypsyxdyrnuphebpeglupdepdysputlu
     });
   }
 
-  // src/react/Welcome.tsx
-  var import_react = __toModule(require_react());
-  function Welcome() {
-    const styles = {
-      position: "fixed",
-      top: "50%",
-      left: "50%",
-      transform: "translate(-50%, -50%)",
-      width: "500px",
-      height: "500px",
-      backgroundColor: "lightgrey",
-      padding: "1rem"
-    };
-    async function requestPerms() {
-      await urbitVisor.requestPermissions(["shipName", "scry", "subscribe", "poke"]);
-    }
-    return /* @__PURE__ */ import_react.default.createElement("div", {
-      style: styles
-    }, /* @__PURE__ */ import_react.default.createElement("p", null, "Welcome to the Urbit Visor Twitter Extension"), /* @__PURE__ */ import_react.default.createElement("p", null, "In order to use the extension you must first grant it permissions to scry, subscribe and read your Urbit ships' name."), /* @__PURE__ */ import_react.default.createElement("p", null, "Click on the button below to request permissions, then click on your Urbit Visor extension icon to grant them."), /* @__PURE__ */ import_react.default.createElement("button", {
-      onClick: requestPerms
-    }, "Request Permissions"));
-  }
-  var Welcome_default = Welcome;
-
-  // src/react/Init.tsx
-  function Init() {
-    (0, import_react3.useEffect)(() => {
-      urbitVisor.registerName("Twitter Ext").then((res) => checkPerms());
-    });
-    const [havePerms, setHavePerms] = (0, import_react3.useState)(true);
-    const styles = {};
-    async function checkPerms() {
-      urbitVisor.on("permissions_granted", [], (perms) => setHavePerms(true));
-      const res = await urbitVisor.authorizedPermissions();
-      setHavePerms(res.response.length > 0);
-    }
-    return /* @__PURE__ */ import_react2.default.createElement("div", {
-      style: styles
-    }, !havePerms && /* @__PURE__ */ import_react2.default.createElement(Welcome_default, null));
-  }
-  var Init_default = /* @__PURE__ */ import_react2.default.createElement(Init, null);
-
-  // src/button/button.ts
-  var import_react10 = __toModule(require_react());
-  var import_react_dom2 = __toModule(require_react_dom());
-
-  // src/react/App.tsx
-  var import_react8 = __toModule(require_react());
-  var import_react9 = __toModule(require_react());
-
   // src/react/Preview.tsx
-  var import_react4 = __toModule(require_react());
-  var import_react5 = __toModule(require_react());
+  var import_react = __toModule(require_react());
+  var import_react2 = __toModule(require_react());
 
   // src/api/client.ts
   var threadsURL = "https://twitter.com/i/api/graphql/GpnXbjn5tx9tVXnVqmXpkA/TweetDetail?variables=";
@@ -26413,10 +26364,10 @@ ${entities.urls.reduce((acc, item) => acc + item.expanded_url, "")}
     return options;
   }
   function Preview(props) {
-    (0, import_react5.useEffect)(() => {
+    (0, import_react2.useEffect)(() => {
       getThread(`${props.id}`).then((tweet2) => setTweet(tweet2));
     }, []);
-    const [tweet, setTweet] = (0, import_react5.useState)(placeholder);
+    const [tweet, setTweet] = (0, import_react2.useState)(placeholder);
     console.log(tweet, "preview component");
     function setLink() {
       props.setPayload({ type: "url", contents: [{ url: props.url.href }] });
@@ -26428,65 +26379,65 @@ ${entities.urls.reduce((acc, item) => acc + item.expanded_url, "")}
     function quit() {
       props.setShow(false);
     }
-    return /* @__PURE__ */ import_react4.default.createElement("div", {
+    return /* @__PURE__ */ import_react.default.createElement("div", {
       id: "tweet-preview"
-    }, /* @__PURE__ */ import_react4.default.createElement("p", {
+    }, /* @__PURE__ */ import_react.default.createElement("p", {
       onClick: quit,
       id: "preview-close-button"
-    }, "X"), /* @__PURE__ */ import_react4.default.createElement("p", null, "You want to share: ", props.url.href), /* @__PURE__ */ import_react4.default.createElement("div", {
+    }, "X"), /* @__PURE__ */ import_react.default.createElement("p", null, "You want to share: ", props.url.href), /* @__PURE__ */ import_react.default.createElement("div", {
       id: "author"
-    }, /* @__PURE__ */ import_react4.default.createElement("img", {
+    }, /* @__PURE__ */ import_react.default.createElement("img", {
       id: "avatar",
       src: tweet.author.avatar,
       alt: ""
-    }), /* @__PURE__ */ import_react4.default.createElement("p", {
+    }), /* @__PURE__ */ import_react.default.createElement("p", {
       id: "tweet-author-name"
-    }, tweet.author.name), /* @__PURE__ */ import_react4.default.createElement("p", null, "@", tweet.author.handle), /* @__PURE__ */ import_react4.default.createElement("p", null, "Posted: ", tweet.time)), /* @__PURE__ */ import_react4.default.createElement("div", {
+    }, tweet.author.name), /* @__PURE__ */ import_react.default.createElement("p", null, "@", tweet.author.handle), /* @__PURE__ */ import_react.default.createElement("p", null, "Posted: ", tweet.time)), /* @__PURE__ */ import_react.default.createElement("div", {
       id: "tweet-body"
-    }, /* @__PURE__ */ import_react4.default.createElement("p", {
+    }, /* @__PURE__ */ import_react.default.createElement("p", {
       id: "tweet-text"
-    }, tweet.text), !tweet.video && tweet.pics.length > 0 && /* @__PURE__ */ import_react4.default.createElement(Pics, {
+    }, tweet.text), !tweet.video && tweet.pics.length > 0 && /* @__PURE__ */ import_react.default.createElement(Pics, {
       pics: tweet.pics
-    }), tweet.video && /* @__PURE__ */ import_react4.default.createElement(Video, {
+    }), tweet.video && /* @__PURE__ */ import_react.default.createElement(Video, {
       video: tweet.video
-    }), tweet.poll && /* @__PURE__ */ import_react4.default.createElement(Poll, {
+    }), tweet.poll && /* @__PURE__ */ import_react.default.createElement(Poll, {
       poll: tweet.poll
-    }), tweet.quote && /* @__PURE__ */ import_react4.default.createElement(Quote, {
+    }), tweet.quote && /* @__PURE__ */ import_react.default.createElement(Quote, {
       quote: tweet.quote
-    })), /* @__PURE__ */ import_react4.default.createElement("div", {
+    })), /* @__PURE__ */ import_react.default.createElement("div", {
       id: "tweet-share-buttons"
-    }, /* @__PURE__ */ import_react4.default.createElement("p", null, "What do you want to share?"), /* @__PURE__ */ import_react4.default.createElement("button", {
+    }, /* @__PURE__ */ import_react.default.createElement("p", null, "What do you want to share?"), /* @__PURE__ */ import_react.default.createElement("button", {
       onClick: setLink
-    }, "Just the Link"), /* @__PURE__ */ import_react4.default.createElement("button", {
+    }, "Just the Link"), /* @__PURE__ */ import_react.default.createElement("button", {
       onClick: setText
     }, "Full Tweet")));
   }
   function Quote({ quote }) {
-    return /* @__PURE__ */ import_react4.default.createElement("div", {
+    return /* @__PURE__ */ import_react.default.createElement("div", {
       id: "tweet-quote"
-    }, /* @__PURE__ */ import_react4.default.createElement("div", {
+    }, /* @__PURE__ */ import_react.default.createElement("div", {
       id: "tweet-quote-author"
-    }, /* @__PURE__ */ import_react4.default.createElement("p", {
+    }, /* @__PURE__ */ import_react.default.createElement("p", {
       id: "tweet-quote-author-name"
-    }, quote.author.name), /* @__PURE__ */ import_react4.default.createElement("p", {
+    }, quote.author.name), /* @__PURE__ */ import_react.default.createElement("p", {
       id: "tweet-quote-author-handle"
-    }, "@", quote.author.handle), /* @__PURE__ */ import_react4.default.createElement("p", {
+    }, "@", quote.author.handle), /* @__PURE__ */ import_react.default.createElement("p", {
       id: "tweet-quote-time"
-    }, quote.time)), /* @__PURE__ */ import_react4.default.createElement("div", {
+    }, quote.time)), /* @__PURE__ */ import_react.default.createElement("div", {
       id: "tweet-quote-body"
-    }, quote.text, !quote.video && quote.pics.length > 0 && /* @__PURE__ */ import_react4.default.createElement(Pics, {
+    }, quote.text, !quote.video && quote.pics.length > 0 && /* @__PURE__ */ import_react.default.createElement(Pics, {
       pics: quote.pics
-    }), quote.video && /* @__PURE__ */ import_react4.default.createElement(Video, {
+    }), quote.video && /* @__PURE__ */ import_react.default.createElement(Video, {
       video: quote.video
-    }), quote.poll && /* @__PURE__ */ import_react4.default.createElement(Poll, {
+    }), quote.poll && /* @__PURE__ */ import_react.default.createElement(Poll, {
       poll: quote.poll
     })));
   }
   function Pics({ pics }) {
-    return /* @__PURE__ */ import_react4.default.createElement("div", {
+    return /* @__PURE__ */ import_react.default.createElement("div", {
       id: "tweet-pictures"
     }, pics.map((pic, i) => {
-      return /* @__PURE__ */ import_react4.default.createElement("img", {
+      return /* @__PURE__ */ import_react.default.createElement("img", {
         key: i,
         className: `img-${pics.length}`,
         src: pic,
@@ -26495,9 +26446,9 @@ ${entities.urls.reduce((acc, item) => acc + item.expanded_url, "")}
     }));
   }
   function Video({ video }) {
-    return /* @__PURE__ */ import_react4.default.createElement("div", {
+    return /* @__PURE__ */ import_react.default.createElement("div", {
       id: "tweet-video"
-    }, /* @__PURE__ */ import_react4.default.createElement("video", {
+    }, /* @__PURE__ */ import_react.default.createElement("video", {
       preload: "none",
       playsInline: true,
       controls: true,
@@ -26506,20 +26457,20 @@ ${entities.urls.reduce((acc, item) => acc + item.expanded_url, "")}
   }
   function Poll({ poll }) {
     const options = pollOptions(poll);
-    return /* @__PURE__ */ import_react4.default.createElement("div", {
+    return /* @__PURE__ */ import_react.default.createElement("div", {
       id: "twitter-poll"
     }, options.map((opt, i) => {
-      return /* @__PURE__ */ import_react4.default.createElement("div", {
+      return /* @__PURE__ */ import_react.default.createElement("div", {
         key: i,
         className: "twitter-poll-option"
-      }, /* @__PURE__ */ import_react4.default.createElement("p", null, opt.label), /* @__PURE__ */ import_react4.default.createElement("p", null, opt.count));
+      }, /* @__PURE__ */ import_react.default.createElement("p", null, opt.label), /* @__PURE__ */ import_react.default.createElement("p", null, opt.count));
     }));
   }
   var Preview_default = Preview;
 
   // src/react/Channels.tsx
-  var import_react6 = __toModule(require_react());
-  var import_react7 = __toModule(require_react());
+  var import_react3 = __toModule(require_react());
+  var import_react4 = __toModule(require_react());
 
   // src/utils/utils.ts
   var import_urbit_ob = __toModule(require_src());
@@ -27242,7 +27193,7 @@ ${entities.urls.reduce((acc, item) => acc + item.expanded_url, "")}
       return { title: "", group: "", type: null, ship: channel.ship, name: channel.name };
   }
   function ChannelSelectBox({ payload }) {
-    (0, import_react7.useEffect)(() => {
+    (0, import_react4.useEffect)(() => {
       readMetadata();
     }, []);
     async function readMetadata() {
@@ -27267,14 +27218,14 @@ ${entities.urls.reduce((acc, item) => acc + item.expanded_url, "")}
       });
       urbitVisor.subscribe({ app: "metadata-store", path: "/all" }).then((res) => sub = res.response);
     }
-    const [input, setInput] = (0, import_react7.useState)("");
-    const [filtering, setFiltering] = (0, import_react7.useState)(false);
-    const [channels, setChannels] = (0, import_react7.useState)([]);
-    const [selected, setSelected] = (0, import_react7.useState)([]);
-    const [loading, setLoading] = (0, import_react7.useState)(false);
-    const [ship, setShip] = (0, import_react7.useState)("");
-    const [dm, setDM] = (0, import_react7.useState)(null);
-    const [options, setOptions] = (0, import_react7.useState)(channels);
+    const [input, setInput] = (0, import_react4.useState)("");
+    const [filtering, setFiltering] = (0, import_react4.useState)(false);
+    const [channels, setChannels] = (0, import_react4.useState)([]);
+    const [selected, setSelected] = (0, import_react4.useState)([]);
+    const [loading, setLoading] = (0, import_react4.useState)(false);
+    const [ship, setShip] = (0, import_react4.useState)("");
+    const [dm, setDM] = (0, import_react4.useState)(null);
+    const [options, setOptions] = (0, import_react4.useState)(channels);
     const divStyles = {
       width: "1000px",
       margin: "1rem auto",
@@ -27365,49 +27316,49 @@ ${entities.urls.reduce((acc, item) => acc + item.expanded_url, "")}
     console.log(options, "options");
     console.log(dm, "dm");
     console.log(input, "input");
-    return /* @__PURE__ */ import_react6.default.createElement("div", {
+    return /* @__PURE__ */ import_react3.default.createElement("div", {
       style: divStyles,
       className: "uv-channel-selector"
-    }, /* @__PURE__ */ import_react6.default.createElement("div", {
+    }, /* @__PURE__ */ import_react3.default.createElement("div", {
       style: titleStyles,
       className: "title"
-    }, /* @__PURE__ */ import_react6.default.createElement("img", {
+    }, /* @__PURE__ */ import_react3.default.createElement("img", {
       style: logoStyles,
       src: "https://github.com/dcSpark/urbit-visor/raw/main/assets/visor-logo.png",
       alt: ""
-    }), /* @__PURE__ */ import_react6.default.createElement("p", null, "Channel Selector")), /* @__PURE__ */ import_react6.default.createElement("div", {
+    }), /* @__PURE__ */ import_react3.default.createElement("p", null, "Channel Selector")), /* @__PURE__ */ import_react3.default.createElement("div", {
       className: "searchbox"
-    }, /* @__PURE__ */ import_react6.default.createElement("p", null, "Search channels or DMs"), /* @__PURE__ */ import_react6.default.createElement("div", {
+    }, /* @__PURE__ */ import_react3.default.createElement("p", null, "Search channels or DMs"), /* @__PURE__ */ import_react3.default.createElement("div", {
       className: "row2"
-    }, /* @__PURE__ */ import_react6.default.createElement("input", {
+    }, /* @__PURE__ */ import_react3.default.createElement("input", {
       onChange: handleChange,
       value: input,
       type: "text"
-    }), /* @__PURE__ */ import_react6.default.createElement("p", null, dm && "Send DM to:"), dm && /* @__PURE__ */ import_react6.default.createElement("p", {
+    }), /* @__PURE__ */ import_react3.default.createElement("p", null, dm && "Send DM to:"), dm && /* @__PURE__ */ import_react3.default.createElement("p", {
       onClick: () => select(dm),
       style: keyStyles
-    }, dm.name)), filtering && /* @__PURE__ */ import_react6.default.createElement("p", null, "Filtering channels...")), /* @__PURE__ */ import_react6.default.createElement("div", {
+    }, dm.name)), filtering && /* @__PURE__ */ import_react3.default.createElement("p", null, "Filtering channels...")), /* @__PURE__ */ import_react3.default.createElement("div", {
       style: containerStyles,
       className: "keys"
-    }, /* @__PURE__ */ import_react6.default.createElement("div", {
+    }, /* @__PURE__ */ import_react3.default.createElement("div", {
       className: "key-container"
-    }, loading && /* @__PURE__ */ import_react6.default.createElement("p", null, "... loading ..."), !loading && /* @__PURE__ */ import_react6.default.createElement("p", null, "Choose a channel to share the Tweet:"), options.map((k, index) => {
+    }, loading && /* @__PURE__ */ import_react3.default.createElement("p", null, "... loading ..."), !loading && /* @__PURE__ */ import_react3.default.createElement("p", null, "Choose a channel to share the Tweet:"), options.map((k, index) => {
       const string = k.title.length ? `${k.group} - ${k.title}` : k.name;
-      return /* @__PURE__ */ import_react6.default.createElement("p", {
+      return /* @__PURE__ */ import_react3.default.createElement("p", {
         style: keyStyles,
         key: string,
         onClick: () => select(k)
       }, " ", string);
-    })), /* @__PURE__ */ import_react6.default.createElement("div", {
+    })), /* @__PURE__ */ import_react3.default.createElement("div", {
       className: "key-container selected-container"
-    }, /* @__PURE__ */ import_react6.default.createElement("p", null, "Share Tweet to:"), selected.map((k, index) => {
+    }, /* @__PURE__ */ import_react3.default.createElement("p", null, "Share Tweet to:"), selected.map((k, index) => {
       const string = k.title.length ? `${k.group} - ${k.title}` : k.name;
-      return /* @__PURE__ */ import_react6.default.createElement("p", {
+      return /* @__PURE__ */ import_react3.default.createElement("p", {
         onClick: () => unselect(k),
         style: keyStyles,
         key: string
       }, " ", string);
-    }), /* @__PURE__ */ import_react6.default.createElement("button", {
+    }), /* @__PURE__ */ import_react3.default.createElement("button", {
       onClick: handleClick2
     }, "Send"))));
   }
@@ -27415,9 +27366,44 @@ ${entities.urls.reduce((acc, item) => acc + item.expanded_url, "")}
 
   // src/react/App.tsx
   var import_react_dom = __toModule(require_react_dom());
+
+  // src/react/Welcome.tsx
+  var import_react5 = __toModule(require_react());
+  function Welcome() {
+    const styles = {
+      position: "fixed",
+      top: "50%",
+      left: "50%",
+      transform: "translate(-50%, -50%)",
+      width: "500px",
+      height: "500px",
+      backgroundColor: "lightgrey",
+      padding: "1rem"
+    };
+    async function requestPerms() {
+      await urbitVisor.requestPermissions(["shipName", "scry", "subscribe", "poke"]);
+    }
+    return /* @__PURE__ */ import_react5.default.createElement("div", {
+      style: styles
+    }, /* @__PURE__ */ import_react5.default.createElement("p", null, "Welcome to the Urbit Visor Twitter Extension"), /* @__PURE__ */ import_react5.default.createElement("p", null, "In order to use the extension you must first grant it permissions to scry, subscribe and read your Urbit ships' name."), /* @__PURE__ */ import_react5.default.createElement("p", null, "Click on the button below to request permissions, then click on your Urbit Visor extension icon to grant them."), /* @__PURE__ */ import_react5.default.createElement("button", {
+      onClick: requestPerms
+    }, "Request Permissions"));
+  }
+  var Welcome_default = Welcome;
+
+  // src/react/App.tsx
   function App(props) {
-    const [payload, setPayload] = (0, import_react9.useState)(null);
-    const [show, setShow] = (0, import_react9.useState)(true);
+    (0, import_react7.useEffect)(() => {
+      checkPerms();
+    });
+    const [havePerms, setHavePerms] = (0, import_react7.useState)(true);
+    const [payload, setPayload] = (0, import_react7.useState)(null);
+    const [show, setShow] = (0, import_react7.useState)(true);
+    async function checkPerms() {
+      urbitVisor.on("permissions_granted", [], (perms) => setHavePerms(true));
+      const res = await urbitVisor.authorizedPermissions();
+      setHavePerms(res.response.length > 0);
+    }
     console.log(show, "show");
     if (!show)
       import_react_dom.default.unmountComponentAtNode(document.getElementById("uv-twitter-extension-container"));
@@ -27430,15 +27416,18 @@ ${entities.urls.reduce((acc, item) => acc + item.expanded_url, "")}
       backgroundColor: "rgb(25, 25, 25, 0.9",
       display: "flex"
     };
-    return /* @__PURE__ */ import_react8.default.createElement("div", {
-      style: styles
-    }, /* @__PURE__ */ import_react8.default.createElement(Preview_default, {
-      ...props,
-      setShow,
-      setPayload
-    }), payload && /* @__PURE__ */ import_react8.default.createElement(Channels_default, {
-      payload
-    }));
+    if (havePerms)
+      return /* @__PURE__ */ import_react6.default.createElement("div", {
+        style: styles
+      }, /* @__PURE__ */ import_react6.default.createElement(Preview_default, {
+        ...props,
+        setShow,
+        setPayload
+      }), payload && /* @__PURE__ */ import_react6.default.createElement(Channels_default, {
+        payload
+      }));
+    else
+      return /* @__PURE__ */ import_react6.default.createElement(Welcome_default, null);
   }
   var App_default = App;
 
@@ -27495,7 +27484,7 @@ ${entities.urls.reduce((acc, item) => acc + item.expanded_url, "")}
     const strings = url.split("/");
     const id = strings[strings.length - 1];
     const div = document.getElementById("uv-twitter-extension-container");
-    const react = import_react10.default.createElement(App_default, { id, url: new URL(url) });
+    const react = import_react8.default.createElement(App_default, { id, url: new URL(url) });
     import_react_dom2.default.render(react, div);
   }
   var injectButtons = () => {
@@ -27521,10 +27510,10 @@ ${entities.urls.reduce((acc, item) => acc + item.expanded_url, "")}
   // src/content.ts
   async function init() {
     console.log("uv twitter extension running");
+    urbitVisor.registerName("Twitter Ext").then((res) => console.log("Twitter extension registered with Urbit Visor"));
     const div = document.createElement("div");
     div.id = "uv-twitter-extension-container";
     document.body.appendChild(div);
-    import_react_dom3.default.render(Init_default, div);
     console.log("uv twitter extension injected");
     injectButtons();
   }
