@@ -1,5 +1,6 @@
-.urbit-visor-share-tweet-button-text:hover{
-  text-decoration: underline;
+
+.urbit-visor-share-tweet-button:hover{
+  cursor: pointer;
 }
 
 

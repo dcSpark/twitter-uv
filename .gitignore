@@ -4,3 +4,6 @@ npm-debug.log
 .env
 .DS_Store
 .dist
+out.css
+out.js
+out.js.map
