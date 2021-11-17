@@ -27022,7 +27022,6 @@ ${entities.urls.reduce((acc, item) => acc + item.expanded_url, "")}
       const type = metadata[url].metadata.config.graph;
       const group = metadata[url].group;
       const groupMetadata = metadata[`${group}/groups${group}`];
-      console.log(groupMetadata, "group");
       const groupTitle = groupMetadata?.metadata?.title;
       return {
         title,
@@ -27046,7 +27045,6 @@ ${entities.urls.reduce((acc, item) => acc + item.expanded_url, "")}
         setLoading(false);
         const list = keys.response["graph-update"].keys.map((channel) => referenceMetadata(channel, data));
         const channels2 = list.filter((chan) => chan.name !== "dm-inbox" && chan.group !== "");
-        console.log(list, "list");
         if (filter === "collections")
           setChannels(channels2.filter((chan) => chan.type !== "links"));
         else
@@ -27147,14 +27145,18 @@ ${entities.urls.reduce((acc, item) => acc + item.expanded_url, "")}
   var Channels_default = ChannelSelectBox;
   function UrbitKey({ keyString, metadata, selected, select, unselect }) {
     const key = { ship: metadata.ship, name: metadata.name };
-    const [disabled, setDisabled] = (0, import_react4.useState)(false);
-    const checked = !!selected.find((k) => k.ship == key.ship && k.name && key.name);
+    const checked = !!selected.find((k) => k.ship === key.ship && k.name === key.name);
     function handleSelect(e) {
       if (e.target.checked)
         select(key);
       else
         unselect(key);
     }
+    ;
+    const disabled = selected.length >= 3 && !checked;
+    console.log(key, "key");
+    console.log(disabled, "disabled");
+    console.log(checked, "checked");
     const chatIcon = /* @__PURE__ */ import_react3.default.createElement("svg", {
       color: "black",
       display: "block",
@@ -27250,7 +27252,7 @@ ${entities.urls.reduce((acc, item) => acc + item.expanded_url, "")}
   function ShareModal(props) {
     (0, import_react6.useEffect)(() => {
       urbitVisor.getShip().then((res) => setShip(res.response));
-    });
+    }, []);
     const linkOnly = /* @__PURE__ */ import_react5.default.createElement("div", {
       id: "twitter-link"
     }, /* @__PURE__ */ import_react5.default.createElement("p", null, props.url.href));

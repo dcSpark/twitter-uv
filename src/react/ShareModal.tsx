@@ -16,10 +16,10 @@ interface UrbitKey {
 export default function ShareModal(props: ModalProps) {
     useEffect(()=>{
         urbitVisor.getShip().then(res => setShip(res.response))
-    })
+    }, []);
     const linkOnly = <div id="twitter-link"><p>{props.url.href}</p></div>
 
-    console.log(props, "share modal running")
+    console.log(props, "share modal running");
     const [payload, setPayload] = useState(props.url.href);
     const [preview, setPreview] = useState(linkOnly);
     const [ship, setShip] = useState<string>(null);
