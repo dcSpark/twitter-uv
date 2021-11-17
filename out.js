@@ -27154,9 +27154,6 @@ ${entities.urls.reduce((acc, item) => acc + item.expanded_url, "")}
     }
     ;
     const disabled = selected.length >= 3 && !checked;
-    console.log(key, "key");
-    console.log(disabled, "disabled");
-    console.log(checked, "checked");
     const chatIcon = /* @__PURE__ */ import_react3.default.createElement("svg", {
       color: "black",
       display: "block",
