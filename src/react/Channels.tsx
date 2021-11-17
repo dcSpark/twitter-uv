@@ -131,8 +131,6 @@ export function ChannelSelectBox({ filter, selected, setSelected }: ChannelBoxPr
     }
 
     function select(key) {
-        if (key.group === "DM") setInput("");
-        console.log(key, "selected key")
         setSelected([...selected, key]);
     }
 
@@ -150,7 +148,7 @@ export function ChannelSelectBox({ filter, selected, setSelected }: ChannelBoxPr
     return (
         <div id="uv-channel-selector">
             <div id="uv-channel-selector-title">
-                <h4>Select Channels ({selected.length}/{channels.length})</h4>
+                <h4>Select Channels ({selected.length}/3)</h4>
             </div>
             <div id="uv-channel-selector-searchbox">
                 <div onClick={focusOnInput} id="uv-channel-selector-searchbox-wrapper">
@@ -162,7 +160,7 @@ export function ChannelSelectBox({ filter, selected, setSelected }: ChannelBoxPr
                 {loading && <p>... loading ...</p>}
                 {options.map((k, index) => {
                     const key = `${k.ship}/${k.name}`;
-                    return <UrbitKey key={key} keyString={key} select={select} unselect={unselect} metadata={k} />
+                    return <UrbitKey key={key} keyString={key} selected={selected} select={select} unselect={unselect} metadata={k} />
                 })}
             </div>
         </div>);
@@ -176,10 +174,13 @@ interface UrbitKeyProps {
     metadata: any
     select: (key) => void
     unselect: (key) => void
+    selected: UrbitKey[]
 }
-function UrbitKey({ keyString, metadata, select, unselect }: UrbitKeyProps) {
+function UrbitKey({ keyString, metadata, selected, select, unselect }: UrbitKeyProps) {
+    const key: UrbitKey = { ship: metadata.ship, name: metadata.name }
+    const [disabled, setDisabled] = useState(false);
+    const checked = !!selected.find(k => k.ship == key.ship && k.name && key.name);
     function handleSelect(e) {
-        const key: UrbitKey = { ship: metadata.ship, name: metadata.name }
         if (e.target.checked) select(key)
         else unselect(key)
     }
@@ -195,7 +196,7 @@ function UrbitKey({ keyString, metadata, select, unselect }: UrbitKeyProps) {
     if (metadata.type == "DM") icon = dmIcon;
     return (
         <div className="urbit-key">
-            <input onChange={handleSelect} type="checkbox" name={keyString} id={keyString} />
+            <input onChange={handleSelect} type="checkbox" name={keyString} id={keyString} defaultChecked={checked} disabled={disabled} />
             <div className="urbit-key-name">
                 <p className="urbit-key-title">{metadata.title}</p>
                 <p className="urbit-key-group">in {metadata.group}</p>

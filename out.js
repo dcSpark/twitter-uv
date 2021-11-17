@@ -1044,7 +1044,7 @@
             }
             return dispatcher.useContext(Context, unstable_observedBits);
           }
-          function useState4(initialState) {
+          function useState5(initialState) {
             var dispatcher = resolveDispatcher();
             return dispatcher.useState(initialState);
           }
@@ -1056,7 +1056,7 @@
             var dispatcher = resolveDispatcher();
             return dispatcher.useRef(initialValue);
           }
-          function useEffect4(create, deps) {
+          function useEffect5(create, deps) {
             var dispatcher = resolveDispatcher();
             return dispatcher.useEffect(create, deps);
           }
@@ -1626,13 +1626,13 @@
           exports.useCallback = useCallback;
           exports.useContext = useContext;
           exports.useDebugValue = useDebugValue;
-          exports.useEffect = useEffect4;
+          exports.useEffect = useEffect5;
           exports.useImperativeHandle = useImperativeHandle;
           exports.useLayoutEffect = useLayoutEffect;
           exports.useMemo = useMemo;
           exports.useReducer = useReducer;
           exports.useRef = useRef2;
-          exports.useState = useState4;
+          exports.useState = useState5;
           exports.version = ReactVersion;
         })();
       }
@@ -2440,11 +2440,11 @@
       if (true) {
         (function() {
           "use strict";
-          var React6 = require_react();
+          var React7 = require_react();
           var _assign = require_object_assign();
           var Scheduler = require_scheduler();
           var tracing = require_tracing();
-          var ReactSharedInternals = React6.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
+          var ReactSharedInternals = React7.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
           function warn(format) {
             {
               for (var _len = arguments.length, args = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
@@ -2476,7 +2476,7 @@
               Function.prototype.apply.call(console[level], console, argsWithFormat);
             }
           }
-          if (!React6) {
+          if (!React7) {
             {
               throw Error("ReactDOM was loaded before React. Make sure you load the React package before loading ReactDOM.");
             }
@@ -3692,7 +3692,7 @@
           var didWarnInvalidChild = false;
           function flattenChildren(children) {
             var content = "";
-            React6.Children.forEach(children, function(child) {
+            React7.Children.forEach(children, function(child) {
               if (child == null) {
                 return;
               }
@@ -3703,7 +3703,7 @@
           function validateProps(element, props) {
             {
               if (typeof props.children === "object" && props.children !== null) {
-                React6.Children.forEach(props.children, function(child) {
+                React7.Children.forEach(props.children, function(child) {
                   if (child == null) {
                     return;
                   }
@@ -10896,7 +10896,7 @@
           }
           var fakeInternalInstance = {};
           var isArray2 = Array.isArray;
-          var emptyRefsObject = new React6.Component().refs;
+          var emptyRefsObject = new React7.Component().refs;
           var didWarnAboutStateAssignmentForComponent;
           var didWarnAboutUninitializedState;
           var didWarnAboutGetSnapshotBeforeUpdateWithoutDidUpdate;
@@ -24848,12 +24848,16 @@ zodnecbudwessevpersutletfulpensytdurwepserwylsunrypsyxdyrnuphebpeglupdepdysputlu
   });
 
   // src/button/button.ts
-  var import_react8 = __toModule(require_react());
+  var import_react10 = __toModule(require_react());
   var import_react_dom2 = __toModule(require_react_dom());
 
   // src/react/App.tsx
+  var import_react8 = __toModule(require_react());
+  var import_react9 = __toModule(require_react());
+
+  // src/react/ShareModal.tsx
+  var import_react5 = __toModule(require_react());
   var import_react6 = __toModule(require_react());
-  var import_react7 = __toModule(require_react());
 
   // node_modules/@dcspark/uv-core/dist/types.js
   var VISOR_ID = "oadimaacghcacmfipakhadejgalcaepg";
@@ -26289,20 +26293,7 @@ ${entities.urls.reduce((acc, item) => acc + item.expanded_url, "")}
     return date.toLocaleString();
   }
 
-  // src/react/Preview.tsx
-  var placeholder = {
-    author: {
-      name: "",
-      handle: "",
-      avatar: ""
-    },
-    pics: [],
-    time: "1d",
-    video: null,
-    text: "",
-    quote: null,
-    poll: null
-  };
+  // src/utils/parsing.ts
   function tweetToText(tweet) {
     const url = `https://twitter.com/${tweet.author.handle}/statuses/${tweet.index}`;
     const contents = [];
@@ -26363,29 +26354,35 @@ ${entities.urls.reduce((acc, item) => acc + item.expanded_url, "")}
     });
     return options;
   }
+
+  // src/react/Preview.tsx
+  var placeholder = {
+    author: {
+      name: "",
+      handle: "",
+      avatar: ""
+    },
+    pics: [],
+    time: "1d",
+    video: null,
+    text: "",
+    quote: null,
+    poll: null
+  };
   function Preview(props) {
     (0, import_react2.useEffect)(() => {
-      getThread(`${props.id}`).then((tweet2) => setTweet(tweet2));
+      getThread(`${props.id}`).then((tweet2) => {
+        const text = tweetToText(tweet2);
+        props.setPayload(text);
+        setTweet(tweet2);
+      });
     }, []);
     const [tweet, setTweet] = (0, import_react2.useState)(placeholder);
     console.log(tweet, "preview component");
-    function setLink() {
-      props.setPayload({ type: "url", contents: [{ url: props.url.href }] });
-    }
-    function setText() {
-      const text = tweetToText(tweet);
-      props.setPayload({ type: "text", contents: text });
-    }
-    function quit() {
-      props.setShow(false);
-    }
     return /* @__PURE__ */ import_react.default.createElement("div", {
       id: "tweet-preview"
-    }, /* @__PURE__ */ import_react.default.createElement("p", {
-      onClick: quit,
-      id: "preview-close-button"
-    }, "X"), /* @__PURE__ */ import_react.default.createElement("p", null, "You want to share: ", props.url.href), /* @__PURE__ */ import_react.default.createElement("div", {
-      id: "author"
+    }, /* @__PURE__ */ import_react.default.createElement("div", {
+      id: "tweet-preview-author"
     }, /* @__PURE__ */ import_react.default.createElement("img", {
       id: "avatar",
       src: tweet.author.avatar,
@@ -26404,13 +26401,7 @@ ${entities.urls.reduce((acc, item) => acc + item.expanded_url, "")}
       poll: tweet.poll
     }), tweet.quote && /* @__PURE__ */ import_react.default.createElement(Quote, {
       quote: tweet.quote
-    })), /* @__PURE__ */ import_react.default.createElement("div", {
-      id: "tweet-share-buttons"
-    }, /* @__PURE__ */ import_react.default.createElement("p", null, "What do you want to share?"), /* @__PURE__ */ import_react.default.createElement("button", {
-      onClick: setLink
-    }, "Just the Link"), /* @__PURE__ */ import_react.default.createElement("button", {
-      onClick: setText
-    }, "Full Tweet")));
+    })));
   }
   function Quote({ quote }) {
     return /* @__PURE__ */ import_react.default.createElement("div", {
@@ -26994,11 +26985,12 @@ ${entities.urls.reduce((acc, item) => acc + item.expanded_url, "")}
   var finals = "cdglmnprstvx".split("");
   var vowels = "aeiouy".split("");
   function liveCheckPatp(input) {
-    const i = input.replace("-", "");
+    const i = input.replace(/-/g, "");
     if (i[0] !== "~")
       return false;
     else {
       const syllables = i.slice(1).match(/.{1,3}/g);
+      console.log(syllables, "syllables");
       if (syllables)
         return checkSyllables(syllables);
       else
@@ -27021,158 +27013,8 @@ ${entities.urls.reduce((acc, item) => acc + item.expanded_url, "")}
         return false;
     }
   }
-  function addDashes(p2) {
-    const list = p2.replace(/[~-]/g, "").match(/.{1,6}/g);
-    console.log(list, "list");
-    console.log(list.join("-"));
-    return "~" + list.join("-");
-  }
-  function buildChatPost(author, resource, contents) {
-    return {
-      app: "graph-push-hook",
-      mark: "graph-update-3",
-      json: {
-        "add-nodes": {
-          resource: { name: resource.name, ship: "~" + resource.ship },
-          nodes: {
-            "/9": {
-              children: null,
-              post: {
-                author: "~" + author,
-                contents,
-                hash: null,
-                index: "/9",
-                signatures: [],
-                "time-sent": Date.now()
-              }
-            }
-          }
-        }
-      }
-    };
-  }
-  function buildNotebookPost(author, resource, title, contents) {
-    const node = {};
-    const index = `/${makeIndex()}`;
-    node[index] = {
-      children: {
-        "1": {
-          post: {
-            author: "~" + author,
-            contents: [],
-            hash: null,
-            index: index + "/1",
-            signatures: [],
-            "time-sent": Date.now()
-          },
-          children: {
-            "1": {
-              children: null,
-              post: {
-                author: "~" + author,
-                contents: [{ text: title }, ...contents],
-                hash: null,
-                index: index + "/1/1",
-                signatures: [],
-                "time-sent": Date.now()
-              }
-            }
-          }
-        },
-        "2": {
-          children: null,
-          post: {
-            author: "~" + author,
-            contents: [],
-            hash: null,
-            index: index + "/2",
-            signatures: [],
-            "time-sent": Date.now()
-          }
-        }
-      },
-      post: {
-        author: "~" + author,
-        contents: [],
-        hash: null,
-        index,
-        signatures: [],
-        "time-sent": Date.now()
-      }
-    };
-    return {
-      app: "graph-push-hook",
-      mark: "graph-update-3",
-      json: {
-        "add-nodes": {
-          resource: { name: resource.name, ship: "~" + resource.ship },
-          nodes: node
-        }
-      }
-    };
-  }
-  function buildCollectionPost(author, resource, title, url) {
-    const node = {};
-    const index = `/${makeIndex()}`;
-    node[index] = {
-      children: null,
-      post: {
-        author: "~" + author,
-        contents: [{ text: title }, ...url],
-        hash: null,
-        index,
-        signatures: [],
-        "time-sent": Date.now()
-      }
-    };
-    return {
-      app: "graph-push-hook",
-      mark: "graph-update-3",
-      json: {
-        "add-nodes": {
-          resource: { name: resource.name, ship: "~" + resource.ship },
-          nodes: node
-        }
-      }
-    };
-  }
-  function buildDM(author, recipient, contents) {
-    const node = {};
-    const point = (0, import_urbit_ob.patp2dec)(recipient);
-    console.log(point, "point");
-    const index = `/${point}/${makeIndex()}`;
-    node[index] = {
-      children: null,
-      post: {
-        author: "~" + author,
-        contents,
-        hash: null,
-        index,
-        signatures: [],
-        "time-sent": Date.now()
-      }
-    };
-    return {
-      app: "dm-hook",
-      mark: "graph-update-3",
-      json: {
-        "add-nodes": {
-          resource: { name: "dm-inbox", ship: "~" + author },
-          nodes: node
-        }
-      }
-    };
-  }
-  function makeIndex() {
-    const DA_UNIX_EPOCH = BigInt("170141184475152167957503069145530368000");
-    const DA_SECOND = BigInt("18446744073709551616");
-    const timeSinceEpoch = BigInt(Date.now()) * DA_SECOND / BigInt(1e3);
-    return (DA_UNIX_EPOCH + timeSinceEpoch).toString();
-  }
 
   // src/react/Channels.tsx
-  var bg = "rgb(25,35,31)";
-  var lightbg = "rgb(35,45,41)";
   function referenceMetadata(channel, metadata) {
     const url = Object.keys(metadata).find((el) => el.includes(`${channel.ship}/${channel.name}`));
     if (url) {
@@ -27192,7 +27034,7 @@ ${entities.urls.reduce((acc, item) => acc + item.expanded_url, "")}
     } else
       return { title: "", group: "", type: null, ship: channel.ship, name: channel.name };
   }
-  function ChannelSelectBox({ payload }) {
+  function ChannelSelectBox({ filter, selected, setSelected }) {
     (0, import_react4.useEffect)(() => {
       readMetadata();
     }, []);
@@ -27200,15 +27042,12 @@ ${entities.urls.reduce((acc, item) => acc + item.expanded_url, "")}
       let sub;
       setLoading(true);
       const subscription = urbitVisor.on("sse", ["metadata-update", "associations"], async (data) => {
-        const shipName = await urbitVisor.getShip();
-        console.log(shipName, "ship");
-        setShip(shipName.response);
         const keys = await urbitVisor.scry({ app: "graph-store", path: "/keys" });
         setLoading(false);
         const list = keys.response["graph-update"].keys.map((channel) => referenceMetadata(channel, data));
-        const channels2 = list.filter((chan) => chan.name !== "dm-inbox");
+        const channels2 = list.filter((chan) => chan.name !== "dm-inbox" && chan.group !== "");
         console.log(list, "list");
-        if (payload.type !== "url")
+        if (filter === "collections")
           setChannels(channels2.filter((chan) => chan.type !== "links"));
         else
           setChannels(channels2);
@@ -27218,157 +27057,285 @@ ${entities.urls.reduce((acc, item) => acc + item.expanded_url, "")}
       });
       urbitVisor.subscribe({ app: "metadata-store", path: "/all" }).then((res) => sub = res.response);
     }
+    const inputRef = (0, import_react4.useRef)();
     const [input, setInput] = (0, import_react4.useState)("");
-    const [filtering, setFiltering] = (0, import_react4.useState)(false);
     const [channels, setChannels] = (0, import_react4.useState)([]);
-    const [selected, setSelected] = (0, import_react4.useState)([]);
+    const [dms, setDMs] = (0, import_react4.useState)([]);
+    const [dmCandidate, setDMCandidate] = (0, import_react4.useState)(null);
     const [loading, setLoading] = (0, import_react4.useState)(false);
-    const [ship, setShip] = (0, import_react4.useState)("");
-    const [dm, setDM] = (0, import_react4.useState)(null);
     const [options, setOptions] = (0, import_react4.useState)(channels);
-    const divStyles = {
-      width: "1000px",
-      margin: "1rem auto",
-      borderRadius: "1rem",
-      padding: "1rem",
-      backgroundColor: bg,
-      overflow: "auto",
-      color: "white"
-    };
-    const logoStyles = {
-      width: "100px"
-    };
-    const titleStyles = {
-      margin: "auto",
-      textAlign: "center"
-    };
     async function handleClick2() {
-      for (let channel of selected) {
-        let data;
-        console.log(channel, "channel");
-        if (channel.group === "DM")
-          data = buildDM(ship, channel.name, payload.contents);
-        else if (channel.type === "publish")
-          data = buildNotebookPost(ship, channel, "Urbit Visor Share", payload.contents);
-        else if (channel.type === "link")
-          data = buildCollectionPost(ship, channel, "Urbit Visor Share", payload.contents);
-        else if (channel.type === "chat")
-          data = buildChatPost(ship, channel, payload.contents);
-        console.log(data, "data");
-        const res = await urbitVisor.poke(data);
-        console.log(res, "poked");
-      }
     }
     function handleChange(e) {
       const inp = e.target.value.toLowerCase();
+      e.target.style.width = `${inp.length + 5}ch`;
       setInput(e.target.value);
       if (inp.length > 0) {
         if (inp[0] === "~") {
-          setFiltering(false);
-          const patp = liveCheckPatp(inp);
-          if (patp)
-            setDM({ group: "DM", title: addDashes(inp), name: addDashes(inp), ship: addDashes(inp) });
+          const validPatp = liveCheckPatp(inp);
+          if (validPatp)
+            setDMCandidate(inp.replace(/-+$/, ""));
           else
-            setDM(null);
+            setDMCandidate(null);
         } else {
-          setFiltering(true);
+          setDMCandidate(null);
           const filtered = channels.filter((chan) => {
             return chan.name.includes(inp) || chan.group.includes(inp) || chan.title.includes(inp) || chan.ship.includes(inp);
           });
-          setOptions(filtered);
+          setOptions([...dms, ...filtered]);
         }
       } else {
-        setFiltering(false);
-        setOptions(channels);
+        setOptions([...dms, ...channels]);
       }
     }
+    function addDM() {
+      const patp = dmCandidate;
+      const data = {
+        group: "Direct Messages",
+        name: "dm",
+        ship: patp,
+        title: patp,
+        type: "DM"
+      };
+      const set = [data, ...dms.filter((dm) => dm.ship !== patp)];
+      setDMs(set);
+      setOptions([data, ...options.filter((dm) => dm.ship !== patp)]);
+    }
     function select(key) {
-      const newchans = channels.filter((k) => !(k.group === key.group && k.name === key.name));
-      const newlist = options.filter((k) => !(k.group === key.group && k.name === key.name));
-      setChannels(newchans);
-      setOptions(newlist);
-      setDM(null);
-      if (key.group === "DM")
-        setInput("");
       setSelected([...selected, key]);
     }
     function unselect(key) {
-      const newlist = selected.filter((k) => !(k.group === key.group && k.name === key.name));
+      const newlist = selected.filter((k) => !(k.ship === key.ship && k.name === key.name));
       setSelected(newlist);
-      if (key.group !== "DM") {
-        setOptions([...options, key]);
-        setChannels([...channels, key]);
-      }
     }
-    const containerStyles = {
-      display: "flex",
-      maxWidth: "100%"
-    };
-    const keyStyles = {
-      margin: "10px",
-      cursor: "pointer",
-      padding: "0.5rem",
-      backgroundColor: lightbg,
-      borderRadius: "1rem",
-      border: "1px solid transparent",
-      color: "white"
-    };
-    console.log(options, "options");
-    console.log(dm, "dm");
-    console.log(input, "input");
+    function focusOnInput() {
+      inputRef.current.focus();
+    }
+    console.log(selected, "selected");
     return /* @__PURE__ */ import_react3.default.createElement("div", {
-      style: divStyles,
-      className: "uv-channel-selector"
+      id: "uv-channel-selector"
     }, /* @__PURE__ */ import_react3.default.createElement("div", {
-      style: titleStyles,
-      className: "title"
-    }, /* @__PURE__ */ import_react3.default.createElement("img", {
-      style: logoStyles,
-      src: "https://github.com/dcSpark/urbit-visor/raw/main/assets/visor-logo.png",
-      alt: ""
-    }), /* @__PURE__ */ import_react3.default.createElement("p", null, "Channel Selector")), /* @__PURE__ */ import_react3.default.createElement("div", {
-      className: "searchbox"
-    }, /* @__PURE__ */ import_react3.default.createElement("p", null, "Search channels or DMs"), /* @__PURE__ */ import_react3.default.createElement("div", {
-      className: "row2"
+      id: "uv-channel-selector-title"
+    }, /* @__PURE__ */ import_react3.default.createElement("h4", null, "Select Channels (", selected.length, "/3)")), /* @__PURE__ */ import_react3.default.createElement("div", {
+      id: "uv-channel-selector-searchbox"
+    }, /* @__PURE__ */ import_react3.default.createElement("div", {
+      onClick: focusOnInput,
+      id: "uv-channel-selector-searchbox-wrapper"
     }, /* @__PURE__ */ import_react3.default.createElement("input", {
+      ref: inputRef,
+      placeholder: "Search channels or DMs",
       onChange: handleChange,
       value: input,
       type: "text"
-    }), /* @__PURE__ */ import_react3.default.createElement("p", null, dm && "Send DM to:"), dm && /* @__PURE__ */ import_react3.default.createElement("p", {
-      onClick: () => select(dm),
-      style: keyStyles
-    }, dm.name)), filtering && /* @__PURE__ */ import_react3.default.createElement("p", null, "Filtering channels...")), /* @__PURE__ */ import_react3.default.createElement("div", {
-      style: containerStyles,
-      className: "keys"
-    }, /* @__PURE__ */ import_react3.default.createElement("div", {
-      className: "key-container"
-    }, loading && /* @__PURE__ */ import_react3.default.createElement("p", null, "... loading ..."), !loading && /* @__PURE__ */ import_react3.default.createElement("p", null, "Choose a channel to share the Tweet:"), options.map((k, index) => {
-      const string = k.title.length ? `${k.group} - ${k.title}` : k.name;
-      return /* @__PURE__ */ import_react3.default.createElement("p", {
-        style: keyStyles,
-        key: string,
-        onClick: () => select(k)
-      }, " ", string);
-    })), /* @__PURE__ */ import_react3.default.createElement("div", {
-      className: "key-container selected-container"
-    }, /* @__PURE__ */ import_react3.default.createElement("p", null, "Share Tweet to:"), selected.map((k, index) => {
-      const string = k.title.length ? `${k.group} - ${k.title}` : k.name;
-      return /* @__PURE__ */ import_react3.default.createElement("p", {
-        onClick: () => unselect(k),
-        style: keyStyles,
-        key: string
-      }, " ", string);
-    }), /* @__PURE__ */ import_react3.default.createElement("button", {
-      onClick: handleClick2
-    }, "Send"))));
+    }), dmCandidate && /* @__PURE__ */ import_react3.default.createElement("button", {
+      onClick: addDM,
+      className: "dm-candidate-chip"
+    }, dmCandidate))), /* @__PURE__ */ import_react3.default.createElement("div", {
+      id: "urbit-key-container"
+    }, loading && /* @__PURE__ */ import_react3.default.createElement("p", null, "... loading ..."), options.map((k, index) => {
+      const key = `${k.ship}/${k.name}`;
+      return /* @__PURE__ */ import_react3.default.createElement(UrbitKey, {
+        key,
+        keyString: key,
+        selected,
+        select,
+        unselect,
+        metadata: k
+      });
+    })));
   }
   var Channels_default = ChannelSelectBox;
+  function UrbitKey({ keyString, metadata, selected, select, unselect }) {
+    const key = { ship: metadata.ship, name: metadata.name };
+    const [disabled, setDisabled] = (0, import_react4.useState)(false);
+    const checked = !!selected.find((k) => k.ship == key.ship && k.name && key.name);
+    function handleSelect(e) {
+      if (e.target.checked)
+        select(key);
+      else
+        unselect(key);
+    }
+    const chatIcon = /* @__PURE__ */ import_react3.default.createElement("svg", {
+      color: "black",
+      display: "block",
+      viewBox: "0 0 16 16"
+    }, /* @__PURE__ */ import_react3.default.createElement("path", {
+      d: "M10.8571 12.2918L11.014 11.817L10.7959 11.745L10.5991 11.8635L10.8571 12.2918ZM12.2857 10.8623L11.8645 10.5929L11.7358 10.7942L11.8115 11.0207L12.2857 10.8623ZM13 13L12.8431 13.4747C13.0228 13.5341 13.2206 13.487 13.3541 13.353C13.4877 13.219 13.5342 13.021 13.4742 12.8415L13 13ZM10.5991 11.8635C9.94405 12.2582 8.87909 12.5 8 12.5V13.5C9.00806 13.5 10.2645 13.2326 11.1152 12.7201L10.5991 11.8635ZM8 12.5C5.51471 12.5 3.5 10.4853 3.5 8.00004H2.5C2.5 11.0376 4.96244 13.5 8 13.5V12.5ZM3.5 8.00004C3.5 5.51475 5.51472 3.5 8 3.5V2.5C4.96242 2.5 2.5 4.96247 2.5 8.00004H3.5ZM8 3.5C10.4853 3.5 12.5 5.51475 12.5 8.00004H13.5C13.5 4.96247 11.0376 2.5 8 2.5V3.5ZM12.5 8.00004C12.5 8.93552 12.2914 9.92518 11.8645 10.5929L12.707 11.1316C13.2729 10.2465 13.5 9.046 13.5 8.00004H12.5ZM10.7002 12.7665L12.8431 13.4747L13.1569 12.5253L11.014 11.817L10.7002 12.7665ZM13.4742 12.8415L12.7599 10.7038L11.8115 11.0207L12.5258 13.1585L13.4742 12.8415Z"
+    }));
+    const notebookIcon = /* @__PURE__ */ import_react3.default.createElement("svg", {
+      color: "black",
+      display: "block",
+      viewBox: "0 0 16 16"
+    }, /* @__PURE__ */ import_react3.default.createElement("path", {
+      fillRule: "evenodd",
+      clipRule: "evenodd",
+      d: "M3.1001 1.8999H11.6001C12.7599 1.8999 13.7001 2.8401 13.7001 3.9999V11.1999C13.7001 12.3597 12.7599 13.2999 11.6001 13.2999H6.5001V13.9999H5.5001V13.2999H3.1001V1.8999ZM6.5001 12.2999H11.6001C12.2076 12.2999 12.7001 11.8074 12.7001 11.1999V3.9999C12.7001 3.39239 12.2076 2.8999 11.6001 2.8999H6.5001V12.2999ZM5.5001 2.8999V12.2999H4.1001V2.8999H5.5001ZM11.2001 6.0999H8.0001V5.0999H11.2001V6.0999Z"
+    }));
+    const collectionIcon = /* @__PURE__ */ import_react3.default.createElement("svg", {
+      color: "black",
+      display: "block",
+      viewBox: "0 0 16 16"
+    }, /* @__PURE__ */ import_react3.default.createElement("path", {
+      fillRule: "evenodd",
+      clipRule: "evenodd",
+      d: "M2 2H14V6H13V12.5C13 13.3284 12.3284 14 11.5 14H4.5C3.67157 14 3 13.3284 3 12.5V6H2V2ZM3 5H4V12.5C4 12.7761 4.22386 13 4.5 13H11.5C11.7761 13 12 12.7761 12 12.5V5H13V3H3V5ZM9.5 9H6.5V8H9.5V9Z"
+    }), /* @__PURE__ */ import_react3.default.createElement("path", {
+      fillRule: "evenodd",
+      clipRule: "evenodd",
+      d: "M12.5 6H3.5V5H12.5V6Z"
+    }));
+    const feedIcon = /* @__PURE__ */ import_react3.default.createElement("svg", {
+      color: "black",
+      display: "block",
+      viewBox: "0 0 16 16"
+    }, /* @__PURE__ */ import_react3.default.createElement("path", {
+      fillRule: "evenodd",
+      clipRule: "evenodd",
+      d: "M6 3H3L3 6H6V3ZM3 2C2.44772 2 2 2.44772 2 3V6C2 6.55228 2.44772 7 3 7H6C6.55228 7 7 6.55228 7 6V3C7 2.44772 6.55228 2 6 2H3Z"
+    }), /* @__PURE__ */ import_react3.default.createElement("path", {
+      fillRule: "evenodd",
+      clipRule: "evenodd",
+      d: "M13 3H10L10 6H13V3ZM10 2C9.44772 2 9 2.44772 9 3V6C9 6.55228 9.44772 7 10 7H13C13.5523 7 14 6.55228 14 6V3C14 2.44772 13.5523 2 13 2H10Z"
+    }), /* @__PURE__ */ import_react3.default.createElement("path", {
+      fillRule: "evenodd",
+      clipRule: "evenodd",
+      d: "M13 10H10L10 13H13V10ZM10 9C9.44772 9 9 9.44772 9 10V13C9 13.5523 9.44772 14 10 14H13C13.5523 14 14 13.5523 14 13V10C14 9.44772 13.5523 9 13 9H10Z"
+    }), /* @__PURE__ */ import_react3.default.createElement("path", {
+      fillRule: "evenodd",
+      clipRule: "evenodd",
+      d: "M6 10H3L3 13H6V10ZM3 9C2.44772 9 2 9.44772 2 10V13C2 13.5523 2.44772 14 3 14H6C6.55228 14 7 13.5523 7 13V10C7 9.44772 6.55228 9 6 9H3Z"
+    }));
+    const dmIcon = /* @__PURE__ */ import_react3.default.createElement("svg", {
+      color: "black",
+      viewBox: "0 0 16 16"
+    }, /* @__PURE__ */ import_react3.default.createElement("path", {
+      fillRule: "evenodd",
+      clipRule: "evenodd",
+      d: "M13.2894 13.0305L13.603 12.6115C13.9633 12.1301 14.1763 11.5339 14.1763 10.885C14.1763 9.29167 12.8846 8 11.2913 8C9.69792 8 8.40625 9.29167 8.40625 10.885C8.40625 12.4784 9.69792 13.77 11.2913 13.77C11.7632 13.77 12.2059 13.6575 12.5968 13.4587L12.9696 13.2691L13.4189 13.4189L13.2894 13.0305ZM14.8419 14.5257C14.907 14.7211 14.7211 14.907 14.5257 14.8419L13.0501 14.35C12.522 14.6186 11.9243 14.77 11.2913 14.77C9.14563 14.77 7.40625 13.0307 7.40625 10.885C7.40625 8.73938 9.14563 7 11.2913 7C13.4369 7 15.1763 8.73938 15.1763 10.885C15.1763 11.7572 14.8889 12.5623 14.4036 13.2107L14.8419 14.5257Z"
+    }), /* @__PURE__ */ import_react3.default.createElement("path", {
+      fillRule: "evenodd",
+      clipRule: "evenodd",
+      d: "M2.95245 9.37231L3.15819 9.75316L3.0213 10.1638L2.43629 11.9189L4.19133 11.3338L4.60198 11.197L4.98284 11.4027C5.68769 11.7835 6.49464 12 7.35515 12C7.4262 12 7.4969 11.9985 7.56722 11.9956C7.67016 12.3413 7.81992 12.6668 8.00914 12.9648C7.79434 12.9881 7.57614 13 7.35515 13C6.32463 13 5.35479 12.7402 4.50756 12.2825L2.041 13.1047L2.00153 13.1179L1.64572 13.2365L1.32949 13.3419C1.13405 13.407 0.948116 13.2211 1.01326 13.0257L1.11867 12.7094L1.23728 12.3536L1.25043 12.3141L2.07262 9.84759C1.61494 9.00035 1.35515 8.03052 1.35515 7C1.35515 3.68629 4.04144 1 7.35515 1C10.6689 1 13.3551 3.68629 13.3551 7C13.3551 7.1943 13.3459 7.38644 13.3279 7.576C13.0276 7.39079 12.7002 7.24531 12.353 7.14689C12.3544 7.0981 12.3551 7.04913 12.3551 7C12.3551 4.23858 10.1166 2 7.35515 2C4.59372 2 2.35515 4.23858 2.35515 7C2.35515 7.8605 2.57169 8.66745 2.95245 9.37231Z"
+    }));
+    let icon = chatIcon;
+    if (metadata.type == "post")
+      icon = feedIcon;
+    if (metadata.type == "publish")
+      icon = notebookIcon;
+    if (metadata.type == "links")
+      icon = collectionIcon;
+    if (metadata.type == "DM")
+      icon = dmIcon;
+    return /* @__PURE__ */ import_react3.default.createElement("div", {
+      className: "urbit-key"
+    }, /* @__PURE__ */ import_react3.default.createElement("input", {
+      onChange: handleSelect,
+      type: "checkbox",
+      name: keyString,
+      id: keyString,
+      defaultChecked: checked,
+      disabled
+    }), /* @__PURE__ */ import_react3.default.createElement("div", {
+      className: "urbit-key-name"
+    }, /* @__PURE__ */ import_react3.default.createElement("p", {
+      className: "urbit-key-title"
+    }, metadata.title), /* @__PURE__ */ import_react3.default.createElement("p", {
+      className: "urbit-key-group"
+    }, "in ", metadata.group)), /* @__PURE__ */ import_react3.default.createElement("div", {
+      className: "urbit-key-type-icon"
+    }, icon));
+  }
+
+  // src/react/ShareModal.tsx
+  function ShareModal(props) {
+    (0, import_react6.useEffect)(() => {
+      urbitVisor.getShip().then((res) => setShip(res.response));
+    });
+    const linkOnly = /* @__PURE__ */ import_react5.default.createElement("div", {
+      id: "twitter-link"
+    }, /* @__PURE__ */ import_react5.default.createElement("p", null, props.url.href));
+    console.log(props, "share modal running");
+    const [payload, setPayload] = (0, import_react6.useState)(props.url.href);
+    const [preview, setPreview] = (0, import_react6.useState)(linkOnly);
+    const [ship, setShip] = (0, import_react6.useState)(null);
+    const [selected, setSelected] = (0, import_react6.useState)([]);
+    function quit() {
+      props.setShow(false);
+    }
+    const fullTweet = /* @__PURE__ */ import_react5.default.createElement(Preview_default, {
+      ...props,
+      setPayload
+    });
+    function setFullTweet() {
+      setPreview(fullTweet);
+    }
+    function setLinkOnly() {
+      setPreview(linkOnly);
+      setPayload(props.url.href);
+    }
+    function setUnroll() {
+    }
+    function shareTweet() {
+      console.log(preview, "payloood");
+    }
+    return /* @__PURE__ */ import_react5.default.createElement("div", {
+      id: "uv-twitter-share-modal"
+    }, /* @__PURE__ */ import_react5.default.createElement("div", {
+      id: "tweet-preview-header"
+    }, /* @__PURE__ */ import_react5.default.createElement("p", {
+      onClick: quit,
+      id: "preview-close-button"
+    }, "X"), /* @__PURE__ */ import_react5.default.createElement("h3", null, "Share via Urbit"), /* @__PURE__ */ import_react5.default.createElement("img", {
+      id: "visor-icon",
+      src: "https://urbit.s3.urbit.cloud/mirtyl-wacdec/2021.11.17..04.05.54-visor.png",
+      alt: ""
+    })), /* @__PURE__ */ import_react5.default.createElement("div", {
+      id: "tweet-preview-tabs"
+    }, /* @__PURE__ */ import_react5.default.createElement("div", {
+      onClick: setFullTweet,
+      className: "tweet-preview-tab"
+    }, /* @__PURE__ */ import_react5.default.createElement("h4", null, "Full Tweet")), /* @__PURE__ */ import_react5.default.createElement("div", {
+      onClick: setLinkOnly,
+      className: "tweet-preview-tab"
+    }, /* @__PURE__ */ import_react5.default.createElement("h4", null, "Link Only")), /* @__PURE__ */ import_react5.default.createElement("div", {
+      onClick: setUnroll,
+      className: "tweet-preview-tab"
+    }, /* @__PURE__ */ import_react5.default.createElement("h4", null, "Unroll Thread"))), /* @__PURE__ */ import_react5.default.createElement("div", {
+      id: "tweet-share-payload-wrapper"
+    }, /* @__PURE__ */ import_react5.default.createElement("div", {
+      id: "tweet-share-payload"
+    }, preview)), /* @__PURE__ */ import_react5.default.createElement(Channels_default, {
+      selected,
+      setSelected
+    }), /* @__PURE__ */ import_react5.default.createElement("div", {
+      id: "tweet-share-button-wrapper"
+    }, /* @__PURE__ */ import_react5.default.createElement("button", {
+      onClick: shareTweet,
+      id: "tweet-share-button"
+    }, /* @__PURE__ */ import_react5.default.createElement("svg", {
+      width: "24",
+      height: "24",
+      viewBox: "0 0 32 32",
+      fill: "none",
+      xmlns: "http://www.w3.org/2000/svg"
+    }, /* @__PURE__ */ import_react5.default.createElement("circle", {
+      cx: "16",
+      cy: "16",
+      r: "13",
+      fill: "white",
+      stroke: "currentcolor",
+      strokeWidth: "2"
+    }), /* @__PURE__ */ import_react5.default.createElement("path", {
+      d: "M22 14.0488H19.6306C19.4522 15.0976 18.9936 15.7317 18.1783 15.7317C16.7006 15.7317 15.8599 14 13.5669 14C11.3503 14 10.1783 15.3659 10 17.9756H12.3694C12.5478 16.9024 13.0064 16.2683 13.8471 16.2683C15.3248 16.2683 16.1146 18 18.4586 18C20.6242 18 21.8217 16.6341 22 14.0488Z",
+      fill: "black"
+    })), /* @__PURE__ */ import_react5.default.createElement("p", null, "Share"))));
+  }
 
   // src/react/App.tsx
   var import_react_dom = __toModule(require_react_dom());
 
   // src/react/Welcome.tsx
-  var import_react5 = __toModule(require_react());
+  var import_react7 = __toModule(require_react());
   function Welcome() {
     const styles = {
       position: "fixed",
@@ -27383,9 +27350,9 @@ ${entities.urls.reduce((acc, item) => acc + item.expanded_url, "")}
     async function requestPerms() {
       await urbitVisor.requestPermissions(["shipName", "scry", "subscribe", "poke"]);
     }
-    return /* @__PURE__ */ import_react5.default.createElement("div", {
+    return /* @__PURE__ */ import_react7.default.createElement("div", {
       style: styles
-    }, /* @__PURE__ */ import_react5.default.createElement("p", null, "Welcome to the Urbit Visor Twitter Extension"), /* @__PURE__ */ import_react5.default.createElement("p", null, "In order to use the extension you must first grant it permissions to scry, subscribe and read your Urbit ships' name."), /* @__PURE__ */ import_react5.default.createElement("p", null, "Click on the button below to request permissions, then click on your Urbit Visor extension icon to grant them."), /* @__PURE__ */ import_react5.default.createElement("button", {
+    }, /* @__PURE__ */ import_react7.default.createElement("p", null, "Welcome to the Urbit Visor Twitter Extension"), /* @__PURE__ */ import_react7.default.createElement("p", null, "In order to use the extension you must first grant it permissions to scry, subscribe and read your Urbit ships' name."), /* @__PURE__ */ import_react7.default.createElement("p", null, "Click on the button below to request permissions, then click on your Urbit Visor extension icon to grant them."), /* @__PURE__ */ import_react7.default.createElement("button", {
       onClick: requestPerms
     }, "Request Permissions"));
   }
@@ -27393,12 +27360,11 @@ ${entities.urls.reduce((acc, item) => acc + item.expanded_url, "")}
 
   // src/react/App.tsx
   function App(props) {
-    (0, import_react7.useEffect)(() => {
+    (0, import_react9.useEffect)(() => {
       checkPerms();
     });
-    const [havePerms, setHavePerms] = (0, import_react7.useState)(true);
-    const [payload, setPayload] = (0, import_react7.useState)(null);
-    const [show, setShow] = (0, import_react7.useState)(true);
+    const [havePerms, setHavePerms] = (0, import_react9.useState)(true);
+    const [show, setShow] = (0, import_react9.useState)(true);
     async function checkPerms() {
       urbitVisor.on("permissions_granted", [], (perms) => setHavePerms(true));
       const res = await urbitVisor.authorizedPermissions();
@@ -27417,17 +27383,14 @@ ${entities.urls.reduce((acc, item) => acc + item.expanded_url, "")}
       display: "flex"
     };
     if (havePerms)
-      return /* @__PURE__ */ import_react6.default.createElement("div", {
+      return /* @__PURE__ */ import_react8.default.createElement("div", {
         style: styles
-      }, /* @__PURE__ */ import_react6.default.createElement(Preview_default, {
+      }, /* @__PURE__ */ import_react8.default.createElement(ShareModal, {
         ...props,
-        setShow,
-        setPayload
-      }), payload && /* @__PURE__ */ import_react6.default.createElement(Channels_default, {
-        payload
+        setShow
       }));
     else
-      return /* @__PURE__ */ import_react6.default.createElement(Welcome_default, null);
+      return /* @__PURE__ */ import_react8.default.createElement(Welcome_default, null);
   }
   var App_default = App;
 
@@ -27442,12 +27405,28 @@ ${entities.urls.reduce((acc, item) => acc + item.expanded_url, "")}
     }
     return true;
   };
+  function hoverButton(e) {
+    const action = e.target.closest(".urbit-visor-share-tweet-action");
+    action.style.backgroundColor = "rgb(248, 250, 157, 0.5)";
+    action.style.borderRadius = "40%";
+    const circle = e.target.closest(".urbit-visor-share-tweet-action").querySelector("circle");
+    const path = e.target.closest(".urbit-visor-share-tweet-action").querySelector("path");
+    circle.style.stroke = "rgb(245, 203, 66)";
+    path.style.fill = "rgb(245, 203, 66)";
+  }
+  function unhoverButton(e) {
+    const action = e.target.closest(".urbit-visor-share-tweet-action");
+    action.style.backgroundColor = "transparent";
+    const circle = e.target.closest(".urbit-visor-share-tweet-action").querySelector("circle");
+    const path = e.target.closest(".urbit-visor-share-tweet-action").querySelector("path");
+    circle.style.stroke = "currentcolor";
+    path.style.fill = "currentcolor";
+  }
   var createVisorButton = (tweet, hasUserActions) => {
     const shareAction = document.createElement("div");
-    shareAction.className = "urbit-visor-share-tweet-action action-brave-tip";
+    shareAction.className = "urbit-visor-share-tweet-action";
     shareAction.style.display = "flex";
     shareAction.style.textAlign = hasUserActions ? "center" : "start";
-    shareAction.style.cursor = "pointer";
     shareAction.setAttribute("role", "button");
     shareAction.setAttribute("tabindex", "0");
     const urbitButton = document.createElement("button");
@@ -27459,22 +27438,18 @@ ${entities.urls.reduce((acc, item) => acc + item.expanded_url, "")}
     urbitButton.style.fontSize = "16px";
     urbitButton.style.lineHeight = "1";
     urbitButton.style.outline = "0";
+    urbitButton.style.padding = "0";
     urbitButton.style.position = "relative";
     urbitButton.type = "button";
     urbitButton.innerHTML = `<svg class="urbit-visor-share-tweet-button-img" width="24" height="24" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-     <circle cx="16" cy="16" r="13" fill="transparent" stroke="rgb(110, 118, 125)" stroke-width="1"/>
-     <path d="M22 14.0488H19.6306C19.4522 15.0976 18.9936 15.7317 18.1783 15.7317C16.7006 15.7317 15.8599 14 13.5669 14C11.3503 14 10.1783 15.3659 10 17.9756H12.3694C12.5478 16.9024 13.0064 16.2683 13.8471 16.2683C15.3248 16.2683 16.1146 18 18.4586 18C20.6242 18 21.8217 16.6341 22 14.0488Z" fill="rgb(110, 118, 125)"/>`;
-    const shareText = document.createElement("p");
-    shareText.className = "urbit-visor-share-tweet-button-text";
-    shareText.innerText = "Share";
-    shareText.style.fontFamily = `Inter`;
+     <circle cx="16" cy="16" r="13" fill="transparent" stroke="currentcolor" stroke-width="2"/>
+     <path d="M22 14.0488H19.6306C19.4522 15.0976 18.9936 15.7317 18.1783 15.7317C16.7006 15.7317 15.8599 14 13.5669 14C11.3503 14 10.1783 15.3659 10 17.9756H12.3694C12.5478 16.9024 13.0064 16.2683 13.8471 16.2683C15.3248 16.2683 16.1146 18 18.4586 18C20.6242 18 21.8217 16.6341 22 14.0488Z" fill="currentcolor"/>`;
+    urbitButton.querySelector("svg").onmouseover = hoverButton;
+    urbitButton.querySelector("svg").onmouseout = unhoverButton;
     if (tweet && isThreadParent(tweet)) {
-      urbitButton.style.marginTop = "12px";
-      shareText.style.marginTop = "19px";
     }
     shareAction.onclick = handleClick;
-    shareAction.appendChild(urbitButton);
-    shareAction.appendChild(shareText);
+    shareAction.append(urbitButton);
     return shareAction;
   };
   async function handleClick(event) {
@@ -27484,7 +27459,7 @@ ${entities.urls.reduce((acc, item) => acc + item.expanded_url, "")}
     const strings = url.split("/");
     const id = strings[strings.length - 1];
     const div = document.getElementById("uv-twitter-extension-container");
-    const react = import_react8.default.createElement(App_default, { id, url: new URL(url) });
+    const react = import_react10.default.createElement(App_default, { id, url: new URL(url) });
     import_react_dom2.default.render(react, div);
   }
   var injectButtons = () => {
@@ -27501,7 +27476,7 @@ ${entities.urls.reduce((acc, item) => acc + item.expanded_url, "")}
         const numActions = actions.querySelectorAll(":scope > div").length || 0;
         const hasUserActions = numActions > 3;
         const shareAction = createVisorButton(tweets[i], hasUserActions);
-        actions.appendChild(shareAction);
+        actions.prepend(shareAction);
       }
     }
     timeout = setTimeout(injectButtons, 3e3);
