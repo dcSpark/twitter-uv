@@ -26150,319 +26150,6 @@ zodnecbudwessevpersutletfulpensytdurwepserwylsunrypsyxdyrnuphebpeglupdepdysputlu
     });
   }
 
-  // src/react/Preview.tsx
-  var import_react = __toModule(require_react());
-  var import_react2 = __toModule(require_react());
-
-  // src/api/client.ts
-  var threadsURL = "https://twitter.com/i/api/graphql/GpnXbjn5tx9tVXnVqmXpkA/TweetDetail?variables=";
-  function headers() {
-    const cookieElems = document.cookie.split("; ");
-    const gt = cookieElems.find((elem) => elem.includes("gt=")).replace("gt=", "");
-    const csrf = cookieElems.find((elem) => elem.includes("ct0=")).replace("ct0=", "");
-    const headers2 = {
-      "Authorization": "Bearer AAAAAAAAAAAAAAAAAAAAANRILgAAAAAAnNwIzUejRCOuH5E6I8xnZz4puTs%3D1Zv7ttfk8LF81IUq16cHjhLTvJu4FA33AGWWjCpTnA",
-      "x-csrf-token": csrf,
-      "x-guest-token": gt
-    };
-    const meta = {
-      credentials: "include",
-      headers: { ...headers2 },
-      referrerPolicy: "no-referrer-when-downgrade",
-      method: "GET",
-      redirect: "follow"
-    };
-    return meta;
-  }
-  var baseVariables = {
-    includePromotedContent: false,
-    withHighlightedLabel: false,
-    withCommunity: false,
-    "with_rux_injections": false,
-    "referrer": "tweet",
-    withTweetQuoteCount: true,
-    withBirdwatchNotes: false,
-    withBirdwatchPivots: false,
-    withTweetResult: true,
-    withReactions: true,
-    withReactionsMetadata: false,
-    withReactionsPerspective: false,
-    withSuperFollowsTweetFields: false,
-    withSuperFollowsUserFields: false,
-    withUserResults: false,
-    withVoice: true
-  };
-  var fetchThread = async (id) => {
-    const variables = encodeURIComponent(JSON.stringify(Object.assign(baseVariables, { focalTweetId: id })));
-    const url = threadsURL + variables;
-    const res = await fetch(url, headers());
-    const json = await res.json();
-    return json;
-  };
-  function translateDate(date) {
-    const unix = Date.parse(date);
-    return new Date(unix);
-  }
-  function findPics(entities) {
-    if (entities.media) {
-      const urls = entities.media.map((pic) => new URL(pic.media_url_https));
-      return urls;
-    } else
-      return [];
-  }
-  function findVideo(entities) {
-    if (!entities)
-      return null;
-    else if (entities.media && entities.media[0].video_info) {
-      const v = entities.media[0].video_info.variants.reduce((prev, next) => {
-        if (next?.bitrate && prev?.bitrate)
-          return next.bitrate > prev.bitrate ? next : prev;
-        else {
-          if (next.bitrate)
-            return next;
-          else
-            return prev;
-        }
-      });
-      return new URL(v.url);
-    } else
-      return null;
-  }
-  function scrubURLS(entities) {
-    const list = [];
-    entities.urls.forEach((m) => list.push(new URL(m.url)));
-    if (entities.media)
-      entities.media.forEach((m) => list.push(new URL(m.url)));
-    return list;
-  }
-  function addFullURL(entities) {
-    return `
-${entities.urls.reduce((acc, item) => acc + item.expanded_url, "")}
-`;
-  }
-  async function getThread(id) {
-    const res = await fetchThread(id);
-    const tweets = res.data.threaded_conversation_with_injections.instructions.find((el) => el.type === "TimelineAddEntries");
-    const data = tweets.entries.find((el) => el.entryId.includes(id));
-    return processThread(data.content.itemContent.tweet_results.result);
-  }
-  function processThread(data) {
-    if (!data)
-      return null;
-    else {
-      console.log(data, "tweet");
-      const tweet = data.legacy;
-      const time = dateString(translateDate(tweet.created_at));
-      const author = processAuthor(data.core.user.legacy);
-      const pics = findPics(tweet.entities);
-      console.log(pics, "pics");
-      const video = findVideo(tweet?.extended_entities);
-      console.log(video, "video");
-      const redundant_urls = scrubURLS(tweet.entities);
-      console.log(redundant_urls, "redundant_urls");
-      const text = redundant_urls.reduce((acc, i) => acc.replace(i, "").trim(), tweet.full_text) + addFullURL(tweet.entities);
-      console.log(text, "text");
-      const quote = processThread(data?.quoted_status_result?.result);
-      console.log(quote, "quote");
-      const poll = processPoll(data?.card?.legacy);
-      console.log(poll, "poll");
-      return { index: parseInt(tweet.id_str), time, author, pics, video, text, quote, poll };
-    }
-  }
-  function processAuthor(user) {
-    return {
-      name: user.name,
-      handle: user.screen_name,
-      avatar: new URL(user.profile_image_url_https)
-    };
-  }
-  function processPoll(poll) {
-    console.log(poll, "poll");
-    if (!poll || !poll.name.includes("choice"))
-      return null;
-    else {
-      return poll.binding_values.reduce((acc, item) => {
-        const obj = {};
-        const type = item.value.type.toLowerCase();
-        obj[item.key] = item.value[`${type}_value`];
-        return Object.assign(acc, obj);
-      }, {});
-    }
-  }
-  function dateString(date) {
-    return date.toLocaleString();
-  }
-
-  // src/utils/parsing.ts
-  function tweetToText(tweet) {
-    const url = `https://twitter.com/${tweet.author.handle}/statuses/${tweet.index}`;
-    const contents = [];
-    const text = `
-    Urbit Visor Presents: 
-    [Tweet by ${tweet.author.name} (@${tweet.author.handle})](${url}) Posted on ${tweet.time}
-    
-
-    ${tweet.text}
-    
-
-  `;
-    contents.push({ text });
-    tweet.pics.forEach((pic) => contents.push({ url: pic.href }));
-    if (tweet.video)
-      contents.push({ url: tweet.video.href });
-    if (tweet.quote) {
-      const quoteContents = quoteToText(tweet.quote);
-      console.log(quoteContents, "to quote");
-      console.log(contents, "mother");
-      quoteContents.forEach((piece) => contents.push(piece));
-    }
-    if (tweet.poll) {
-      const string = ".\nPoll:\nOption   Count\n";
-      const options = pollOptions(tweet.poll);
-      const poll = options.reduce((acc, opt) => acc + `${opt.label}: ${opt.count}
-`, string);
-      contents.push({ text: poll });
-    }
-    return contents;
-  }
-  function quoteToText(quote) {
-    const url = `https://twitter.com/${quote.author.handle}/statuses/${quote.index}`;
-    const contents = [];
-    const text = ` 
-      .
-
-      
-
-      [Quoting: ${quote.author.name} (@${quote.author.handle})](${url}) Posted on ${quote.time}
-      
-
-      ${quote.text}
-      
-
-    `;
-    contents.push({ text });
-    quote.pics.forEach((pic) => contents.push({ url: pic.href }));
-    if (quote.video)
-      contents.push({ url: quote.video.href });
-    return contents;
-  }
-  function pollOptions(poll) {
-    const labels = Object.keys(poll).filter((key) => key.includes("label"));
-    const options = labels.map((label) => {
-      const count = label.split("_label")[0] + "_count";
-      return { label: poll[label], count: poll[count] };
-    });
-    return options;
-  }
-
-  // src/react/Preview.tsx
-  var placeholder = {
-    author: {
-      name: "",
-      handle: "",
-      avatar: ""
-    },
-    pics: [],
-    time: "1d",
-    video: null,
-    text: "",
-    quote: null,
-    poll: null
-  };
-  function Preview(props) {
-    (0, import_react2.useEffect)(() => {
-      getThread(`${props.id}`).then((tweet2) => {
-        const text = tweetToText(tweet2);
-        props.setPayload(text);
-        setTweet(tweet2);
-      });
-    }, []);
-    const [tweet, setTweet] = (0, import_react2.useState)(placeholder);
-    console.log(tweet, "preview component");
-    return /* @__PURE__ */ import_react.default.createElement("div", {
-      id: "tweet-preview"
-    }, /* @__PURE__ */ import_react.default.createElement("div", {
-      id: "tweet-preview-author"
-    }, /* @__PURE__ */ import_react.default.createElement("img", {
-      id: "avatar",
-      src: tweet.author.avatar,
-      alt: ""
-    }), /* @__PURE__ */ import_react.default.createElement("p", {
-      id: "tweet-author-name"
-    }, tweet.author.name), /* @__PURE__ */ import_react.default.createElement("p", null, "@", tweet.author.handle), /* @__PURE__ */ import_react.default.createElement("p", null, "Posted: ", tweet.time)), /* @__PURE__ */ import_react.default.createElement("div", {
-      id: "tweet-body"
-    }, /* @__PURE__ */ import_react.default.createElement("p", {
-      id: "tweet-text"
-    }, tweet.text), !tweet.video && tweet.pics.length > 0 && /* @__PURE__ */ import_react.default.createElement(Pics, {
-      pics: tweet.pics
-    }), tweet.video && /* @__PURE__ */ import_react.default.createElement(Video, {
-      video: tweet.video
-    }), tweet.poll && /* @__PURE__ */ import_react.default.createElement(Poll, {
-      poll: tweet.poll
-    }), tweet.quote && /* @__PURE__ */ import_react.default.createElement(Quote, {
-      quote: tweet.quote
-    })));
-  }
-  function Quote({ quote }) {
-    return /* @__PURE__ */ import_react.default.createElement("div", {
-      id: "tweet-quote"
-    }, /* @__PURE__ */ import_react.default.createElement("div", {
-      id: "tweet-quote-author"
-    }, /* @__PURE__ */ import_react.default.createElement("p", {
-      id: "tweet-quote-author-name"
-    }, quote.author.name), /* @__PURE__ */ import_react.default.createElement("p", {
-      id: "tweet-quote-author-handle"
-    }, "@", quote.author.handle), /* @__PURE__ */ import_react.default.createElement("p", {
-      id: "tweet-quote-time"
-    }, quote.time)), /* @__PURE__ */ import_react.default.createElement("div", {
-      id: "tweet-quote-body"
-    }, quote.text, !quote.video && quote.pics.length > 0 && /* @__PURE__ */ import_react.default.createElement(Pics, {
-      pics: quote.pics
-    }), quote.video && /* @__PURE__ */ import_react.default.createElement(Video, {
-      video: quote.video
-    }), quote.poll && /* @__PURE__ */ import_react.default.createElement(Poll, {
-      poll: quote.poll
-    })));
-  }
-  function Pics({ pics }) {
-    return /* @__PURE__ */ import_react.default.createElement("div", {
-      id: "tweet-pictures"
-    }, pics.map((pic, i) => {
-      return /* @__PURE__ */ import_react.default.createElement("img", {
-        key: i,
-        className: `img-${pics.length}`,
-        src: pic,
-        alt: ""
-      });
-    }));
-  }
-  function Video({ video }) {
-    return /* @__PURE__ */ import_react.default.createElement("div", {
-      id: "tweet-video"
-    }, /* @__PURE__ */ import_react.default.createElement("video", {
-      preload: "none",
-      playsInline: true,
-      controls: true,
-      src: video
-    }));
-  }
-  function Poll({ poll }) {
-    const options = pollOptions(poll);
-    return /* @__PURE__ */ import_react.default.createElement("div", {
-      id: "twitter-poll"
-    }, options.map((opt, i) => {
-      return /* @__PURE__ */ import_react.default.createElement("div", {
-        key: i,
-        className: "twitter-poll-option"
-      }, /* @__PURE__ */ import_react.default.createElement("p", null, opt.label), /* @__PURE__ */ import_react.default.createElement("p", null, opt.count));
-    }));
-  }
-  var Preview_default = Preview;
-
-  // src/react/Channels.tsx
-  var import_react3 = __toModule(require_react());
-  var import_react4 = __toModule(require_react());
-
   // src/utils/utils.ts
   var import_urbit_ob = __toModule(require_src());
   var p = [
@@ -27013,8 +26700,461 @@ ${entities.urls.reduce((acc, item) => acc + item.expanded_url, "")}
         return false;
     }
   }
+  function buildChatPost(author, resource, contents) {
+    return {
+      app: "graph-push-hook",
+      mark: "graph-update-3",
+      json: {
+        "add-nodes": {
+          resource: { name: resource.name, ship: "~" + resource.ship },
+          nodes: {
+            "/9": {
+              children: null,
+              post: {
+                author: "~" + author,
+                contents,
+                hash: null,
+                index: "/9",
+                signatures: [],
+                "time-sent": Date.now()
+              }
+            }
+          }
+        }
+      }
+    };
+  }
+  function buildNotebookPost(author, resource, title, contents) {
+    const node = {};
+    const index = `/${makeIndex()}`;
+    node[index] = {
+      children: {
+        "1": {
+          post: {
+            author: "~" + author,
+            contents: [],
+            hash: null,
+            index: index + "/1",
+            signatures: [],
+            "time-sent": Date.now()
+          },
+          children: {
+            "1": {
+              children: null,
+              post: {
+                author: "~" + author,
+                contents: [{ text: title }, ...contents],
+                hash: null,
+                index: index + "/1/1",
+                signatures: [],
+                "time-sent": Date.now()
+              }
+            }
+          }
+        },
+        "2": {
+          children: null,
+          post: {
+            author: "~" + author,
+            contents: [],
+            hash: null,
+            index: index + "/2",
+            signatures: [],
+            "time-sent": Date.now()
+          }
+        }
+      },
+      post: {
+        author: "~" + author,
+        contents: [],
+        hash: null,
+        index,
+        signatures: [],
+        "time-sent": Date.now()
+      }
+    };
+    return {
+      app: "graph-push-hook",
+      mark: "graph-update-3",
+      json: {
+        "add-nodes": {
+          resource: { name: resource.name, ship: "~" + resource.ship },
+          nodes: node
+        }
+      }
+    };
+  }
+  function buildCollectionPost(author, resource, title, url) {
+    const node = {};
+    const index = `/${makeIndex()}`;
+    node[index] = {
+      children: null,
+      post: {
+        author: "~" + author,
+        contents: [{ text: title }, ...url],
+        hash: null,
+        index,
+        signatures: [],
+        "time-sent": Date.now()
+      }
+    };
+    return {
+      app: "graph-push-hook",
+      mark: "graph-update-3",
+      json: {
+        "add-nodes": {
+          resource: { name: resource.name, ship: "~" + resource.ship },
+          nodes: node
+        }
+      }
+    };
+  }
+  function buildDM(author, recipient, contents) {
+    const node = {};
+    const point = (0, import_urbit_ob.patp2dec)(recipient);
+    console.log(point, "point");
+    const index = `/${point}/${makeIndex()}`;
+    node[index] = {
+      children: null,
+      post: {
+        author: "~" + author,
+        contents,
+        hash: null,
+        index,
+        signatures: [],
+        "time-sent": Date.now()
+      }
+    };
+    return {
+      app: "dm-hook",
+      mark: "graph-update-3",
+      json: {
+        "add-nodes": {
+          resource: { name: "dm-inbox", ship: "~" + author },
+          nodes: node
+        }
+      }
+    };
+  }
+  function makeIndex() {
+    const DA_UNIX_EPOCH = BigInt("170141184475152167957503069145530368000");
+    const DA_SECOND = BigInt("18446744073709551616");
+    const timeSinceEpoch = BigInt(Date.now()) * DA_SECOND / BigInt(1e3);
+    return (DA_UNIX_EPOCH + timeSinceEpoch).toString();
+  }
+
+  // src/react/Preview.tsx
+  var import_react = __toModule(require_react());
+  var import_react2 = __toModule(require_react());
+
+  // src/api/client.ts
+  var threadsURL = "https://twitter.com/i/api/graphql/GpnXbjn5tx9tVXnVqmXpkA/TweetDetail?variables=";
+  function headers() {
+    const cookieElems = document.cookie.split("; ");
+    const gt = cookieElems.find((elem) => elem.includes("gt=")).replace("gt=", "");
+    const csrf = cookieElems.find((elem) => elem.includes("ct0=")).replace("ct0=", "");
+    const headers2 = {
+      "Authorization": "Bearer AAAAAAAAAAAAAAAAAAAAANRILgAAAAAAnNwIzUejRCOuH5E6I8xnZz4puTs%3D1Zv7ttfk8LF81IUq16cHjhLTvJu4FA33AGWWjCpTnA",
+      "x-csrf-token": csrf,
+      "x-guest-token": gt
+    };
+    const meta = {
+      credentials: "include",
+      headers: { ...headers2 },
+      referrerPolicy: "no-referrer-when-downgrade",
+      method: "GET",
+      redirect: "follow"
+    };
+    return meta;
+  }
+  var baseVariables = {
+    includePromotedContent: false,
+    withHighlightedLabel: false,
+    withCommunity: false,
+    "with_rux_injections": false,
+    "referrer": "tweet",
+    withTweetQuoteCount: true,
+    withBirdwatchNotes: false,
+    withBirdwatchPivots: false,
+    withTweetResult: true,
+    withReactions: true,
+    withReactionsMetadata: false,
+    withReactionsPerspective: false,
+    withSuperFollowsTweetFields: false,
+    withSuperFollowsUserFields: false,
+    withUserResults: false,
+    withVoice: true
+  };
+  var fetchThread = async (id) => {
+    const variables = encodeURIComponent(JSON.stringify(Object.assign(baseVariables, { focalTweetId: id })));
+    const url = threadsURL + variables;
+    const res = await fetch(url, headers());
+    const json = await res.json();
+    return json;
+  };
+  function translateDate(date) {
+    const unix = Date.parse(date);
+    return new Date(unix);
+  }
+  function findPics(entities) {
+    if (entities.media) {
+      const urls = entities.media.map((pic) => new URL(pic.media_url_https));
+      return urls;
+    } else
+      return [];
+  }
+  function findVideo(entities) {
+    if (!entities)
+      return null;
+    else if (entities.media && entities.media[0].video_info) {
+      const v = entities.media[0].video_info.variants.reduce((prev, next) => {
+        if (next?.bitrate && prev?.bitrate)
+          return next.bitrate > prev.bitrate ? next : prev;
+        else {
+          if (next.bitrate)
+            return next;
+          else
+            return prev;
+        }
+      });
+      return new URL(v.url);
+    } else
+      return null;
+  }
+  function scrubURLS(entities) {
+    const list = [];
+    entities.urls.forEach((m) => list.push(new URL(m.url)));
+    if (entities.media)
+      entities.media.forEach((m) => list.push(new URL(m.url)));
+    return list;
+  }
+  function addFullURL(entities) {
+    return `
+${entities.urls.reduce((acc, item) => acc + item.expanded_url, "")}
+`;
+  }
+  async function getThread(id) {
+    const res = await fetchThread(id);
+    const tweets = res.data.threaded_conversation_with_injections.instructions.find((el) => el.type === "TimelineAddEntries");
+    const data = tweets.entries.find((el) => el.entryId.includes(id));
+    return processThread(data.content.itemContent.tweet_results.result);
+  }
+  function processThread(data) {
+    if (!data)
+      return null;
+    else {
+      console.log(data, "tweet");
+      const tweet = data.legacy;
+      const time = dateString(translateDate(tweet.created_at));
+      const author = processAuthor(data.core.user.legacy);
+      const pics = findPics(tweet.entities);
+      console.log(pics, "pics");
+      const video = findVideo(tweet?.extended_entities);
+      console.log(video, "video");
+      const redundant_urls = scrubURLS(tweet.entities);
+      console.log(redundant_urls, "redundant_urls");
+      const text = redundant_urls.reduce((acc, i) => acc.replace(i, "").trim(), tweet.full_text) + addFullURL(tweet.entities);
+      console.log(text, "text");
+      const quote = processThread(data?.quoted_status_result?.result);
+      console.log(quote, "quote");
+      const poll = processPoll(data?.card?.legacy);
+      console.log(poll, "poll");
+      return { index: parseInt(tweet.id_str), time, author, pics, video, text, quote, poll };
+    }
+  }
+  function processAuthor(user) {
+    return {
+      name: user.name,
+      handle: user.screen_name,
+      avatar: new URL(user.profile_image_url_https)
+    };
+  }
+  function processPoll(poll) {
+    console.log(poll, "poll");
+    if (!poll || !poll.name.includes("choice"))
+      return null;
+    else {
+      return poll.binding_values.reduce((acc, item) => {
+        const obj = {};
+        const type = item.value.type.toLowerCase();
+        obj[item.key] = item.value[`${type}_value`];
+        return Object.assign(acc, obj);
+      }, {});
+    }
+  }
+  function dateString(date) {
+    return date.toLocaleString();
+  }
+
+  // src/utils/parsing.ts
+  function tweetToText(tweet) {
+    const url = `https://twitter.com/${tweet.author.handle}/statuses/${tweet.index}`;
+    const contents = [];
+    const text = `
+    Urbit Visor Presents: 
+    [Tweet by ${tweet.author.name} (@${tweet.author.handle})](${url}) Posted on ${tweet.time}
+    
+
+    ${tweet.text}
+    
+
+  `;
+    contents.push({ text });
+    tweet.pics.forEach((pic) => contents.push({ url: pic.href }));
+    if (tweet.video)
+      contents.push({ url: tweet.video.href });
+    if (tweet.quote) {
+      const quoteContents = quoteToText(tweet.quote);
+      console.log(quoteContents, "to quote");
+      console.log(contents, "mother");
+      quoteContents.forEach((piece) => contents.push(piece));
+    }
+    if (tweet.poll) {
+      const string = ".\nPoll:\nOption   Count\n";
+      const options = pollOptions(tweet.poll);
+      const poll = options.reduce((acc, opt) => acc + `${opt.label}: ${opt.count}
+`, string);
+      contents.push({ text: poll });
+    }
+    return contents;
+  }
+  function quoteToText(quote) {
+    const url = `https://twitter.com/${quote.author.handle}/statuses/${quote.index}`;
+    const contents = [];
+    const text = ` 
+      .
+
+      
+
+      [Quoting: ${quote.author.name} (@${quote.author.handle})](${url}) Posted on ${quote.time}
+      
+
+      ${quote.text}
+      
+
+    `;
+    contents.push({ text });
+    quote.pics.forEach((pic) => contents.push({ url: pic.href }));
+    if (quote.video)
+      contents.push({ url: quote.video.href });
+    return contents;
+  }
+  function pollOptions(poll) {
+    const labels = Object.keys(poll).filter((key) => key.includes("label"));
+    const options = labels.map((label) => {
+      const count = label.split("_label")[0] + "_count";
+      return { label: poll[label], count: poll[count] };
+    });
+    return options;
+  }
+
+  // src/react/Preview.tsx
+  var placeholder = {
+    author: {
+      name: "",
+      handle: "",
+      avatar: ""
+    },
+    pics: [],
+    time: "1d",
+    video: null,
+    text: "",
+    quote: null,
+    poll: null
+  };
+  function Preview(props) {
+    (0, import_react2.useEffect)(() => {
+      getThread(`${props.id}`).then((tweet2) => {
+        const text = tweetToText(tweet2);
+        props.setPayload(text);
+        setTweet(tweet2);
+      });
+    }, []);
+    const [tweet, setTweet] = (0, import_react2.useState)(placeholder);
+    console.log(tweet, "preview component");
+    return /* @__PURE__ */ import_react.default.createElement("div", {
+      id: "tweet-preview"
+    }, /* @__PURE__ */ import_react.default.createElement("div", {
+      id: "tweet-preview-author"
+    }, /* @__PURE__ */ import_react.default.createElement("img", {
+      id: "avatar",
+      src: tweet.author.avatar,
+      alt: ""
+    }), /* @__PURE__ */ import_react.default.createElement("p", {
+      id: "tweet-author-name"
+    }, tweet.author.name), /* @__PURE__ */ import_react.default.createElement("p", null, "@", tweet.author.handle), /* @__PURE__ */ import_react.default.createElement("p", null, "Posted: ", tweet.time)), /* @__PURE__ */ import_react.default.createElement("div", {
+      id: "tweet-body"
+    }, /* @__PURE__ */ import_react.default.createElement("p", {
+      id: "tweet-text"
+    }, tweet.text), !tweet.video && tweet.pics.length > 0 && /* @__PURE__ */ import_react.default.createElement(Pics, {
+      pics: tweet.pics
+    }), tweet.video && /* @__PURE__ */ import_react.default.createElement(Video, {
+      video: tweet.video
+    }), tweet.poll && /* @__PURE__ */ import_react.default.createElement(Poll, {
+      poll: tweet.poll
+    }), tweet.quote && /* @__PURE__ */ import_react.default.createElement(Quote, {
+      quote: tweet.quote
+    })));
+  }
+  function Quote({ quote }) {
+    return /* @__PURE__ */ import_react.default.createElement("div", {
+      id: "tweet-quote"
+    }, /* @__PURE__ */ import_react.default.createElement("div", {
+      id: "tweet-quote-author"
+    }, /* @__PURE__ */ import_react.default.createElement("p", {
+      id: "tweet-quote-author-name"
+    }, quote.author.name), /* @__PURE__ */ import_react.default.createElement("p", {
+      id: "tweet-quote-author-handle"
+    }, "@", quote.author.handle), /* @__PURE__ */ import_react.default.createElement("p", {
+      id: "tweet-quote-time"
+    }, quote.time)), /* @__PURE__ */ import_react.default.createElement("div", {
+      id: "tweet-quote-body"
+    }, quote.text, !quote.video && quote.pics.length > 0 && /* @__PURE__ */ import_react.default.createElement(Pics, {
+      pics: quote.pics
+    }), quote.video && /* @__PURE__ */ import_react.default.createElement(Video, {
+      video: quote.video
+    }), quote.poll && /* @__PURE__ */ import_react.default.createElement(Poll, {
+      poll: quote.poll
+    })));
+  }
+  function Pics({ pics }) {
+    return /* @__PURE__ */ import_react.default.createElement("div", {
+      id: "tweet-pictures"
+    }, pics.map((pic, i) => {
+      return /* @__PURE__ */ import_react.default.createElement("img", {
+        key: i,
+        className: `img-${pics.length}`,
+        src: pic,
+        alt: ""
+      });
+    }));
+  }
+  function Video({ video }) {
+    return /* @__PURE__ */ import_react.default.createElement("div", {
+      id: "tweet-video"
+    }, /* @__PURE__ */ import_react.default.createElement("video", {
+      preload: "none",
+      playsInline: true,
+      controls: true,
+      src: video
+    }));
+  }
+  function Poll({ poll }) {
+    const options = pollOptions(poll);
+    return /* @__PURE__ */ import_react.default.createElement("div", {
+      id: "twitter-poll"
+    }, options.map((opt, i) => {
+      return /* @__PURE__ */ import_react.default.createElement("div", {
+        key: i,
+        className: "twitter-poll-option"
+      }, /* @__PURE__ */ import_react.default.createElement("p", null, opt.label), /* @__PURE__ */ import_react.default.createElement("p", null, opt.count));
+    }));
+  }
+  var Preview_default = Preview;
 
   // src/react/Channels.tsx
+  var import_react3 = __toModule(require_react());
+  var import_react4 = __toModule(require_react());
   function referenceMetadata(channel, metadata) {
     const url = Object.keys(metadata).find((el) => el.includes(`${channel.ship}/${channel.name}`));
     if (url) {
@@ -27062,8 +27202,6 @@ ${entities.urls.reduce((acc, item) => acc + item.expanded_url, "")}
     const [dmCandidate, setDMCandidate] = (0, import_react4.useState)(null);
     const [loading, setLoading] = (0, import_react4.useState)(false);
     const [options, setOptions] = (0, import_react4.useState)(channels);
-    async function handleClick2() {
-    }
     function handleChange(e) {
       const inp = e.target.value.toLowerCase();
       e.target.style.width = `${inp.length + 5}ch`;
@@ -27099,11 +27237,11 @@ ${entities.urls.reduce((acc, item) => acc + item.expanded_url, "")}
       setDMs(set);
       setOptions([data, ...options.filter((dm) => dm.ship !== patp)]);
     }
-    function select(key) {
-      setSelected([...selected, key]);
+    function select(channel) {
+      setSelected([...selected, channel]);
     }
-    function unselect(key) {
-      const newlist = selected.filter((k) => !(k.ship === key.ship && k.name === key.name));
+    function unselect(channel) {
+      const newlist = selected.filter((c) => !(c.ship === channel.ship && c.name === channel.name));
       setSelected(newlist);
     }
     function focusOnInput() {
@@ -27144,13 +27282,12 @@ ${entities.urls.reduce((acc, item) => acc + item.expanded_url, "")}
   }
   var Channels_default = ChannelSelectBox;
   function UrbitKey({ keyString, metadata, selected, select, unselect }) {
-    const key = { ship: metadata.ship, name: metadata.name };
-    const checked = !!selected.find((k) => k.ship === key.ship && k.name === key.name);
+    const checked = !!selected.find((c) => c.ship === metadata.ship && c.name === metadata.name);
     function handleSelect(e) {
       if (e.target.checked)
-        select(key);
+        select(metadata);
       else
-        unselect(key);
+        unselect(metadata);
     }
     ;
     const disabled = selected.length >= 3 && !checked;
@@ -27254,7 +27391,7 @@ ${entities.urls.reduce((acc, item) => acc + item.expanded_url, "")}
       id: "twitter-link"
     }, /* @__PURE__ */ import_react5.default.createElement("p", null, props.url.href));
     console.log(props, "share modal running");
-    const [payload, setPayload] = (0, import_react6.useState)(props.url.href);
+    const [payload, setPayload] = (0, import_react6.useState)([{ url: props.url.href }]);
     const [preview, setPreview] = (0, import_react6.useState)(linkOnly);
     const [ship, setShip] = (0, import_react6.useState)(null);
     const [selected, setSelected] = (0, import_react6.useState)([]);
@@ -27270,12 +27407,29 @@ ${entities.urls.reduce((acc, item) => acc + item.expanded_url, "")}
     }
     function setLinkOnly() {
       setPreview(linkOnly);
-      setPayload(props.url.href);
+      setPayload([{ url: props.url.href }]);
     }
     function setUnroll() {
     }
-    function shareTweet() {
-      console.log(preview, "payloood");
+    async function shareTweet() {
+      console.log(payload, "payload");
+      console.log(selected, "selected");
+      console.log(ship, "ship");
+      for (let channel of selected) {
+        let data;
+        console.log(channel, "channel");
+        if (channel.group === "DM")
+          data = buildDM(ship, channel.name, payload);
+        else if (channel.type === "publish")
+          data = buildNotebookPost(ship, channel, "Urbit Visor Share", payload);
+        else if (channel.type === "link")
+          data = buildCollectionPost(ship, channel, "Urbit Visor Share", payload);
+        else if (channel.type === "chat")
+          data = buildChatPost(ship, channel, payload);
+        console.log(data, "data");
+        const res = await urbitVisor.poke(data);
+        console.log(res, "poked");
+      }
     }
     return /* @__PURE__ */ import_react5.default.createElement("div", {
       id: "uv-twitter-share-modal"

@@ -1,7 +1,7 @@
 import React from 'react';
 import { useState, useEffect, useRef } from "react";
 import { urbitVisor } from "@dcspark/uv-core";
-import { liveCheckPatp, addDashes, buildDM, buildChatPost, buildCollectionPost, buildNotebookPost } from "../utils/utils";
+import { liveCheckPatp } from "../utils/utils";
 interface UrbitKey {
     ship: string,
     name: string
@@ -36,7 +36,7 @@ function referenceMetadata(channel: any, metadata: any): UrbitChannel {
 
 interface ChannelBoxProps {
     filter?: any
-    selected: UrbitKey[]
+    selected: UrbitChannel[]
     setSelected: (keys) => void
 }
 
@@ -71,22 +71,6 @@ export function ChannelSelectBox({ filter, selected, setSelected }: ChannelBoxPr
     const [dmCandidate, setDMCandidate] = useState<string>(null);
     const [loading, setLoading] = useState(false);
     const [options, setOptions] = useState(channels);
-
-    async function handleClick() {
-        // for (let channel of selected) {
-        //     let data;
-        //     console.log(channel, "channel")
-        //     if (channel.group === "DM") data = buildDM(ship, channel.name, payload.contents)
-        //     else if (channel.type === "publish") data = buildNotebookPost(ship, channel, "Urbit Visor Share", payload.contents)
-        //     else if (channel.type === "link") data = buildCollectionPost(ship, channel, "Urbit Visor Share", payload.contents)
-        //     else if (channel.type === "chat") data = buildChatPost(ship, channel, payload.contents)
-        //     console.log(data, "data")
-        //     const res = await urbitVisor.poke(data);
-        //     console.log(res, "poked")
-        // }
-    }
-
-
 
     function handleChange(e) {
         const inp = e.target.value.toLowerCase();
@@ -128,12 +112,12 @@ export function ChannelSelectBox({ filter, selected, setSelected }: ChannelBoxPr
         setOptions([data, ...options.filter(dm => dm.ship !== patp)]);
     }
 
-    function select(key) {
-        setSelected([...selected, key]);
+    function select(channel) {
+        setSelected([...selected, channel]);
     }
 
-    function unselect(key) {
-        const newlist = selected.filter(k => !(k.ship === key.ship && k.name === key.name));
+    function unselect(channel) {
+        const newlist = selected.filter(c => !(c.ship === channel.ship && c.name === channel.name));
         setSelected(newlist);
     }
     function focusOnInput(){
@@ -172,15 +156,13 @@ interface UrbitKeyProps {
     metadata: any
     select: (key) => void
     unselect: (key) => void
-    selected: UrbitKey[]
+    selected: UrbitChannel[]
 }
 function UrbitKey({ keyString, metadata, selected, select, unselect }: UrbitKeyProps) {
-    const key: UrbitKey = { ship: metadata.ship, name: metadata.name }
-
-    const checked = !!selected.find(k => k.ship === key.ship && k.name === key.name);
+    const checked = !!selected.find(c => c.ship === metadata.ship && c.name === metadata.name);
     function handleSelect(e) {
-        if (e.target.checked) select(key)
-        else unselect(key)
+        if (e.target.checked) select(metadata)
+        else unselect(metadata)
     };
     const disabled = selected.length >= 3 && !checked;
 
