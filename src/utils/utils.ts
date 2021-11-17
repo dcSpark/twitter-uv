@@ -54,10 +54,11 @@ const initials = "bdfhlmnprstwz".split("");
 const finals = "cdglmnprstvx".split("");
 const vowels = "aeiouy".split("");
 export function liveCheckPatp(input: string): boolean {
-    const i = input.replace("-", "");
+    const i = input.replace(/-/g, "");
     if (i[0] !== "~") return false
     else {
         const syllables = i.slice(1).match(/.{1,3}/g);
+        console.log(syllables, "syllables")
         if (syllables) return checkSyllables(syllables)
         else return false
     }

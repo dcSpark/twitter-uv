@@ -15,16 +15,33 @@ const isThreadParent = (tweet: Element) => {
   return true
 }
 
+function hoverButton(e){
+  const action = e.target.closest(".urbit-visor-share-tweet-action");
+  action.style.backgroundColor = "rgb(248, 250, 157, 0.5)";
+  action.style.borderRadius = "40%";
+  const circle = e.target.closest(".urbit-visor-share-tweet-action").querySelector("circle");
+  const path = e.target.closest(".urbit-visor-share-tweet-action").querySelector("path");
+  circle.style.stroke = "rgb(245, 203, 66)";
+  path.style.fill = "rgb(245, 203, 66)";
+}
+function unhoverButton(e){
+  const action = e.target.closest(".urbit-visor-share-tweet-action");
+  action.style.backgroundColor = "transparent";
+  const circle = e.target.closest(".urbit-visor-share-tweet-action").querySelector("circle");
+  const path = e.target.closest(".urbit-visor-share-tweet-action").querySelector("path");
+  circle.style.stroke = "currentcolor";
+  path.style.fill = "currentcolor";
+}
+
 const createVisorButton = (
   tweet: Element,
   hasUserActions: boolean
 ) => {
   // Create the tip action
   const shareAction = document.createElement('div')
-  shareAction.className = 'urbit-visor-share-tweet-action action-brave-tip'
+  shareAction.className = 'urbit-visor-share-tweet-action'
   shareAction.style.display = 'flex';
   shareAction.style.textAlign = hasUserActions ? 'center' : 'start';
-  shareAction.style.cursor = 'pointer';
   shareAction.setAttribute('role', 'button');
   shareAction.setAttribute('tabindex', '0');
 
@@ -39,13 +56,15 @@ const createVisorButton = (
   urbitButton.style.fontSize = '16px'
   urbitButton.style.lineHeight = '1'
   urbitButton.style.outline = '0'
-  urbitButton.style.position = 'relative'
+  urbitButton.style.padding = "0";
+  urbitButton.style.position = 'relative';
   urbitButton.type = 'button'
   urbitButton.innerHTML = `<svg class="urbit-visor-share-tweet-button-img" width="24" height="24" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-     <circle cx="16" cy="16" r="13" fill="transparent" stroke="rgb(110, 118, 125)" stroke-width="1"/>
-     <path d="M22 14.0488H19.6306C19.4522 15.0976 18.9936 15.7317 18.1783 15.7317C16.7006 15.7317 15.8599 14 13.5669 14C11.3503 14 10.1783 15.3659 10 17.9756H12.3694C12.5478 16.9024 13.0064 16.2683 13.8471 16.2683C15.3248 16.2683 16.1146 18 18.4586 18C20.6242 18 21.8217 16.6341 22 14.0488Z" fill="rgb(110, 118, 125)"/>`
+     <circle cx="16" cy="16" r="13" fill="transparent" stroke="currentcolor" stroke-width="2"/>
+     <path d="M22 14.0488H19.6306C19.4522 15.0976 18.9936 15.7317 18.1783 15.7317C16.7006 15.7317 15.8599 14 13.5669 14C11.3503 14 10.1783 15.3659 10 17.9756H12.3694C12.5478 16.9024 13.0064 16.2683 13.8471 16.2683C15.3248 16.2683 16.1146 18 18.4586 18C20.6242 18 21.8217 16.6341 22 14.0488Z" fill="currentcolor"/>`
 
-
+  urbitButton.querySelector("svg").onmouseover = hoverButton;
+  urbitButton.querySelector("svg").onmouseout = unhoverButton;
   // Create the tip icon container
   //  const tipIconContainer = document.createElement('div')
   //  tipIconContainer.className = 'IconContainer js-tooltip'
@@ -64,19 +83,14 @@ const createVisorButton = (
   // const css = '.urbit-visor-share-tweet-action :hover { background-color: red; color: #6781db; }'
   // style.appendChild(document.createTextNode(css))
   // shadowRoot.appendChild(style)
-  const shareText = document.createElement("p");
-  shareText.className = "urbit-visor-share-tweet-button-text"
-  shareText.innerText = "Share";
-  shareText.style.fontFamily = `Inter`;
+
 
   //  // Thread parents require a slightly larger margin due to layout differences
   if (tweet && isThreadParent(tweet)) {
-    urbitButton.style.marginTop = '12px';
-    shareText.style.marginTop = "19px";
-  }
+    // urbitButton.style.marginTop = '10px';
+  } 
   shareAction.onclick = handleClick
-  shareAction.appendChild(urbitButton);
-  shareAction.appendChild(shareText);
+  shareAction.append(urbitButton);
   return shareAction
 }
 
@@ -127,7 +141,7 @@ export const injectButtons = () => {
       const numActions = actions.querySelectorAll(':scope > div').length || 0
       const hasUserActions = numActions > 3
       const shareAction = createVisorButton(tweets[i], hasUserActions)
-      actions.appendChild(shareAction)
+      actions.prepend(shareAction)
     }
   }
 

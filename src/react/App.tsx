@@ -1,8 +1,6 @@
 import React from "react";
 import {useEffect, useState} from "react";
-import { urbitVisor } from "@dcspark/uv-core";
-import Preview from "./Preview";
-import Channels from "./Channels";
+import ShareModal from "./ShareModal";
 import "./styles.css";
 import ReactDOM from "react-dom";
 
@@ -14,7 +12,6 @@ export interface TwitterProps{
 }
 
 function App(props: TwitterProps){
-    const [payload, setPayload] = useState(null);
     const [show, setShow] = useState(true);
     console.log(show, "show")
     if (!show)
@@ -30,8 +27,7 @@ function App(props: TwitterProps){
     }
     return (
         <div style={styles}>
-            <Preview {...props} setShow={setShow} setPayload={setPayload} />
-            {payload && <Channels payload={payload} />}
+            <ShareModal {...props} setShow={setShow} />
         </div>
     )
 }
