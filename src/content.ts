@@ -2,15 +2,17 @@
 import ReactDOM from "react-dom";
 import Init from "./react/Init";
 import {injectButtons}from "./button/button";
+import { urbitVisor } from "@dcspark/uv-core";
 
 
 
 async function init() {
   console.log("uv twitter extension running")
+  urbitVisor.registerName("Twitter Ext").then(res => console.log("Twitter extension registered with Urbit Visor"))
   const div = document.createElement("div");
   div.id = "uv-twitter-extension-container";
   document.body.appendChild(div);
-  ReactDOM.render(Init, div);
+  // ReactDOM.render(Init, div);
   console.log("uv twitter extension injected");
   injectButtons();
 }

@@ -6,7 +6,7 @@ import Welcome from "./Welcome";
 
 function Init(){
     useEffect(()=>{
-        urbitVisor.registerName("Twitter Ext").then(res => checkPerms())
+        urbitVisor.registerName("Twitter Ext").then(res => console.log("Twitter extension registered with Urbit Visor"))
     })
     const [havePerms, setHavePerms] = useState(true);
     const styles = {

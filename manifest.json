@@ -5,9 +5,9 @@
     "manifest_version": 3,
     "icons": {
         "16": "./public/images/icon16.png",
-        "32": "./public/images/icon16.png",
-        "48": "./public/images/icon16.png",
-        "128": "./public/images/icon16.png"
+        "32": "./public/images/icon48.png",
+        "48": "./public/images/icon48.png",
+        "128": "./public/images/icon128.png"
     },
     "content_scripts": [
         {
