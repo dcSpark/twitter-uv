@@ -230,3 +230,7 @@
     display: flex;
     padding: 5px;
 }
+
+#extension-icon {
+    width: 50px;
+}

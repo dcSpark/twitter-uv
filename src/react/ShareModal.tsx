@@ -7,6 +7,8 @@ import { buildDM, buildChatPost, buildCollectionPost, buildNotebookPost } from "
 
 import Preview from "./Preview";
 import Channels from "./Channels";
+import mainLogo from './icon128.png';
+
 
 interface ModalProps extends TwitterProps {
     setShow: (boolean: boolean) => void
@@ -73,7 +75,7 @@ export default function ShareModal(props: ModalProps) {
             <div id="tweet-preview-header">
                 <p onClick={quit} id="preview-close-button">X</p>
                 <h3>Share via Urbit</h3>
-                <img id="visor-icon" src="https://urbit.s3.urbit.cloud/mirtyl-wacdec/2021.11.17..04.05.54-visor.png" alt="" />
+                <img id="extension-icon" src={mainLogo} alt="" />
             </div>
             <div id="tweet-preview-tabs">
                 <div onClick={setFullTweet} className="tweet-preview-tab">
