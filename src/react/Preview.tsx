@@ -2,7 +2,7 @@ import React from "react";
 import { useEffect, useState } from "react";
 import { TwitterProps } from "./App";
 import { getTweet, getThread, Tweet, Poll } from "../api/client";
-import { tweetToText, pollOptions } from "../utils/parsing";
+import { tweetToGraphStore, threadToGraphStore, pollOptions } from "../utils/parsing";
 
 
 
@@ -21,18 +21,26 @@ const placeholder = {
 }
 interface PreviewProps extends TwitterProps {
     setPayload: (payload) => void
+    thread?: boolean
 }
 
+
+
 function Preview(props: PreviewProps) {
+    console.log(props, "preview props")
     useEffect(() => {
         getThread(`${props.id}`).then(tweet => {
-            const text = tweetToText(tweet);
-            props.setPayload(text);
-            setTweet(tweet)
+            console.log(tweet, "fetched tweet");
+            setTweet(tweet.parent);
+            const tweetcontents = tweetToGraphStore(tweet.parent);
+            console.log(tweetcontents, "tweetcontents")
+            const threadcontents = threadToGraphStore(tweet);
+            console.log(threadcontents, "threadcontents")
+            if (!props.thread) props.setPayload(tweetcontents);
+            else props.setPayload(threadcontents);
         })
     }, []);
     const [tweet, setTweet] = useState<Tweet>(placeholder);
-    console.log(tweet, "preview component")
 
     return (
         <div id="tweet-preview">

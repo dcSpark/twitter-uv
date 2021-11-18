@@ -227,5 +227,6 @@
 }
 
 #tweet-preview-author {
+    display: flex;
     padding: 5px;
 }
