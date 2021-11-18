@@ -7,7 +7,6 @@ import { buildDM, buildChatPost, buildCollectionPost, buildNotebookPost } from "
 
 import Preview from "./Preview";
 import Channels from "./Channels";
-import { tweetToText } from "../utils/parsing";
 
 interface ModalProps extends TwitterProps {
     setShow: (boolean: boolean) => void
@@ -36,6 +35,7 @@ export default function ShareModal(props: ModalProps) {
         props.setShow(false);
     }
     const fullTweet = <Preview {...props} setPayload={setPayload} />;
+    const unrollThread = <Preview {...props} thread={true} setPayload={setPayload} />;
 
     function setFullTweet() {
         setPreview(fullTweet);
@@ -46,7 +46,7 @@ export default function ShareModal(props: ModalProps) {
         setPayload([{url: props.url.href}]);
     }
     function setUnroll() {
-
+      setPreview(unrollThread);
     }
     async function shareTweet() {
         console.log(payload, "payload");
@@ -55,7 +55,7 @@ export default function ShareModal(props: ModalProps) {
         for (let channel of selected) {
             let data;
             console.log(channel, "channel")
-            if (channel.group === "DM") data = buildDM(ship, channel.name, payload);
+            if (channel.type === "DM") data = buildDM(ship, channel.ship, payload);
             else if (channel.type === "publish") data = buildNotebookPost(ship, channel, "Urbit Visor Share", payload);
             else if (channel.type === "link") data = buildCollectionPost(ship, channel, "Urbit Visor Share", payload);
             else if (channel.type === "chat") data = buildChatPost(ship, channel, payload);

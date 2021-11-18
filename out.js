@@ -26885,8 +26885,12 @@ zodnecbudwessevpersutletfulpensytdurwepserwylsunrypsyxdyrnuphebpeglupdepdysputlu
     withUserResults: false,
     withVoice: true
   };
-  var fetchThread = async (id) => {
-    const variables = encodeURIComponent(JSON.stringify(Object.assign(baseVariables, { focalTweetId: id })));
+  var fetchThread = async (id, cursor = null) => {
+    let variables;
+    if (cursor)
+      variables = encodeURIComponent(JSON.stringify(Object.assign(baseVariables, { focalTweetId: id, cursor })));
+    else
+      variables = encodeURIComponent(JSON.stringify(Object.assign(baseVariables, { focalTweetId: id })));
     const url = threadsURL + variables;
     const res = await fetch(url, headers());
     const json = await res.json();
@@ -26936,30 +26940,53 @@ ${entities.urls.reduce((acc, item) => acc + item.expanded_url, "")}
   async function getThread(id) {
     const res = await fetchThread(id);
     const tweets = res.data.threaded_conversation_with_injections.instructions.find((el) => el.type === "TimelineAddEntries");
-    const data = tweets.entries.find((el) => el.entryId.includes(id));
-    return processThread(data.content.itemContent.tweet_results.result);
+    const parent = tweets.entries.find((el) => el.entryId.includes(id));
+    const children = tweets.entries.filter((el) => el.entryId.includes("conversationthread"));
+    const placeholder2 = { content: { items: [] } };
+    const threadChildren = children.find((subthread) => subthread.content.items.find((child) => child.item.itemContent.tweetDisplayType === "SelfThread")) || placeholder2;
+    const processedParent = processThread(parent.content.itemContent.tweet_results.result);
+    const cursorObject = threadChildren.content.items.find((child) => child.item.itemContent.itemType === "TimelineTimelineCursor");
+    const cursorString = cursorObject?.item?.itemContent?.value;
+    let processedChildren = [];
+    if (threadChildren) {
+      processedChildren = threadChildren.content.items.filter((child) => child.item.itemContent.itemType === "TimelineTweet" && child.item.itemContent.tweetDisplayType === "SelfThread").map((child) => processThread(child.item.itemContent.tweet_results.result));
+    }
+    ;
+    let more = [];
+    if (cursorString) {
+      const moreKids = await getSubsequentChildren(id, cursorString, []);
+      more = [...moreKids];
+    }
+    return { parent: processedParent, children: [...processedChildren, ...more] };
+  }
+  async function getSubsequentChildren(id, cursor, acc) {
+    const res = await fetchThread(id, cursor);
+    const data = res.data.threaded_conversation_with_injections.instructions.find((el) => el.type === "TimelineAddToModule");
+    const children = data.moduleItems.filter((el) => el.entryId.includes("tweet") && el.item.itemContent.tweetDisplayType === "SelfThread");
+    const newCursor = data.moduleItems.find((el) => el.entryId.includes("cursor"));
+    const cursorString = newCursor?.item?.itemContent?.value;
+    const processedChildren = children.map((child) => processThread(child.item.itemContent.tweet_results.result));
+    if (cursorString)
+      return getSubsequentChildren(id, cursorString, [...acc, ...processedChildren]);
+    else
+      return [...acc, ...processedChildren];
   }
   function processThread(data) {
     if (!data)
       return null;
     else {
-      console.log(data, "tweet");
       const tweet = data.legacy;
       const time = dateString(translateDate(tweet.created_at));
       const author = processAuthor(data.core.user.legacy);
       const pics = findPics(tweet.entities);
-      console.log(pics, "pics");
       const video = findVideo(tweet?.extended_entities);
-      console.log(video, "video");
       const redundant_urls = scrubURLS(tweet.entities);
-      console.log(redundant_urls, "redundant_urls");
       const text = redundant_urls.reduce((acc, i) => acc.replace(i, "").trim(), tweet.full_text) + addFullURL(tweet.entities);
-      console.log(text, "text");
       const quote = processThread(data?.quoted_status_result?.result);
-      console.log(quote, "quote");
       const poll = processPoll(data?.card?.legacy);
-      console.log(poll, "poll");
-      return { index: parseInt(tweet.id_str), time, author, pics, video, text, quote, poll };
+      const parent = tweet?.self_thread?.id_str || null;
+      const startsThread = parent && tweet.conversation_id_str === tweet.id_str;
+      return { index: tweet.id_str, time, author, pics, video, text, quote, poll, parent, startsThread };
     }
   }
   function processAuthor(user) {
@@ -26970,7 +26997,6 @@ ${entities.urls.reduce((acc, item) => acc + item.expanded_url, "")}
     };
   }
   function processPoll(poll) {
-    console.log(poll, "poll");
     if (!poll || !poll.name.includes("choice"))
       return null;
     else {
@@ -26987,19 +27013,29 @@ ${entities.urls.reduce((acc, item) => acc + item.expanded_url, "")}
   }
 
   // src/utils/parsing.ts
-  function tweetToText(tweet) {
+  function tweetTitle(tweet) {
     const url = `https://twitter.com/${tweet.author.handle}/statuses/${tweet.index}`;
-    const contents = [];
-    const text = `
+    return `
     Urbit Visor Presents: 
     [Tweet by ${tweet.author.name} (@${tweet.author.handle})](${url}) Posted on ${tweet.time}
     
-
-    ${tweet.text}
-    
+-
 
   `;
-    contents.push({ text });
+  }
+  function threadTitle(thread) {
+    const tweet = thread.parent;
+    const url = `https://twitter.com/${tweet.author.handle}/statuses/${tweet.index}`;
+    return `
+    Urbit Visor Presents: 
+    [Twitter Thread, ${thread.children.length + 1} tweets long, by ${tweet.author.name} (@${tweet.author.handle})](${url}) Posted on ${tweet.time}
+    
+-
+
+  `;
+  }
+  function tweetToText(tweet) {
+    const contents = [{ text: tweet.text + " -\n " }];
     tweet.pics.forEach((pic) => contents.push({ url: pic.href }));
     if (tweet.video)
       contents.push({ url: tweet.video.href });
@@ -27014,9 +27050,21 @@ ${entities.urls.reduce((acc, item) => acc + item.expanded_url, "")}
       const options = pollOptions(tweet.poll);
       const poll = options.reduce((acc, opt) => acc + `${opt.label}: ${opt.count}
 `, string);
-      contents.push({ text: poll });
+      contents.push({ text: poll + " \n " });
     }
     return contents;
+  }
+  function tweetToGraphStore(tweet) {
+    return [{ text: tweetTitle(tweet) }, ...tweetToText(tweet)];
+  }
+  function threadToGraphStore(thread) {
+    const title = threadTitle(thread);
+    const parent = tweetToText(thread.parent);
+    const children = thread.children.reduce((acc, tweet, index) => {
+      const contents = tweetToText(tweet);
+      return [...acc, ...contents];
+    }, []);
+    return [{ text: title }, ...parent, ...children];
   }
   function quoteToText(quote) {
     const url = `https://twitter.com/${quote.author.handle}/statuses/${quote.index}`;
@@ -27063,15 +27111,22 @@ ${entities.urls.reduce((acc, item) => acc + item.expanded_url, "")}
     poll: null
   };
   function Preview(props) {
+    console.log(props, "preview props");
     (0, import_react2.useEffect)(() => {
       getThread(`${props.id}`).then((tweet2) => {
-        const text = tweetToText(tweet2);
-        props.setPayload(text);
-        setTweet(tweet2);
+        console.log(tweet2, "fetched tweet");
+        setTweet(tweet2.parent);
+        const tweetcontents = tweetToGraphStore(tweet2.parent);
+        console.log(tweetcontents, "tweetcontents");
+        const threadcontents = threadToGraphStore(tweet2);
+        console.log(threadcontents, "threadcontents");
+        if (!props.thread)
+          props.setPayload(tweetcontents);
+        else
+          props.setPayload(threadcontents);
       });
     }, []);
     const [tweet, setTweet] = (0, import_react2.useState)(placeholder);
-    console.log(tweet, "preview component");
     return /* @__PURE__ */ import_react.default.createElement("div", {
       id: "tweet-preview"
     }, /* @__PURE__ */ import_react.default.createElement("div", {
@@ -27402,6 +27457,11 @@ ${entities.urls.reduce((acc, item) => acc + item.expanded_url, "")}
       ...props,
       setPayload
     });
+    const unrollThread = /* @__PURE__ */ import_react5.default.createElement(Preview_default, {
+      ...props,
+      thread: true,
+      setPayload
+    });
     function setFullTweet() {
       setPreview(fullTweet);
     }
@@ -27410,6 +27470,7 @@ ${entities.urls.reduce((acc, item) => acc + item.expanded_url, "")}
       setPayload([{ url: props.url.href }]);
     }
     function setUnroll() {
+      setPreview(unrollThread);
     }
     async function shareTweet() {
       console.log(payload, "payload");
@@ -27418,8 +27479,8 @@ ${entities.urls.reduce((acc, item) => acc + item.expanded_url, "")}
       for (let channel of selected) {
         let data;
         console.log(channel, "channel");
-        if (channel.group === "DM")
-          data = buildDM(ship, channel.name, payload);
+        if (channel.type === "DM")
+          data = buildDM(ship, channel.ship, payload);
         else if (channel.type === "publish")
           data = buildNotebookPost(ship, channel, "Urbit Visor Share", payload);
         else if (channel.type === "link")
@@ -27596,7 +27657,9 @@ ${entities.urls.reduce((acc, item) => acc + item.expanded_url, "")}
     urbitButton.type = "button";
     urbitButton.innerHTML = `<svg class="urbit-visor-share-tweet-button-img" width="24" height="24" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
      <circle cx="16" cy="16" r="13" fill="transparent" stroke="currentcolor" stroke-width="2"/>
-     <path d="M22 14.0488H19.6306C19.4522 15.0976 18.9936 15.7317 18.1783 15.7317C16.7006 15.7317 15.8599 14 13.5669 14C11.3503 14 10.1783 15.3659 10 17.9756H12.3694C12.5478 16.9024 13.0064 16.2683 13.8471 16.2683C15.3248 16.2683 16.1146 18 18.4586 18C20.6242 18 21.8217 16.6341 22 14.0488Z" fill="currentcolor"/>`;
+     <path d="M22 14.0488H19.6306C19.4522 15.0976 18.9936 15.7317 18.1783 15.7317C16.7006 15.7317 15.8599 14 13.5669 14C11.3503 14 10.1783 15.3659 10 17.9756H12.3694C12.5478 16.9024 13.0064 16.2683 13.8471 16.2683C15.3248 16.2683 16.1146 18 18.4586 18C20.6242 18 21.8217 16.6341 22 14.0488Z" fill="currentcolor"/>
+     </svg>
+     `;
     urbitButton.querySelector("svg").onmouseover = hoverButton;
     urbitButton.querySelector("svg").onmouseout = unhoverButton;
     if (tweet && isThreadParent(tweet)) {
@@ -27607,10 +27670,10 @@ ${entities.urls.reduce((acc, item) => acc + item.expanded_url, "")}
   };
   async function handleClick(event) {
     const tweet = event.target.closest("article");
-    console.log(tweet, "tweet");
     const url = Array.from(tweet.closest("article").querySelectorAll("a")).map((el) => el.href).find((el) => el.includes("status"));
     const strings = url.split("/");
-    const id = strings[strings.length - 1];
+    const statusAt = strings.indexOf("status");
+    const id = strings[statusAt + 1];
     const div = document.getElementById("uv-twitter-extension-container");
     const react = import_react10.default.createElement(App_default, { id, url: new URL(url) });
     import_react_dom2.default.render(react, div);
