@@ -30,6 +30,7 @@ export default function ShareModal(props: ModalProps) {
     const [preview, setPreview] = useState(linkOnly);
     const [ship, setShip] = useState<string>(null);
     const [selected, setSelected] = useState<UrbitChannel[]>([]);
+    const [channelFilters, setChannelFilters] = useState([]);
 
 
     function quit() {
@@ -38,15 +39,17 @@ export default function ShareModal(props: ModalProps) {
     const fullTweet = <Preview {...props} setPayload={setPayload} />;
 
     function setFullTweet() {
+        setChannelFilters(["link"])
         setPreview(fullTweet);
         // payload set at the preview component on fetching the data, could move the fetching here tho
     }
     function setLinkOnly() {
+        setChannelFilters([])
         setPreview(linkOnly);
         setPayload([{url: props.url.href}]);
     }
     function setUnroll() {
-
+        setChannelFilters(["chat", "link", "post"])
     }
     async function shareTweet() {
         console.log(payload, "payload");
@@ -87,7 +90,7 @@ export default function ShareModal(props: ModalProps) {
                     {preview}
                 </div>
             </div>
-            <Channels selected={selected} setSelected={setSelected}/>
+            <Channels selected={selected} setSelected={setSelected} exclude={channelFilters}/>
             <div id="tweet-share-button-wrapper">
             <button onClick={shareTweet} id="tweet-share-button">
                 <svg width="24" height="24" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">

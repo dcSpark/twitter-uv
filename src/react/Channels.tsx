@@ -35,12 +35,12 @@ function referenceMetadata(channel: any, metadata: any): UrbitChannel {
 }
 
 interface ChannelBoxProps {
-    filter?: any
+    exclude: string[]
     selected: UrbitChannel[]
     setSelected: (keys) => void
 }
 
-export function ChannelSelectBox({ filter, selected, setSelected }: ChannelBoxProps) {
+export function ChannelSelectBox({ exclude, selected, setSelected }: ChannelBoxProps) {
 
 
     useEffect(() => {
@@ -55,15 +55,14 @@ export function ChannelSelectBox({ filter, selected, setSelected }: ChannelBoxPr
             setLoading(false)
             const list = keys.response["graph-update"].keys.map((channel: any) => referenceMetadata(channel, data));
             const channels = list.filter(chan => chan.name !== "dm-inbox" && chan.group !== "");
-            if (filter === "collections") setChannels(channels.filter(chan => chan.type !== "links"));
-            else setChannels(channels);
+            setChannels(channels);
             setOptions(channels);
             setLoading(false);
             urbitVisor.unsubscribe(sub).then(res => console.log(res, "unsubscribed"))
         });
         urbitVisor.subscribe({ app: "metadata-store", path: "/all" }).then(res => sub = res.response);
+    };
 
-    }
     const inputRef = useRef();
     const [input, setInput] = useState("");
     const [channels, setChannels] = useState<UrbitChannel[]>([]);
@@ -72,6 +71,8 @@ export function ChannelSelectBox({ filter, selected, setSelected }: ChannelBoxPr
     const [loading, setLoading] = useState(false);
     const [options, setOptions] = useState(channels);
 
+    console.log(exclude, "exclude")
+    console.log(channels.filter(chan => !exclude.includes(chan.type)))
     function handleChange(e) {
         const inp = e.target.value.toLowerCase();
         e.target.style.width = `${inp.length + 5}ch`
@@ -98,7 +99,7 @@ export function ChannelSelectBox({ filter, selected, setSelected }: ChannelBoxPr
         }
     }
 
-    function addDM(){
+    function addDM() {
         const patp = dmCandidate;
         const data = {
             group: "Direct Messages",
@@ -120,7 +121,7 @@ export function ChannelSelectBox({ filter, selected, setSelected }: ChannelBoxPr
         const newlist = selected.filter(c => !(c.ship === channel.ship && c.name === channel.name));
         setSelected(newlist);
     }
-    function focusOnInput(){
+    function focusOnInput() {
         inputRef.current.focus();
     }
     console.log(selected, "selected")
@@ -140,7 +141,7 @@ export function ChannelSelectBox({ filter, selected, setSelected }: ChannelBoxPr
             </div>
             <div id="urbit-key-container">
                 {loading && <p>... loading ...</p>}
-                {options.map((k, index) => {
+                {options.filter(chan => !exclude.includes(chan.type)).map((k, index) => {
                     const key = `${k.ship}/${k.name}`;
                     return <UrbitKey key={key} keyString={key} selected={selected} select={select} unselect={unselect} metadata={k} />
                 })}
@@ -174,7 +175,7 @@ function UrbitKey({ keyString, metadata, selected, select, unselect }: UrbitKeyP
     let icon = chatIcon;
     if (metadata.type == "post") icon = feedIcon;
     if (metadata.type == "publish") icon = notebookIcon;
-    if (metadata.type == "links") icon = collectionIcon;
+    if (metadata.type == "link") icon = collectionIcon;
     if (metadata.type == "DM") icon = dmIcon;
     return (
         <div className="urbit-key">
