@@ -27477,8 +27477,8 @@ ${entities.urls.reduce((acc, item) => acc + item.expanded_url, "")}
       for (let channel of selected) {
         let data;
         console.log(channel, "channel");
-        if (channel.group === "DM")
-          data = buildDM(ship, channel.name, payload);
+        if (channel.type === "DM")
+          data = buildDM(ship, channel.ship, payload);
         else if (channel.type === "publish")
           data = buildNotebookPost(ship, channel, "Urbit Visor Share", payload);
         else if (channel.type === "link")
