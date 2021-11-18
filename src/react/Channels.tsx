@@ -1,7 +1,7 @@
 import React from 'react';
 import { useState, useEffect, useRef } from "react";
 import { urbitVisor } from "@dcspark/uv-core";
-import { liveCheckPatp, addDashes, buildDM, buildChatPost, buildCollectionPost, buildNotebookPost } from "../utils/utils";
+import { liveCheckPatp } from "../utils/utils";
 interface UrbitKey {
     ship: string,
     name: string
@@ -22,7 +22,6 @@ function referenceMetadata(channel: any, metadata: any): UrbitChannel {
         const type = metadata[url].metadata.config.graph;
         const group = metadata[url].group;
         const groupMetadata = metadata[`${group}/groups${group}`];
-        console.log(groupMetadata, "group")
         const groupTitle = groupMetadata?.metadata?.title;
         return {
             title: title,
@@ -37,7 +36,7 @@ function referenceMetadata(channel: any, metadata: any): UrbitChannel {
 
 interface ChannelBoxProps {
     filter?: any
-    selected: UrbitKey[]
+    selected: UrbitChannel[]
     setSelected: (keys) => void
 }
 
@@ -56,7 +55,6 @@ export function ChannelSelectBox({ filter, selected, setSelected }: ChannelBoxPr
             setLoading(false)
             const list = keys.response["graph-update"].keys.map((channel: any) => referenceMetadata(channel, data));
             const channels = list.filter(chan => chan.name !== "dm-inbox" && chan.group !== "");
-            console.log(list, "list")
             if (filter === "collections") setChannels(channels.filter(chan => chan.type !== "links"));
             else setChannels(channels);
             setOptions(channels);
@@ -73,22 +71,6 @@ export function ChannelSelectBox({ filter, selected, setSelected }: ChannelBoxPr
     const [dmCandidate, setDMCandidate] = useState<string>(null);
     const [loading, setLoading] = useState(false);
     const [options, setOptions] = useState(channels);
-
-    async function handleClick() {
-        // for (let channel of selected) {
-        //     let data;
-        //     console.log(channel, "channel")
-        //     if (channel.group === "DM") data = buildDM(ship, channel.name, payload.contents)
-        //     else if (channel.type === "publish") data = buildNotebookPost(ship, channel, "Urbit Visor Share", payload.contents)
-        //     else if (channel.type === "link") data = buildCollectionPost(ship, channel, "Urbit Visor Share", payload.contents)
-        //     else if (channel.type === "chat") data = buildChatPost(ship, channel, payload.contents)
-        //     console.log(data, "data")
-        //     const res = await urbitVisor.poke(data);
-        //     console.log(res, "poked")
-        // }
-    }
-
-
 
     function handleChange(e) {
         const inp = e.target.value.toLowerCase();
@@ -130,14 +112,12 @@ export function ChannelSelectBox({ filter, selected, setSelected }: ChannelBoxPr
         setOptions([data, ...options.filter(dm => dm.ship !== patp)]);
     }
 
-    function select(key) {
-        if (key.group === "DM") setInput("");
-        console.log(key, "selected key")
-        setSelected([...selected, key]);
+    function select(channel) {
+        setSelected([...selected, channel]);
     }
 
-    function unselect(key) {
-        const newlist = selected.filter(k => !(k.ship === key.ship && k.name === key.name));
+    function unselect(channel) {
+        const newlist = selected.filter(c => !(c.ship === channel.ship && c.name === channel.name));
         setSelected(newlist);
     }
     function focusOnInput(){
@@ -150,7 +130,7 @@ export function ChannelSelectBox({ filter, selected, setSelected }: ChannelBoxPr
     return (
         <div id="uv-channel-selector">
             <div id="uv-channel-selector-title">
-                <h4>Select Channels ({selected.length}/{channels.length})</h4>
+                <h4>Select Channels ({selected.length}/3)</h4>
             </div>
             <div id="uv-channel-selector-searchbox">
                 <div onClick={focusOnInput} id="uv-channel-selector-searchbox-wrapper">
@@ -162,7 +142,7 @@ export function ChannelSelectBox({ filter, selected, setSelected }: ChannelBoxPr
                 {loading && <p>... loading ...</p>}
                 {options.map((k, index) => {
                     const key = `${k.ship}/${k.name}`;
-                    return <UrbitKey key={key} keyString={key} select={select} unselect={unselect} metadata={k} />
+                    return <UrbitKey key={key} keyString={key} selected={selected} select={select} unselect={unselect} metadata={k} />
                 })}
             </div>
         </div>);
@@ -176,13 +156,16 @@ interface UrbitKeyProps {
     metadata: any
     select: (key) => void
     unselect: (key) => void
+    selected: UrbitChannel[]
 }
-function UrbitKey({ keyString, metadata, select, unselect }: UrbitKeyProps) {
+function UrbitKey({ keyString, metadata, selected, select, unselect }: UrbitKeyProps) {
+    const checked = !!selected.find(c => c.ship === metadata.ship && c.name === metadata.name);
     function handleSelect(e) {
-        const key: UrbitKey = { ship: metadata.ship, name: metadata.name }
-        if (e.target.checked) select(key)
-        else unselect(key)
-    }
+        if (e.target.checked) select(metadata)
+        else unselect(metadata)
+    };
+    const disabled = selected.length >= 3 && !checked;
+
     const chatIcon = <svg color="black" display="block" viewBox="0 0 16 16"><path d="M10.8571 12.2918L11.014 11.817L10.7959 11.745L10.5991 11.8635L10.8571 12.2918ZM12.2857 10.8623L11.8645 10.5929L11.7358 10.7942L11.8115 11.0207L12.2857 10.8623ZM13 13L12.8431 13.4747C13.0228 13.5341 13.2206 13.487 13.3541 13.353C13.4877 13.219 13.5342 13.021 13.4742 12.8415L13 13ZM10.5991 11.8635C9.94405 12.2582 8.87909 12.5 8 12.5V13.5C9.00806 13.5 10.2645 13.2326 11.1152 12.7201L10.5991 11.8635ZM8 12.5C5.51471 12.5 3.5 10.4853 3.5 8.00004H2.5C2.5 11.0376 4.96244 13.5 8 13.5V12.5ZM3.5 8.00004C3.5 5.51475 5.51472 3.5 8 3.5V2.5C4.96242 2.5 2.5 4.96247 2.5 8.00004H3.5ZM8 3.5C10.4853 3.5 12.5 5.51475 12.5 8.00004H13.5C13.5 4.96247 11.0376 2.5 8 2.5V3.5ZM12.5 8.00004C12.5 8.93552 12.2914 9.92518 11.8645 10.5929L12.707 11.1316C13.2729 10.2465 13.5 9.046 13.5 8.00004H12.5ZM10.7002 12.7665L12.8431 13.4747L13.1569 12.5253L11.014 11.817L10.7002 12.7665ZM13.4742 12.8415L12.7599 10.7038L11.8115 11.0207L12.5258 13.1585L13.4742 12.8415Z"></path></svg>
     const notebookIcon = <svg color="black" display="block" viewBox="0 0 16 16"><path fillRule="evenodd" clipRule="evenodd" d="M3.1001 1.8999H11.6001C12.7599 1.8999 13.7001 2.8401 13.7001 3.9999V11.1999C13.7001 12.3597 12.7599 13.2999 11.6001 13.2999H6.5001V13.9999H5.5001V13.2999H3.1001V1.8999ZM6.5001 12.2999H11.6001C12.2076 12.2999 12.7001 11.8074 12.7001 11.1999V3.9999C12.7001 3.39239 12.2076 2.8999 11.6001 2.8999H6.5001V12.2999ZM5.5001 2.8999V12.2999H4.1001V2.8999H5.5001ZM11.2001 6.0999H8.0001V5.0999H11.2001V6.0999Z"></path></svg>
     const collectionIcon = <svg color="black" display="block" viewBox="0 0 16 16"><path fillRule="evenodd" clipRule="evenodd" d="M2 2H14V6H13V12.5C13 13.3284 12.3284 14 11.5 14H4.5C3.67157 14 3 13.3284 3 12.5V6H2V2ZM3 5H4V12.5C4 12.7761 4.22386 13 4.5 13H11.5C11.7761 13 12 12.7761 12 12.5V5H13V3H3V5ZM9.5 9H6.5V8H9.5V9Z"></path><path fillRule="evenodd" clipRule="evenodd" d="M12.5 6H3.5V5H12.5V6Z"></path></svg>
@@ -195,7 +178,7 @@ function UrbitKey({ keyString, metadata, select, unselect }: UrbitKeyProps) {
     if (metadata.type == "DM") icon = dmIcon;
     return (
         <div className="urbit-key">
-            <input onChange={handleSelect} type="checkbox" name={keyString} id={keyString} />
+            <input onChange={handleSelect} type="checkbox" name={keyString} id={keyString} defaultChecked={checked} disabled={disabled} />
             <div className="urbit-key-name">
                 <p className="urbit-key-title">{metadata.title}</p>
                 <p className="urbit-key-group">in {metadata.group}</p>
