@@ -27019,7 +27019,8 @@ ${entities.urls.reduce((acc, item) => acc + item.expanded_url, "")}
     Urbit Visor Presents: 
     [Tweet by ${tweet.author.name} (@${tweet.author.handle})](${url}) Posted on ${tweet.time}
     
- 
+-
+
   `;
   }
   function threadTitle(thread) {
@@ -27029,7 +27030,8 @@ ${entities.urls.reduce((acc, item) => acc + item.expanded_url, "")}
     Urbit Visor Presents: 
     [Twitter Thread, ${thread.children.length + 1} tweets long, by ${tweet.author.name} (@${tweet.author.handle})](${url}) Posted on ${tweet.time}
     
- 
+-
+
   `;
   }
   function tweetToText(tweet) {

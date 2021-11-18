@@ -5,7 +5,7 @@ function tweetTitle(tweet: Tweet){
     return `
     Urbit Visor Presents: 
     [Tweet by ${tweet.author.name} (@${tweet.author.handle})](${url}) Posted on ${tweet.time}
-    \n 
+    \n-\n
   `;
 }
 function threadTitle(thread: Thread){
@@ -14,7 +14,7 @@ function threadTitle(thread: Thread){
     return `
     Urbit Visor Presents: 
     [Twitter Thread, ${thread.children.length + 1} tweets long, by ${tweet.author.name} (@${tweet.author.handle})](${url}) Posted on ${tweet.time}
-    \n 
+    \n-\n
   `;
 }
 
