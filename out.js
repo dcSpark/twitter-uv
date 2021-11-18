@@ -27173,7 +27173,7 @@ ${entities.urls.reduce((acc, item) => acc + item.expanded_url, "")}
     } else
       return { title: "", group: "", type: null, ship: channel.ship, name: channel.name };
   }
-  function ChannelSelectBox({ filter, selected, setSelected }) {
+  function ChannelSelectBox({ exclude, selected, setSelected }) {
     (0, import_react4.useEffect)(() => {
       readMetadata();
     }, []);
@@ -27185,16 +27185,14 @@ ${entities.urls.reduce((acc, item) => acc + item.expanded_url, "")}
         setLoading(false);
         const list = keys.response["graph-update"].keys.map((channel) => referenceMetadata(channel, data));
         const channels2 = list.filter((chan) => chan.name !== "dm-inbox" && chan.group !== "");
-        if (filter === "collections")
-          setChannels(channels2.filter((chan) => chan.type !== "links"));
-        else
-          setChannels(channels2);
+        setChannels(channels2);
         setOptions(channels2);
         setLoading(false);
         urbitVisor.unsubscribe(sub).then((res) => console.log(res, "unsubscribed"));
       });
       urbitVisor.subscribe({ app: "metadata-store", path: "/all" }).then((res) => sub = res.response);
     }
+    ;
     const inputRef = (0, import_react4.useRef)();
     const [input, setInput] = (0, import_react4.useState)("");
     const [channels, setChannels] = (0, import_react4.useState)([]);
@@ -27202,6 +27200,8 @@ ${entities.urls.reduce((acc, item) => acc + item.expanded_url, "")}
     const [dmCandidate, setDMCandidate] = (0, import_react4.useState)(null);
     const [loading, setLoading] = (0, import_react4.useState)(false);
     const [options, setOptions] = (0, import_react4.useState)(channels);
+    console.log(exclude, "exclude");
+    console.log(channels.filter((chan) => !exclude.includes(chan.type)));
     function handleChange(e) {
       const inp = e.target.value.toLowerCase();
       e.target.style.width = `${inp.length + 5}ch`;
@@ -27268,7 +27268,7 @@ ${entities.urls.reduce((acc, item) => acc + item.expanded_url, "")}
       className: "dm-candidate-chip"
     }, dmCandidate))), /* @__PURE__ */ import_react3.default.createElement("div", {
       id: "urbit-key-container"
-    }, loading && /* @__PURE__ */ import_react3.default.createElement("p", null, "... loading ..."), options.map((k, index) => {
+    }, loading && /* @__PURE__ */ import_react3.default.createElement("p", null, "... loading ..."), options.filter((chan) => !exclude.includes(chan.type)).map((k, index) => {
       const key = `${k.ship}/${k.name}`;
       return /* @__PURE__ */ import_react3.default.createElement(UrbitKey, {
         key,
@@ -27358,7 +27358,7 @@ ${entities.urls.reduce((acc, item) => acc + item.expanded_url, "")}
       icon = feedIcon;
     if (metadata.type == "publish")
       icon = notebookIcon;
-    if (metadata.type == "links")
+    if (metadata.type == "link")
       icon = collectionIcon;
     if (metadata.type == "DM")
       icon = dmIcon;
@@ -27395,6 +27395,7 @@ ${entities.urls.reduce((acc, item) => acc + item.expanded_url, "")}
     const [preview, setPreview] = (0, import_react6.useState)(linkOnly);
     const [ship, setShip] = (0, import_react6.useState)(null);
     const [selected, setSelected] = (0, import_react6.useState)([]);
+    const [channelFilters, setChannelFilters] = (0, import_react6.useState)([]);
     function quit() {
       props.setShow(false);
     }
@@ -27403,13 +27404,16 @@ ${entities.urls.reduce((acc, item) => acc + item.expanded_url, "")}
       setPayload
     });
     function setFullTweet() {
+      setChannelFilters(["link"]);
       setPreview(fullTweet);
     }
     function setLinkOnly() {
+      setChannelFilters([]);
       setPreview(linkOnly);
       setPayload([{ url: props.url.href }]);
     }
     function setUnroll() {
+      setChannelFilters(["chat", "link", "post"]);
     }
     async function shareTweet() {
       console.log(payload, "payload");
@@ -27459,7 +27463,8 @@ ${entities.urls.reduce((acc, item) => acc + item.expanded_url, "")}
       id: "tweet-share-payload"
     }, preview)), /* @__PURE__ */ import_react5.default.createElement(Channels_default, {
       selected,
-      setSelected
+      setSelected,
+      exclude: channelFilters
     }), /* @__PURE__ */ import_react5.default.createElement("div", {
       id: "tweet-share-button-wrapper"
     }, /* @__PURE__ */ import_react5.default.createElement("button", {
