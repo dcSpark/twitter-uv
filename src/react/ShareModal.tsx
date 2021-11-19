@@ -9,6 +9,8 @@ import { buildDM, buildChatPost, buildCollectionPost, buildNotebookPost } from "
 
 import Preview from "./Preview";
 import Channels from "./Channels";
+import mainLogo from './icon128.png';
+
 
 interface ModalProps extends TwitterProps {
     setShow: (boolean: boolean) => void
@@ -46,18 +48,26 @@ export default function ShareModal(props: ModalProps) {
 
     console.log(props, "share modal running");
     const [tweet, setTweet] = useState<Tweet>(placeholder);
-    const [payload, setPayload] = useState([{url: props.url.href}]);
     const [title, setTitle] = useState("");
+    const [payload, setPayload] = useState([`[${props.url.href}](${props.url.href})`]);
     const [preview, setPreview] = useState(linkOnly);
     const [ship, setShip] = useState<string>(null);
     const [selected, setSelected] = useState<UrbitChannel[]>([]);
     const [channelFilters, setChannelFilters] = useState([]);
+    const [error, setError] = useState("");
 
 
     function quit() {
         props.setShow(false);
     }
     const fullTweet = <Preview tweet={tweet.parent} />;
+    function success(){
+        // TODO: show some message?
+        quit();
+    }
+    function failure(){
+      setError("Error sharing the Tweet, please try again later")
+    }
 
     function setFullTweet() {
         setChannelFilters(["link"]);
@@ -68,7 +78,7 @@ export default function ShareModal(props: ModalProps) {
     function setLinkOnly() {
         setChannelFilters([])
         setPreview(linkOnly);
-        setPayload([{url: props.url.href}]);
+        setPayload(`[${props.url.href}](${props.url.href})`);
     }
     function setUnroll() {
         setChannelFilters(["chat", "link", "post"]);
@@ -90,8 +100,12 @@ export default function ShareModal(props: ModalProps) {
             else if (channel.type === "link") data = buildCollectionPost(ship, channel, title, payload);
             else if (channel.type === "chat") data = buildChatPost(ship, channel, payload);
             console.log(data, "data");
-            const res = await urbitVisor.poke(data);
-            console.log(res, "poked");
+            urbitVisor.poke(data).then(res => {
+                // TODO error handling
+                if (res.status === "ok") success();
+                else console.log(res, "poked")
+            });
+            
         }
     }
     return (
@@ -99,7 +113,7 @@ export default function ShareModal(props: ModalProps) {
             <div id="tweet-preview-header">
                 <p onClick={quit} id="preview-close-button">X</p>
                 <h3>Share via Urbit</h3>
-                <img id="visor-icon" src="https://urbit.s3.urbit.cloud/mirtyl-wacdec/2021.11.17..04.05.54-visor.png" alt="" />
+                <img id="extension-icon" src={mainLogo} alt="" />
             </div>
             <div id="tweet-preview-tabs">
                 <div onClick={setFullTweet} className="tweet-preview-tab">

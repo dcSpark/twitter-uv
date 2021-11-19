@@ -48,8 +48,10 @@ function Preview({tweet}: PreviewProps) {
         <div id="tweet-preview">
             <div id="tweet-preview-author">
                 <img id="avatar" src={tweet.author.avatar} alt="" />
+                <div id="tweet-author-name-wrapper">
                 <p id="tweet-author-name">{tweet.author.name}</p>
-                <p>@{tweet.author.handle}</p>
+                <p id="tweet-author-handle">@{tweet.author.handle}</p>
+                </div>
                 <p>Posted: {tweet.time}</p>
             </div>
             <div id="tweet-body">

@@ -85,7 +85,7 @@ export function addDashes(p: string): string {
     return "~" + list.join("-")
 }
 
-export function buildChatPost(author, resource, contents) {
+export function buildChatPost(author, resource, text) {
     return {
         app: "graph-push-hook", mark: "graph-update-3", json: {
             "add-nodes": {
@@ -95,7 +95,7 @@ export function buildChatPost(author, resource, contents) {
                         children: null,
                         post: {
                             author: "~" + author,
-                            contents: contents,
+                            contents: [{text: text}],
                             hash: null,
                             index: "/9",
                             signatures: [],
@@ -108,7 +108,7 @@ export function buildChatPost(author, resource, contents) {
         }
     };
 }
-export function buildNotebookPost(author, resource, title, contents) {
+export function buildNotebookPost(author, resource, title, text) {
     const node = {};
     const index = `/${makeIndex()}`;
     node[index] =  {
@@ -127,7 +127,7 @@ export function buildNotebookPost(author, resource, title, contents) {
                         children: null,
                         post: {
                             author: "~" + author,
-                            contents: [{text: title}, ...contents],
+                            contents: [{text: title}, {text: text}],
                             hash: null,
                             index: index + "/1/1",
                             signatures: [],
@@ -167,14 +167,14 @@ export function buildNotebookPost(author, resource, title, contents) {
         }
     };
 }
-export function buildCollectionPost(author, resource, title, url) {
+export function buildCollectionPost(author, resource, title: string, url: string) {
     const node = {};
     const index = `/${makeIndex()}`;
     node[index] =  {
             children: null,
             post: {
                 author: "~" + author,
-                contents: [{text: title}, ...url],
+                contents: [{text: title}, {url: url}],
                 hash: null,
                 index: index,
                 signatures: [],
@@ -190,7 +190,7 @@ export function buildCollectionPost(author, resource, title, url) {
         }
     };
 }
-export function buildDM(author, recipient, contents) {
+export function buildDM(author, recipient, text: string) {
     const node = {};
     const point = patp2dec(recipient);
     console.log(point, "point")
@@ -199,7 +199,7 @@ export function buildDM(author, recipient, contents) {
             children: null,
             post: {
                 author: "~" + author,
-                contents: contents,
+                contents: [{text: text}],
                 hash: null,
                 index: index,
                 signatures: [],
