@@ -7,6 +7,8 @@ import { buildDM, buildChatPost, buildCollectionPost, buildNotebookPost } from "
 
 import Preview from "./Preview";
 import Channels from "./Channels";
+import mainLogo from './icon128.png';
+
 
 interface ModalProps extends TwitterProps {
     setShow: (boolean: boolean) => void
@@ -30,10 +32,18 @@ export default function ShareModal(props: ModalProps) {
     const [ship, setShip] = useState<string>(null);
     const [selected, setSelected] = useState<UrbitChannel[]>([]);
     const [channelFilters, setChannelFilters] = useState([]);
+    const [error, setError] = useState("");
 
 
     function quit() {
         props.setShow(false);
+    }
+    function success(){
+        // TODO: show some message?
+        quit();
+    }
+    function failure(){
+      setError("Error sharing the Tweet, please try again later")
     }
     const fullTweet = <Preview {...props} setPayload={setPayload} />;
     const unrollThread = <Preview {...props} thread={true} setPayload={setPayload} />;
@@ -64,8 +74,12 @@ export default function ShareModal(props: ModalProps) {
             else if (channel.type === "link") data = buildCollectionPost(ship, channel, "Urbit Visor Share", payload);
             else if (channel.type === "chat") data = buildChatPost(ship, channel, payload);
             console.log(data, "data");
-            const res = await urbitVisor.poke(data);
-            console.log(res, "poked");
+            urbitVisor.poke(data).then(res => {
+                // TODO error handling
+                if (res.status === "ok") success();
+                else console.log(res, "poked")
+            });
+            
         }
     }
     return (
@@ -73,7 +87,7 @@ export default function ShareModal(props: ModalProps) {
             <div id="tweet-preview-header">
                 <p onClick={quit} id="preview-close-button">X</p>
                 <h3>Share via Urbit</h3>
-                <img id="visor-icon" src="https://urbit.s3.urbit.cloud/mirtyl-wacdec/2021.11.17..04.05.54-visor.png" alt="" />
+                <img id="extension-icon" src={mainLogo} alt="" />
             </div>
             <div id="tweet-preview-tabs">
                 <div onClick={setFullTweet} className="tweet-preview-tab">

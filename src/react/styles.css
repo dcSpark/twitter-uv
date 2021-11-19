@@ -18,10 +18,15 @@
     margin: 0;
 }
 
+#tweet-preview {
+    max-height: 300px;
+    overflow-y: scroll;
+}
+
 #tweet-preview-header {
     display: flex;
     justify-content: space-between;
-    padding: 1rem;
+    padding: 0.2rem 1rem;
 }
 
 #visor-icon {
@@ -50,7 +55,6 @@
 #tweet-share-payload {
     border: 1px solid grey;
     border-radius: 1rem;
-    margin: 1rem;
     padding: 0 1rem;
 }
 
@@ -70,13 +74,23 @@
     border-radius: 2rem;
 }
 
+#tweet-author-name-wrapper {
+    display: flex;
+}
+
 #tweet-author-name,
 #tweet-quote-author-name {
+    margin: 1rem 0.2rem;
     font-weight: 700;
 }
 
+#tweet-author-handle,
+#tweet-quote-author-handle {
+    margin-right: 2rem;
+}
+
 #tweet-body {
-    margin: 1rem 0 1rem 3rem;
+    margin-bottom: 1rem;
     overflow-y: scroll;
 }
 
@@ -229,4 +243,8 @@
 #tweet-preview-author {
     display: flex;
     padding: 5px;
+}
+
+#extension-icon {
+    width: 50px;
 }

@@ -19,6 +19,8 @@ function hoverButton(e){
   const action = e.target.closest(".urbit-visor-share-tweet-action");
   action.style.backgroundColor = "rgb(248, 250, 157, 0.5)";
   action.style.borderRadius = "40%";
+  action.style.transitionDuration = "0.2s";
+  action.style.transitionProperty = "background-color, box-shadow";
   const circle = e.target.closest(".urbit-visor-share-tweet-action").querySelector("circle");
   const path = e.target.closest(".urbit-visor-share-tweet-action").querySelector("path");
   circle.style.stroke = "rgb(245, 203, 66)";
