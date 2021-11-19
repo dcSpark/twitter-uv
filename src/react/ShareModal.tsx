@@ -27,7 +27,7 @@ export default function ShareModal(props: ModalProps) {
     const linkOnly = <div id="twitter-link"><p>{props.url.href}</p></div>
 
     console.log(props, "share modal running");
-    const [payload, setPayload] = useState([{url: props.url.href}]);
+    const [payload, setPayload] = useState([`[${props.url.href}](${props.url.href})`]);
     const [preview, setPreview] = useState(linkOnly);
     const [ship, setShip] = useState<string>(null);
     const [selected, setSelected] = useState<UrbitChannel[]>([]);
@@ -56,7 +56,7 @@ export default function ShareModal(props: ModalProps) {
     function setLinkOnly() {
         setChannelFilters([])
         setPreview(linkOnly);
-        setPayload([{url: props.url.href}]);
+        setPayload(`[${props.url.href}](${props.url.href})`);
     }
     function setUnroll() {
         setChannelFilters(["chat", "link", "post"])
