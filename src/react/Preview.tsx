@@ -19,28 +19,30 @@ const placeholder = {
     quote: null,
     poll: null
 }
-interface PreviewProps extends TwitterProps {
-    setPayload: (payload) => void
-    thread?: boolean
+// interface PreviewProps extends TwitterProps {
+//     setPayload: (payload) => void
+//     thread?: boolean
+// }
+
+interface PreviewProps {
+    tweet: Tweet
 }
 
 
-
-function Preview(props: PreviewProps) {
-    console.log(props, "preview props")
-    useEffect(() => {
-        getThread(`${props.id}`).then(tweet => {
-            console.log(tweet, "fetched tweet");
-            setTweet(tweet.parent);
-            const tweetcontents = tweetToGraphStore(tweet.parent);
-            console.log(tweetcontents, "tweetcontents")
-            const threadcontents = threadToGraphStore(tweet);
-            console.log(threadcontents, "threadcontents")
-            if (!props.thread) props.setPayload(tweetcontents);
-            else props.setPayload(threadcontents);
-        })
-    }, []);
-    const [tweet, setTweet] = useState<Tweet>(placeholder);
+function Preview({tweet}: PreviewProps) {
+    // useEffect(() => {
+    //     getThread(`${props.id}`).then(tweet => {
+    //         console.log(tweet, "fetched tweet");
+    //         setTweet(tweet.parent);
+    //         const tweetcontents = tweetToGraphStore(tweet.parent);
+    //         console.log(tweetcontents, "tweetcontents")
+    //         const threadcontents = threadToGraphStore(tweet);
+    //         console.log(threadcontents, "threadcontents")
+    //         if (!props.thread) props.setPayload(tweetcontents);
+    //         else props.setPayload(threadcontents);
+    //     })
+    // }, []);
+    // const [tweet, setTweet] = useState<Tweet>(placeholder);
 
     return (
         <div id="tweet-preview">

@@ -2,6 +2,8 @@ import React from "react";
 import { useEffect, useState } from "react";
 import { TwitterProps } from "./App";
 import { urbitVisor } from "@dcspark/uv-core";
+import { getTweet, getThread, Tweet, Poll } from "../api/client";
+import { titleFromTweet, tweetToGraphStore, threadToGraphStore, pollOptions } from "../utils/parsing";
 import { buildDM, buildChatPost, buildCollectionPost, buildNotebookPost } from "../utils/utils";
 
 
@@ -18,14 +20,34 @@ interface UrbitChannel {
     ship: string,
     name: string
 }
+const placeholder = {
+    author: {
+        name: "",
+        handle: "",
+        avatar: ""
+    },
+    pics: [],
+    time: "1d",
+    video: null,
+    text: "",
+    quote: null,
+    poll: null
+}
+
 export default function ShareModal(props: ModalProps) {
     useEffect(()=>{
-        urbitVisor.getShip().then(res => setShip(res.response))
+        urbitVisor.getShip().then(res => setShip(res.response));
+        getThread(`${props.id}`).then(tweet => {
+            console.log(tweet, "fetched tweet");
+            setTweet(tweet);
+        })
     }, []);
     const linkOnly = <div id="twitter-link"><p>{props.url.href}</p></div>
 
     console.log(props, "share modal running");
+    const [tweet, setTweet] = useState<Tweet>(placeholder);
     const [payload, setPayload] = useState([{url: props.url.href}]);
+    const [title, setTitle] = useState("");
     const [preview, setPreview] = useState(linkOnly);
     const [ship, setShip] = useState<string>(null);
     const [selected, setSelected] = useState<UrbitChannel[]>([]);
@@ -35,13 +57,13 @@ export default function ShareModal(props: ModalProps) {
     function quit() {
         props.setShow(false);
     }
-    const fullTweet = <Preview {...props} setPayload={setPayload} />;
-    const unrollThread = <Preview {...props} thread={true} setPayload={setPayload} />;
+    const fullTweet = <Preview tweet={tweet.parent} />;
 
     function setFullTweet() {
-        setChannelFilters(["link"])
+        setChannelFilters(["link"]);
         setPreview(fullTweet);
-        // payload set at the preview component on fetching the data, could move the fetching here tho
+        setTitle("Tweet " + titleFromTweet(tweet.parent));
+        setPayload(tweetToGraphStore(tweet.parent));
     }
     function setLinkOnly() {
         setChannelFilters([])
@@ -49,9 +71,13 @@ export default function ShareModal(props: ModalProps) {
         setPayload([{url: props.url.href}]);
     }
     function setUnroll() {
-        setChannelFilters(["chat", "link", "post"])
-        setPreview(unrollThread);
-    }
+        setChannelFilters(["chat", "link", "post"]);
+        setPreview(fullTweet);
+        setTitle("Unrolled Thread " + titleFromTweet(tweet.parent));
+        setPayload(threadToGraphStore(tweet));
+    };
+    console.log(tweet, "tweet")
+    console.log(payload, "payload")
     async function shareTweet() {
         console.log(payload, "payload");
         console.log(selected, "selected")
@@ -60,8 +86,8 @@ export default function ShareModal(props: ModalProps) {
             let data;
             console.log(channel, "channel")
             if (channel.type === "DM") data = buildDM(ship, channel.ship, payload);
-            else if (channel.type === "publish") data = buildNotebookPost(ship, channel, "Urbit Visor Share", payload);
-            else if (channel.type === "link") data = buildCollectionPost(ship, channel, "Urbit Visor Share", payload);
+            else if (channel.type === "publish") data = buildNotebookPost(ship, channel, title, payload);
+            else if (channel.type === "link") data = buildCollectionPost(ship, channel, title, payload);
             else if (channel.type === "chat") data = buildChatPost(ship, channel, payload);
             console.log(data, "data");
             const res = await urbitVisor.poke(data);

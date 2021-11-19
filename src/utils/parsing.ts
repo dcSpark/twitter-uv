@@ -17,6 +17,9 @@ function threadTitle(thread: Thread){
     \n-\n
   `;
 }
+export function titleFromTweet(tweet: Tweet): string{
+    return `by @${tweet.author.handle} - ${tweet.time}`;
+}
 
 function tweetToText(tweet: Tweet) {
     const contents: any = [{text: tweet.text + " -\n "}]; // argh
