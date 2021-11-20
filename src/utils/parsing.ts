@@ -13,6 +13,9 @@ function threadTitle(thread: Thread){
 Length: ${thread.children.length + 1} Tweets\n
 Posted on ${tweet.time}\n\n\`-------------------------------------------------------\`\n\n`;
 }
+export function titleFromTweet(tweet: Tweet): string{
+    return `by @${tweet.author.handle} - ${tweet.time}`;
+}
 
 function tweetToMarkdown(tweet: Tweet) {
     const text = tweet.text + "\n\n";
