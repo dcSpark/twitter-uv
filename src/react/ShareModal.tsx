@@ -37,36 +37,43 @@ const placeholder = {
 }
 
 export default function ShareModal(props: ModalProps) {
-    useEffect(()=>{
+    useEffect(() => {
         urbitVisor.getShip().then(res => setShip(res.response));
         getThread(`${props.id}`).then(tweet => {
-            console.log(tweet, "fetched tweet");
-            setTweet(tweet);
-        })
+            setTweet(tweet)
+            setTitle("Tweet " + titleFromTweet(tweet.parent));
+            setLoading(false);
+        });
     }, []);
     const linkOnly = <div id="twitter-link"><p>{props.url.href}</p></div>
 
     console.log(props, "share modal running");
+    const [loading, setLoading] = useState(true);
     const [tweet, setTweet] = useState<Tweet>(placeholder);
     const [title, setTitle] = useState("");
-    const [payload, setPayload] = useState([`[${props.url.href}](${props.url.href})`]);
+    const [payload, setPayload] = useState(`[${props.url.href}](${props.url.href})`);
     const [preview, setPreview] = useState(linkOnly);
     const [ship, setShip] = useState<string>(null);
     const [selected, setSelected] = useState<UrbitChannel[]>([]);
     const [channelFilters, setChannelFilters] = useState([]);
     const [error, setError] = useState("");
 
+    console.log(payload, "f payload");
+    console.log(props, "props")
+    console.log(title, "f title");
+    console.log(loading, "loading")
+
 
     function quit() {
         props.setShow(false);
     }
     const fullTweet = <Preview tweet={tweet.parent} />;
-    function success(){
+    function success() {
         // TODO: show some message?
         quit();
     }
-    function failure(){
-      setError("Error sharing the Tweet, please try again later")
+    function failure() {
+        setError("Error sharing the Tweet, please try again later")
     }
 
     function setFullTweet() {
@@ -78,6 +85,7 @@ export default function ShareModal(props: ModalProps) {
     function setLinkOnly() {
         setChannelFilters([])
         setPreview(linkOnly);
+        setTitle("Tweet " + titleFromTweet(tweet.parent));
         setPayload(`[${props.url.href}](${props.url.href})`);
     }
     function setUnroll() {
@@ -89,9 +97,6 @@ export default function ShareModal(props: ModalProps) {
     console.log(tweet, "tweet")
     console.log(payload, "payload")
     async function shareTweet() {
-        console.log(payload, "payload");
-        console.log(selected, "selected")
-        console.log(ship, "ship");
         for (let channel of selected) {
             let data;
             console.log(channel, "channel")
@@ -105,7 +110,7 @@ export default function ShareModal(props: ModalProps) {
                 if (res.status === "ok") success();
                 else console.log(res, "poked")
             });
-            
+
         }
     }
     return (
@@ -131,15 +136,15 @@ export default function ShareModal(props: ModalProps) {
                     {preview}
                 </div>
             </div>
-            <Channels selected={selected} setSelected={setSelected} exclude={channelFilters}/>
+            <Channels selected={selected} setSelected={setSelected} exclude={channelFilters} />
             <div id="tweet-share-button-wrapper">
-            <button onClick={shareTweet} id="tweet-share-button">
-                <svg width="24" height="24" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <circle cx="16" cy="16" r="13" fill="white" stroke="currentcolor" strokeWidth="2" />
-                    <path d="M22 14.0488H19.6306C19.4522 15.0976 18.9936 15.7317 18.1783 15.7317C16.7006 15.7317 15.8599 14 13.5669 14C11.3503 14 10.1783 15.3659 10 17.9756H12.3694C12.5478 16.9024 13.0064 16.2683 13.8471 16.2683C15.3248 16.2683 16.1146 18 18.4586 18C20.6242 18 21.8217 16.6341 22 14.0488Z" fill="black" />
-                </svg>
-                <p>Share</p>
-            </button>
+                <button disabled={loading} onClick={shareTweet} id="tweet-share-button">
+                    <svg width="24" height="24" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="16" cy="16" r="13" fill="white" stroke="currentcolor" strokeWidth="2" />
+                        <path d="M22 14.0488H19.6306C19.4522 15.0976 18.9936 15.7317 18.1783 15.7317C16.7006 15.7317 15.8599 14 13.5669 14C11.3503 14 10.1783 15.3659 10 17.9756H12.3694C12.5478 16.9024 13.0064 16.2683 13.8471 16.2683C15.3248 16.2683 16.1146 18 18.4586 18C20.6242 18 21.8217 16.6341 22 14.0488Z" fill="black" />
+                    </svg>
+                    <p>Share</p>
+                </button>
             </div>
         </div>
     )

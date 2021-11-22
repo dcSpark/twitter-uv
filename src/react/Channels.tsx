@@ -71,8 +71,6 @@ export function ChannelSelectBox({ exclude, selected, setSelected }: ChannelBoxP
     const [loading, setLoading] = useState(false);
     const [options, setOptions] = useState(channels);
 
-    console.log(exclude, "exclude")
-    console.log(channels.filter(chan => !exclude.includes(chan.type)))
     function handleChange(e) {
         const inp = e.target.value.toLowerCase();
         e.target.style.width = `${inp.length + 5}ch`
@@ -124,9 +122,6 @@ export function ChannelSelectBox({ exclude, selected, setSelected }: ChannelBoxP
     function focusOnInput() {
         inputRef.current.focus();
     }
-    console.log(selected, "selected")
-
-
 
     return (
         <div id="uv-channel-selector">
