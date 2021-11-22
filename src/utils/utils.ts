@@ -168,13 +168,14 @@ export function buildNotebookPost(author, resource, title, text) {
     };
 }
 export function buildCollectionPost(author, resource, title: string, url: string) {
+    const payload = url.split("(")[1].replace(/\)/g, "");
     const node = {};
     const index = `/${makeIndex()}`;
     node[index] =  {
             children: null,
             post: {
                 author: "~" + author,
-                contents: [{text: title}, {url: url}],
+                contents: [{text: title}, {url: payload}],
                 hash: null,
                 index: index,
                 signatures: [],
