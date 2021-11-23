@@ -26,26 +26,11 @@ function tweetToMarkdown(tweet: Tweet) {
     ? withMedia + "Quoting:\n" + tweetToMarkdown(tweet.quote).split("\n").map(line => `> ${line}`).join("\n")
     : withMedia
     const withPoll = tweet.poll
-    ? withQuote + pollOptions(tweet.poll).reduce((acc, opt)=> acc + `${opt.label}: ${opt.count}\n`, ".\nPoll:\nOption   Count\n") + "\n"
+    ? withQuote + pollOptions(tweet.poll).reduce((acc, opt)=> acc + `${opt.label}: ${opt.count}\n`, "\nPoll:\n") + "\n"
     : withQuote
     return withPoll
 };
-function tweetToText(tweet: Tweet) {
-    const contents: any = [{text: tweet.text + "\n"}]; // argh
-    tweet.pics.forEach(pic => contents.push({ url: pic.href }));
-    if (tweet.video) contents.push({ url: tweet.video.href });
-    if (tweet.quote) {
-        const quoteContents = quoteToText(tweet.quote);
-        quoteContents.forEach(piece => contents.push(piece));
-    }
-    if (tweet.poll){
-      const string = ".\nPoll:\nOption   Count\n";
-      const options = pollOptions(tweet.poll);
-      const poll = options.reduce((acc, opt)=> acc + `${opt.label}: ${opt.count}\n`, string);
-      contents.push({text: poll + "\n"});
-    }
-    return contents
-};
+
 export function tweetToGraphStore(tweet: Tweet){
   return tweetTitle(tweet) + tweetToMarkdown(tweet)
 };
