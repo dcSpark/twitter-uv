@@ -10,8 +10,8 @@
     border-radius: 1rem;
     background-color: white;
     color: black;
-    margin: 1rem auto 0 auto;
-    max-height: 700px;
+    margin: auto;
+    height: 90%
 }
 
 #uv-twitter-share-modal h4 {
