@@ -1,8 +1,6 @@
 import React from "react";
-import { useEffect, useState } from "react";
-import { TwitterProps } from "./App";
-import { getTweet, getThread, Tweet, Poll } from "../api/client";
-import { tweetToGraphStore, threadToGraphStore, pollOptions } from "../utils/parsing";
+import { Tweet, Poll } from "../api/client";
+import { pollOptions } from "../utils/parsing";
 
 
 
@@ -19,10 +17,7 @@ const placeholder = {
     quote: null,
     poll: null
 }
-// interface PreviewProps extends TwitterProps {
-//     setPayload: (payload) => void
-//     thread?: boolean
-// }
+
 
 interface PreviewProps {
     tweet: Tweet
@@ -30,20 +25,7 @@ interface PreviewProps {
 
 
 function Preview({tweet}: PreviewProps) {
-    // useEffect(() => {
-    //     getThread(`${props.id}`).then(tweet => {
-    //         console.log(tweet, "fetched tweet");
-    //         setTweet(tweet.parent);
-    //         const tweetcontents = tweetToGraphStore(tweet.parent);
-    //         console.log(tweetcontents, "tweetcontents")
-    //         const threadcontents = threadToGraphStore(tweet);
-    //         console.log(threadcontents, "threadcontents")
-    //         if (!props.thread) props.setPayload(tweetcontents);
-    //         else props.setPayload(threadcontents);
-    //     })
-    // }, []);
-    // const [tweet, setTweet] = useState<Tweet>(placeholder);
-
+    console.log(tweet, "tweet at preview")
     return (
         <div id="tweet-preview">
             <div id="tweet-preview-author">

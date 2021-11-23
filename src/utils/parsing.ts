@@ -19,45 +19,18 @@ export function titleFromTweet(tweet: Tweet): string{
 
 function tweetToMarkdown(tweet: Tweet) {
     const text = tweet.text + "\n\n";
-    const withPics = tweet.pics.reduce((acc, picURL)=>{
-      return acc + `![](${picURL.href})`
-    }, text);
-    let withVideo = withPics;
-    if (tweet.video) withVideo = withVideo + `[](${tweet.video.href.replace(/\?.+/,'')})`;
-    let withQuote = withVideo;
-    if (tweet.quote) {
-        const quoteText = tweetToMarkdown(tweet.quote);
-        console.log(quoteText, "quote text")
-        const quoteText2 = quoteText.split("\n").map(line => `> ${line}`).join("\n");
-        withQuote = withQuote + "Quoting:\n" + quoteText2; 
-    }
-    let withPoll = withQuote;
-    if (tweet.poll){
-      const string = ".\nPoll:\nOption   Count\n";
-      const options = pollOptions(tweet.poll);
-      const poll = options.reduce((acc, opt)=> acc + `${opt.label}: ${opt.count}\n`, string);
-      withPoll = withPoll + poll + "\n"
-    }
+    const withMedia = tweet.video
+    ? text + `![](${tweet.video.href.replace(/\?.+/,'')})`
+    : tweet.pics.reduce((acc, picURL)=> acc + `![](${picURL.href})`, text);
+    const withQuote = tweet.quote
+    ? withMedia + "Quoting:\n" + tweetToMarkdown(tweet.quote).split("\n").map(line => `> ${line}`).join("\n")
+    : withMedia
+    const withPoll = tweet.poll
+    ? withQuote + pollOptions(tweet.poll).reduce((acc, opt)=> acc + `${opt.label}: ${opt.count}\n`, "\nPoll:\n") + "\n"
+    : withQuote
     return withPoll
 };
-function tweetToText(tweet: Tweet) {
-    const contents: any = [{text: tweet.text + "\n"}]; // argh
-    tweet.pics.forEach(pic => contents.push({ url: pic.href }));
-    if (tweet.video) contents.push({ url: tweet.video.href });
-    if (tweet.quote) {
-        const quoteContents = quoteToText(tweet.quote);
-        console.log(quoteContents, "to quote")
-        console.log(contents, "mother")
-        quoteContents.forEach(piece => contents.push(piece));
-    }
-    if (tweet.poll){
-      const string = ".\nPoll:\nOption   Count\n";
-      const options = pollOptions(tweet.poll);
-      const poll = options.reduce((acc, opt)=> acc + `${opt.label}: ${opt.count}\n`, string);
-      contents.push({text: poll + "\n"});
-    }
-    return contents
-};
+
 export function tweetToGraphStore(tweet: Tweet){
   return tweetTitle(tweet) + tweetToMarkdown(tweet)
 };
@@ -66,10 +39,7 @@ export function threadToGraphStore(thread): string{
     const title = threadTitle(thread);
     const parent = tweetToMarkdown(thread.parent);
     const children = thread.children.reduce((acc, tweet, index)=>{
-        // const contents = [{text: `\n${index + 2}/${thread.children.length + 1}\n`}, ...tweetToText(tweet)];
-        const text = tweetToMarkdown(tweet);
-        console.log(text, "tweet to markdown")
-        
+        const text = tweetToMarkdown(tweet);        
         return acc + text
     }, "")
     return title + parent + children
