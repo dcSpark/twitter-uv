@@ -3,8 +3,8 @@
     "version": "0.1.1",
     "description": "Browser Extension to provide Urbit Visor integration to Twitter.com",
     "scripts": {
-        "start": "esbuild src/content.ts --outfile=out.js --bundle --watch --loader:.png=dataurl",
-        "build": "esbuild src/content.ts --bundle --outfile=out.js --loader:.png=dataurl",
+        "start": "esbuild src/content.ts --outfile=dist/dev.js --bundle --watch --loader:.png=dataurl",
+        "build": "esbuild src/content.ts --bundle --outfile=dist/prod.js --loader:.png=dataurl",
         "test": "echo \"Error: no test specified\" && exit 1"
     },
     "keywords": [
