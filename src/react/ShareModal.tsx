@@ -1,4 +1,5 @@
 import React from "react";
+import { unmountComponentAtNode } from "react-dom";
 import { useEffect, useState } from "react";
 import { TwitterProps } from "./App";
 import { urbitVisor } from "@dcspark/uv-core";
@@ -12,9 +13,7 @@ import Channels from "./Channels";
 import mainLogo from './icon128.png';
 
 
-interface ModalProps extends TwitterProps {
-    setShow: (boolean: boolean) => void
-}
+
 interface UrbitChannel {
     title: string,
     type: "post" | "chat" | "link" | "publish" | null,
@@ -23,31 +22,40 @@ interface UrbitChannel {
     name: string
 }
 const placeholder = {
-    author: {
-        name: "",
-        handle: "",
-        avatar: ""
-    },
-    pics: [],
-    time: "1d",
-    video: null,
-    text: "",
-    quote: null,
-    poll: null
+    children: [],
+    parent: {
+        author: {
+            name: "",
+            handle: "",
+            avatar: ""
+        },
+        pics: [],
+        time: "1d",
+        video: null,
+        text: "",
+        quote: null,
+        poll: null
+    }
 }
 
-export default function ShareModal(props: ModalProps) {
+export default function ShareModal(props: TwitterProps) {
     useEffect(() => {
-        urbitVisor.getShip().then(res => setShip(res.response));
+        let leakingMemory = true;
+        urbitVisor.getShip().then(res => {
+            if (leakingMemory) setShip(res.response)
+        });
         getThread(`${props.id}`).then(tweet => {
+            if (leakingMemory){
+            // error handling here, shit happens
             setTweet(tweet)
             setTitle("Tweet " + titleFromTweet(tweet.parent));
             setLoading(false);
+            }
         });
+        return () => leakingMemory = false
     }, []);
     const linkOnly = <div id="twitter-link"><p>{props.url.href}</p></div>
 
-    console.log(props, "share modal running");
     const [loading, setLoading] = useState(true);
     const [tweet, setTweet] = useState<Tweet>(placeholder);
     const [title, setTitle] = useState("");
@@ -58,14 +66,8 @@ export default function ShareModal(props: ModalProps) {
     const [channelFilters, setChannelFilters] = useState([]);
     const [error, setError] = useState("");
 
-    console.log(payload, "f payload");
-    console.log(props, "props")
-    console.log(title, "f title");
-    console.log(loading, "loading")
-
-
     function quit() {
-        props.setShow(false);
+        unmountComponentAtNode(document.getElementById("uv-twitter-extension-container"));
     }
     const fullTweet = <Preview tweet={tweet.parent} />;
     function success() {
@@ -94,8 +96,6 @@ export default function ShareModal(props: ModalProps) {
         setTitle("Unrolled Thread " + titleFromTweet(tweet.parent));
         setPayload(threadToGraphStore(tweet));
     };
-    console.log(tweet, "tweet")
-    console.log(payload, "payload")
     async function shareTweet() {
         for (let channel of selected) {
             let data;

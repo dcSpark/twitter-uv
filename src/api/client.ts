@@ -40,10 +40,11 @@ const baseVariables = {
   withVoice: true
 }
 const fetchThread = async (id: string, cursor: string = null) => {
-  let variables;
-  if (cursor) variables = encodeURIComponent(JSON.stringify(Object.assign(baseVariables, { focalTweetId: id, cursor: cursor })));
-  else variables = encodeURIComponent(JSON.stringify(Object.assign(baseVariables, { focalTweetId: id })));
-  const url = threadsURL + variables;
+  const variables = cursor 
+  ? {...baseVariables, ...{ focalTweetId: id, cursor: cursor }}
+  : {...baseVariables, ...{ focalTweetId: id }}
+  ;
+  const url = threadsURL + encodeURIComponent(JSON.stringify(variables));
   const res = await fetch(url, headers());
   const json = await res.json();
   return json
@@ -113,6 +114,7 @@ export async function getThread(id: string) {
     const moreKids =  await getSubsequentChildren(id, cursorString, []);
     more = [...moreKids]
   }
+  console.log(processedParent, "processed parent");
   return {parent: processedParent, children: [...processedChildren, ...more]}
 }
 
