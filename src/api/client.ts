@@ -114,7 +114,6 @@ export async function getThread(id: string) {
     const moreKids =  await getSubsequentChildren(id, cursorString, []);
     more = [...moreKids]
   }
-  console.log(processedParent, "processed parent");
   return {parent: processedParent, children: [...processedChildren, ...more]}
 }
 
