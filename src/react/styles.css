@@ -1,250 +1,228 @@
 .urbit-visor-share-tweet-button:hover {
-    cursor: pointer;
+  cursor: pointer;
 }
-
 #uv-twitter-share-modal {
-    display: flex;
-    flex-direction: column;
-    width: 650px;
-    border: 1px solid white;
-    border-radius: 1rem;
-    background-color: white;
-    color: black;
-    margin: 1rem auto 0 auto;
-    max-height: 700px;
+  display: flex;
+  flex-direction: column;
+  width: 650px;
+  border: 1px solid white;
+  border-radius: 1rem;
+  background-color: white;
+  color: black;
+  margin: 1rem auto 0 auto;
+  max-height: 700px;
 }
-
 #uv-twitter-share-modal h4 {
-    margin: 0;
+  margin: 0;
 }
-
 #tweet-preview {
-    max-height: 300px;
-    overflow-y: scroll;
+  max-height: 100%;
+  overflow-y: scroll;
 }
-
+#tweet-preview::-webkit-scrollbar {
+  display: none;
+}
 #tweet-preview-header {
-    display: flex;
-    justify-content: space-between;
-    padding: 0.2rem 1rem;
+  display: flex;
+  justify-content: space-between;
+  padding: 0.2rem 1rem;
 }
-
 #visor-icon {
-    width: 30px;
-    height: auto;
+  width: 30px;
+  height: auto;
 }
-
 #tweet-preview-tabs {
-    display: flex;
-    justify-content: space-between;
-    border-top: 1px solid grey;
-    border-bottom: 1px solid grey;
-    padding: 1rem;
+  display: flex;
+  justify-content: space-between;
+  border-top: 1px solid grey;
+  border-bottom: 1px solid grey;
+  padding: 1rem;
 }
-
 .tweet-preview-tab:hover {
-    cursor: pointer;
-    text-decoration: underline;
+  cursor: pointer;
+  text-decoration: underline;
 }
-
 #tweet-share-payload-wrapper {
-    border-bottom: 1px solid grey;
-    padding: 0.4rem;
+  border-bottom: 1px solid grey;
+  padding: 0.4rem;
+  max-height: 240px;
+  overflow-y: hidden;
 }
-
+#tweet-share-payload-wrapper::-webkit-scrollbar {
+  display: none;
+}
 #tweet-share-payload {
-    border: 1px solid grey;
-    border-radius: 1rem;
-    padding: 0 1rem;
+  border: 1px solid grey;
+  border-radius: 1rem;
+  padding-top: 1%;
+  padding-bottom: 0%;
+  padding-right: 4% !important;
+  padding-left: 4% !important;
+  height: 96%;
 }
-
 #preview-close-button:hover {
-    cursor: pointer;
-    text-decoration: underline;
+  cursor: pointer;
+  text-decoration: underline;
 }
-
 #tweet-preview #author,
 #tweet-quote-author {
-    display: flex;
-    justify-content: space-between;
-    margin: 0 0 1rem 0;
+  display: flex;
+  justify-content: space-between;
+  margin: 0 0 1rem 0;
 }
-
 #avatar {
-    border-radius: 2rem;
+  border-radius: 2rem;
 }
-
 #tweet-author-name-wrapper {
-    display: flex;
+  display: flex;
 }
-
 #tweet-author-name,
 #tweet-quote-author-name {
-    margin: 1rem 0.2rem;
-    font-weight: 700;
+  margin: 1rem 0.2rem;
+  font-weight: 700;
 }
-
 #tweet-author-handle,
 #tweet-quote-author-handle {
-    margin-right: 2rem;
+  margin-right: 2rem;
 }
-
 #tweet-body {
-    margin-bottom: 1rem;
-    overflow-y: scroll;
+  margin-bottom: 1rem;
+  overflow: hidden;
 }
-
 #tweet-text {
-    margin-bottom: 1rem;
+  margin-bottom: 1rem;
+  overflow: hidden;
 }
-
 #tweet-pictures {
-    width: 100%;
-    padding: 0.3rem;
-    display: flex;
-    flex-wrap: wrap;
-    text-align: center;
+  width: 100%;
+  padding: 0.3rem;
+  display: flex;
+  flex-wrap: wrap;
+  text-align: center;
 }
-
+div#tweet-pictures img {
+  max-width: 98% !important;
+}
 #tweet-pictures .img-1 {
-    width: auto;
+  width: auto;
 }
-
 #tweet-pictures .img-2,
 #tweet-pictures .img-3,
 #tweet-pictures .img-4 {
-    width: 48%;
-    margin: 0.1rem;
+  width: 48%;
+  margin: 0.1rem;
 }
-
 #twitter-poll {
-    border-radius: 14px;
-    border: 1px solid grey;
-    margin: 0 1rem;
-    padding: 0 1rem;
+  border-radius: 14px;
+  border: 1px solid grey;
+  margin: 0 1rem;
+  padding: 0 1rem;
 }
-
 .twitter-poll-option {
-    display: flex;
-    justify-content: space-between;
+  display: flex;
+  justify-content: space-between;
 }
-
 #tweet-quote {
-    width: 80%;
-    border: 1px solid grey;
-    border-radius: 0.5rem;
-    padding: 0.5rem;
-    margin: 0 auto;
+  width: 80%;
+  border: 1px solid grey;
+  border-radius: 0.5rem;
+  padding: 0.5rem;
+  margin: 0 auto;
 }
-
+div#twitter-link p {
+  text-align: center;
+}
 #tweet-share-buttons {
-    margin-top: 0.5rem;
+  margin-top: 0.5rem;
 }
-
 #uv-channel-selector {
-    flex: 1 1 1px;
-    overflow-y: scroll;
-    padding: 0.4rem;
+  flex: 1 1 1px;
+  overflow: auto;
+  padding: 0.4rem;
 }
-
 #uv-channel-selector-title {
-    text-align: center;
+  text-align: center;
 }
-
 #uv-channel-selector-searchbox {
-    width: 100%;
-    margin: 0.5rem 0;
+  width: 100%;
+  margin: 0.5rem 0;
 }
-
 #uv-channel-selector-searchbox-wrapper {
-    width: 100%;
-    display: flex;
-    border: none;
-    outline: none;
-    background-color: rgb(200, 200, 200);
-    height: 30px;
-    border-radius: 1rem;
-    cursor: text;
-    box-sizing: border-box;
+  width: 100%;
+  display: flex;
+  border: none;
+  outline: none;
+  background-color: rgb(200, 200, 200);
+  height: 30px;
+  border-radius: 1rem;
+  cursor: text;
+  box-sizing: border-box;
 }
-
 #uv-channel-selector-searchbox input {
-    border: none;
-    outline: none;
-    background-color: transparent;
-    padding: 0.5rem;
+  border: none;
+  outline: none;
+  background-color: transparent;
+  padding: 0.5rem;
 }
-
 .dm-candidate-chip {
-    border-radius: 1rem;
-    background-color: black;
-    color: white;
-    cursor: pointer;
+  border-radius: 1rem;
+  background-color: black;
+  color: white;
+  cursor: pointer;
 }
-
 #urbit-key-container {
-    display: flex;
-    flex-wrap: wrap;
-    width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
 }
-
 .urbit-key {
-    border: 1px solid grey;
-    border-radius: 1rem;
-    display: flex;
-    justify-content: space-between;
-    padding: 0.3rem 0.6rem;
-    margin: 0.2rem;
-    width: 45%;
+  border: 1px solid grey;
+  border-radius: 1rem;
+  display: flex;
+  justify-content: space-between;
+  padding: 0.3rem 0.6rem;
+  margin: 0.2rem;
+  width: 45%;
 }
-
 .urbit-key input[type="checkbox"] {
-    width: 20px;
-    margin: auto 0;
-    width: 10%
+  width: 20px;
+  margin: auto 0;
+  width: 10%;
 }
-
 .urbit-key-name {
-    width: 80%;
+  width: 80%;
 }
-
 .urbit-key-title {
-    font-weight: 700;
+  font-weight: 700;
 }
-
 .urbit-key-type-icon {
-    width: 10%;
-    width: 25px;
-    margin: auto 0;
+  width: 10%;
+  width: 25px;
+  margin: auto 0;
 }
-
 #tweet-share-button-wrapper {
-    box-sizing: border-box;
-    width: 100%;
-    padding: 0.5rem;
-    border-top: 0.5px solid grey;
+  box-sizing: border-box;
+  width: 100%;
+  padding: 0.5rem;
+  border-top: 0.5px solid grey;
 }
-
 #tweet-share-button {
-    width: 100%;
-    background-color: black;
-    border-radius: 1rem;
-    height: 50px;
-    display: flex;
-    justify-content: center;
-    color: white;
-    cursor: pointer;
+  width: 100%;
+  background-color: black;
+  border-radius: 1rem;
+  height: 50px;
+  display: flex;
+  justify-content: center;
+  color: white;
+  cursor: pointer;
 }
-
 #tweet-share-button svg {
-    margin: 0.7em 0.5em 0.7em 0;
+  margin: 0.7em 0.5em 0.7em 0;
 }
-
 #tweet-preview-author {
-    display: flex;
-    padding: 5px;
+  display: flex;
+  padding: 5px;
 }
-
 #extension-icon {
-    width: 50px;
+  width: 50px;
 }
