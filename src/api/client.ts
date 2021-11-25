@@ -90,7 +90,7 @@ function scrubURLS(entities: any): URL[] {
 };
 
 function addFullURL(entities: any) {
-  return `\n${entities.urls.reduce((acc, item) => acc + item.expanded_url, "")}\n`
+  return `\n${entities.urls.reduce((acc, item) => acc + `[${item.expanded_url}](${item.expanded_url})\n`, "")}\n`
 }
 
 export async function getThread(id: string) {
@@ -100,7 +100,8 @@ export async function getThread(id: string) {
   const children = tweets.entries.filter(el => el.entryId.includes("conversationthread"));
   const placeholder = { content: { items: [] } };
 
-  const threadChildren = children.find(subthread => subthread.content.items.find(child => child.item.itemContent.tweetDisplayType === "SelfThread")) || placeholder; const processedParent = processThread(parent.content.itemContent.tweet_results.result);
+  const threadChildren = children.find(subthread => subthread.content.items.find(child => child.item.itemContent.tweetDisplayType === "SelfThread")) || placeholder; 
+  const processedParent = processThread(parent.content.itemContent.tweet_results.result);
   const cursorObject = threadChildren.content.items.find(child => child.item.itemContent.itemType === "TimelineTimelineCursor");
   const cursorString = cursorObject?.item?.itemContent?.value;
   let processedChildren = [];
