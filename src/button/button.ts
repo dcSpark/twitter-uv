@@ -1,9 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import App from "../react/App";
-import { urbitVisor } from "@dcspark/uv-core";
-let allowed = false;
-urbitVisor.authorizedPermissions().then(res => console.log(res, "perms"))
 const isThreadParent = (tweet: Element) => {
   if (!tweet || !location.pathname.includes('/status/')) {
     return false

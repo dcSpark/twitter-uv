@@ -48,6 +48,8 @@ export function ChannelSelectBox({ exclude, selected, setSelected }: ChannelBoxP
         let sub: number;
         setLoading(true)
         const subscription = urbitVisor.on("sse", ["metadata-update", "associations"], async (data: any) => {
+            console.log(data, "metadata coming in")
+            console.log(leakingMemory)
             if (leakingMemory) {
                 const keys = await urbitVisor.scry({ app: "graph-store", path: "/keys" });
                 setLoading(false)
@@ -60,28 +62,11 @@ export function ChannelSelectBox({ exclude, selected, setSelected }: ChannelBoxP
             }
         });
         urbitVisor.subscribe({ app: "metadata-store", path: "/all" }).then(res => {
+            console.log(res, "subscribed to resource")
             if (leakingMemory) sub = res.response
         });
         return () => leakingMemory = false;
     }, []);
-
-    async function readMetadata(leakingMemory: boolean) {
-        let sub: number;
-        setLoading(true)
-        const subscription = urbitVisor.on("sse", ["metadata-update", "associations"], async (data: any) => {
-            if (leakingMemory) {
-                const keys = await urbitVisor.scry({ app: "graph-store", path: "/keys" });
-                setLoading(false)
-                const list = keys.response["graph-update"].keys.map((channel: any) => referenceMetadata(channel, data));
-                const channels = list.filter(chan => chan.name !== "dm-inbox" && chan.group !== "");
-                setChannels(channels);
-                setOptions(channels);
-                setLoading(false);
-                urbitVisor.unsubscribe(sub).then(res => console.log(res, "unsubscribed"))
-            }
-        });
-        urbitVisor.subscribe({ app: "metadata-store", path: "/all" }).then(res => sub = res.response);
-    };
 
     const inputRef = useRef();
     const [input, setInput] = useState("");

@@ -8,7 +8,7 @@ import { urbitVisor } from "@dcspark/uv-core";
 
 async function init() {
   console.log("uv twitter extension running")
-  urbitVisor.registerName("Twitter Ext").then(res => console.log("Twitter extension registered with Urbit Visor"))
+  urbitVisor.registerName("Twitter Ext").then(res => console.log(res, "Twitter extension registered with Urbit Visor"))
   const div = document.createElement("div");
   div.id = "uv-twitter-extension-container";
   document.body.appendChild(div);

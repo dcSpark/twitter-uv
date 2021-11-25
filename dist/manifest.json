@@ -1,0 +1,25 @@
+{
+    "name": "Twitter for Urbit Visor",
+    "description": "Browser Extension to provide Urbit Visor integration to Twitter.com",
+    "version": "0.1.0",
+    "manifest_version": 3,
+    "icons": {
+        "16": "./public/images/icon16.png",
+        "48": "./public/images/icon48.png",
+        "128": "./public/images/icon128.png"
+    },
+    "content_scripts": [{
+        "matches": ["*://*.twitter.com/*"],
+        "js": ["dev.js"],
+        "css": ["dev.css"]
+    }],
+    "action": {
+        "default_icons": {
+            "16": "./public/images/icon16.png",
+            "48": "./public/images/icon48.png",
+            "128": "./public/images/icon128.png"
+        }
+    },
+    "permissions": [],
+    "host_permissions": ["*://*.twitter.com/*"]
+}

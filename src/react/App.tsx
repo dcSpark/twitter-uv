@@ -29,7 +29,10 @@ function App(props: TwitterProps) {
     const [loading, setLoading] = useState(true);
 
     async function checkPerms(): Promise<void> {
-        urbitVisor.on("permissions_granted", [], (perms) => setHavePerms(true));
+        urbitVisor.on("permissions_granted", [], (perms) => {
+        console.log(perms, "perms read")
+        setHavePerms(true)}
+        );
         const res = await urbitVisor.authorizedPermissions();
         console.log(res, "res")
         const ok = ["shipName", "scry", "subscribe", "poke"].every(perm => res.response.includes(perm))
