@@ -10,8 +10,8 @@
     },
     "content_scripts": [{
         "matches": ["*://*.twitter.com/*"],
-        "js": ["./out.js"],
-        "css": ["./out.css"]
+        "js": ["dev.js"],
+        "css": ["dev.css"]
     }],
     "action": {
         "default_icons": {

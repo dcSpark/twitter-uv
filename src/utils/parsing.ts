@@ -1,9 +1,9 @@
-import { getTweet, getThread, Tweet, Thread, Poll } from "../api/client";
+import { Tweet, Thread, Poll } from "../api/client";
 
 function tweetTitle(tweet: Tweet){
     const url = `https://twitter.com/${tweet.author.handle}/statuses/${tweet.index}`
     return `[Tweet by ${tweet.author.name} (@${tweet.author.handle})](${url}) Posted on ${tweet.time}
-    \n-\n
+    \n-------------------\n
   `;
 }
 function threadTitle(thread: Thread){
@@ -18,6 +18,7 @@ export function titleFromTweet(tweet: Tweet): string{
 }
 
 function tweetToMarkdown(tweet: Tweet) {
+    console.log(tweet, "parsing tweet")
     const text = tweet.text + "\n\n";
     const withMedia = tweet.video
     ? text + `![](${tweet.video.href.replace(/\?.+/,'')})`
@@ -43,22 +44,6 @@ export function threadToGraphStore(thread): string{
         return acc + text
     }, "")
     return title + parent + children
-}
-function quoteToText(quote: Tweet) {
-    const url = `https://twitter.com/${quote.author.handle}/statuses/${quote.index}`
-    const contents = [];
-    const text = ` 
-      .\n
-      \n
-      [Quoting: ${quote.author.name} (@${quote.author.handle})](${url}) Posted on ${quote.time}
-      \n
-      ${quote.text}
-      \n
-    `;
-    contents.push({ text: text });
-    quote.pics.forEach(pic => contents.push({ url: pic.href }));
-    if (quote.video) contents.push({ url: quote.video.href });
-    return contents
 }
 
 export function pollOptions(poll: Poll){
