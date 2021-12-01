@@ -10,3 +10,4 @@ dist/dev.js
 dist/dev.css
 dist/prod.js
 dist/prod.css
+package-lock.json

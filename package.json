@@ -19,7 +19,7 @@
         "typescript": "^4.4.3"
     },
     "dependencies": {
-        "@dcspark/uv-core": "^0.2.9",
+        "@dcspark/uv-core": "^0.3.0",
         "esbuild": "^0.13.4",
         "react": "^17.0.2",
         "react-dom": "^17.0.2",
