@@ -7,7 +7,8 @@ You need to have Urbit Visor installed to use this extension.
 1. Clone this repo
 2. Go to `chrome://extensions` on your browser (or `brave://extensions` if using Brave)
 3. Enable "developer mode", click on "load unpacked".
-4. Add the root folder.
+4. Run `npm run start` on the terminal.
+5. Add the ./dist folder.
 
 ## Test functionality
 The extension should inject an Urbit icon in the button row under any tweet read at twitter.com.
