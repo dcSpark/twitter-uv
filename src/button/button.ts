@@ -20,9 +20,11 @@ function hoverButton(e) {
   action.style.borderRadius = "50%";
   action.style.transitionDuration = "0.2s";
   action.style.transitionProperty = "background-color, box-shadow";
-  // action.style.position = 'absolute !important';
-  // action.style.top = '-5px';
-  // action.style.left = '-29px';
+  action.style.position = 'absolute !important';
+  action.style.top = '-6px';
+  action.style.left = '-8px';
+  action.style.width = '32px';
+  action.style.height = '32px';
   const circle = e.target.closest(".urbit-visor-share-tweet-action").querySelector("circle");
   const path = e.target.closest(".urbit-visor-share-tweet-action").querySelector("path");
   circle.style.stroke = "rgb(251, 189, 10)";
@@ -61,9 +63,11 @@ const createVisorButton = (
   urbitButton.style.lineHeight = '1'
   urbitButton.style.outline = '0'
   urbitButton.style.padding = "0";
-  urbitButton.style.width = '38px';
-  urbitButton.style.height = '38px';
-  urbitButton.style.position = 'relative';
+  urbitButton.style.width = '24px';
+  urbitButton.style.height = '24px';
+  urbitButton.style.position = 'absolute';
+  urbitButton.style.top = '-2px';
+  urbitButton.style.left = '-4px';
   urbitButton.type = 'button'
   urbitButton.innerHTML = `<svg class="urbit-visor-share-tweet-button-img" width="20" height="20" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
      <circle cx="16" cy="16" r="13" fill="transparent" stroke="currentcolor" stroke-width="2"/>
