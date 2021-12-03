@@ -37,6 +37,7 @@ function unhoverButton(e) {
   const path = e.target.closest(".urbit-visor-share-tweet-action").querySelector("path");
   circle.style.stroke = "currentcolor";
   path.style.fill = "currentcolor";
+
 }
 
 const createVisorButton = (
@@ -67,7 +68,7 @@ const createVisorButton = (
   urbitButton.style.width = '24px';
   urbitButton.style.height = '24px';
   urbitButton.style.position = 'absolute';
-  urbitButton.style.top = '-2px';
+  urbitButton.style.top = '-4px';
   urbitButton.style.left = '-3px';
   urbitButton.type = 'button'
   urbitButton.innerHTML = `<svg class="urbit-visor-share-tweet-button-img" width="20" height="20" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -78,25 +79,7 @@ const createVisorButton = (
 
   urbitButton.querySelector("svg").onmouseover = hoverButton;
   urbitButton.querySelector("svg").onmouseout = unhoverButton;
-  // Create the tip icon container
-  //  const tipIconContainer = document.createElement('div')
-  //  tipIconContainer.className = 'IconContainer js-tooltip'
-  //  tipIconContainer.style.display = 'inline-block'
-  //  tipIconContainer.style.lineHeight = '0'
-  //  tipIconContainer.style.position = 'relative'
-  //  tipIconContainer.style.verticalAlign = 'middle'
-  //  urbitButton.appendChild(tipIconContainer)
-
-  // Create the shadow DOM root that hosts our injected DOM elements
-  // const shadowRoot = shareAction.attachShadow({ mode: 'open' })
-  // shadowRoot.appendChild(urbitButton)
-
-  // // Create style element for hover color
-  // const style = document.createElement('style')
-  // const css = '.urbit-visor-share-tweet-action :hover { background-color: red; color: #6781db; }'
-  // style.appendChild(document.createTextNode(css))
-  // shadowRoot.appendChild(style)
-
+  
 
   //  // Thread parents require a slightly larger margin due to layout differences
   if (tweet && isThreadParent(tweet)) {
@@ -127,16 +110,10 @@ export const injectButtons = () => {
 
   // Reset page state since first run of this function may have
   // been pre-content
-
   let tweets = document.querySelectorAll('[role="article"]')
 
 
   for (let i = 0; i < tweets.length; ++i) {
-    //  const tweetId = utils.getTweetId(tweets[i], newTwitter)
-    //  if (!tweetId) {
-    //    continue
-    //  }
-
     const actions = tweets[i].querySelector('[role="group"]')
 
     if (!actions) {
