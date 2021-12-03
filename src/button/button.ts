@@ -22,7 +22,7 @@ function hoverButton(e) {
   action.style.transitionProperty = "background-color, box-shadow";
   action.style.position = 'absolute !important';
   action.style.top = '-6px';
-  action.style.left = '-8px';
+  action.style.left = '-7px';
   action.style.width = '32px';
   action.style.height = '32px';
   const circle = e.target.closest(".urbit-visor-share-tweet-action").querySelector("circle");
@@ -47,6 +47,7 @@ const createVisorButton = (
   const shareAction = document.createElement('div')
   shareAction.className = 'urbit-visor-share-tweet-action'
   shareAction.style.display = 'flex';
+  shareAction.style.width = '32px';
   shareAction.style.textAlign = hasUserActions ? 'center' : 'start';
   shareAction.setAttribute('role', 'button');
   shareAction.setAttribute('tabindex', '0');
@@ -67,7 +68,7 @@ const createVisorButton = (
   urbitButton.style.height = '24px';
   urbitButton.style.position = 'absolute';
   urbitButton.style.top = '-2px';
-  urbitButton.style.left = '-4px';
+  urbitButton.style.left = '-3px';
   urbitButton.type = 'button'
   urbitButton.innerHTML = `<svg class="urbit-visor-share-tweet-button-img" width="20" height="20" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
      <circle cx="16" cy="16" r="13" fill="transparent" stroke="currentcolor" stroke-width="2"/>
