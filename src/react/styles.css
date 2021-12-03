@@ -260,5 +260,6 @@ div#twitter-link p {
   padding: 5px;
 }
 #extension-icon {
-  width: 50px;
+  width: auto;
+  height: 40px;
 }
