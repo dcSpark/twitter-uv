@@ -89,7 +89,8 @@ const createVisorButton = (tweet: Element, hasUserActions: boolean) => {
 
   // Thread parents require a slightly larger margin due to layout differences
   if (tweet && isThreadParent(tweet)) {
-    // urbitButton.style.marginTop = '10px';
+    urbitButton.style.marginLeft = "60px";
+    urbitButton.style.marginTop = "13px";
   }
   shareAction.onclick = handleClick;
   shareAction.append(urbitButton);
