@@ -75,7 +75,7 @@ const createVisorButton = (tweet: Element, hasUserActions: boolean) => {
   urbitButton.style.width = "24px";
   urbitButton.style.height = "24px";
   urbitButton.style.position = "absolute";
-  urbitButton.style.top = "-4px";
+  urbitButton.style.top = "-2px";
   urbitButton.style.left = "-3px";
   urbitButton.type = "button";
   urbitButton.innerHTML = `<svg class="urbit-visor-share-tweet-button-img" width="20" height="20" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
