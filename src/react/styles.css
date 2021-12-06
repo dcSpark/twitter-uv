@@ -105,7 +105,7 @@
 }
 #tweet-share-payload {
   border: 1px solid #dee4e5;
-  border-radius: 1rem;
+  border-radius: 20px;
   padding-top: 1%;
   padding-bottom: 0%;
   padding-right: 4% !important;
@@ -194,7 +194,11 @@ div#tweet-pictures img {
   margin: 0 auto;
 }
 div#twitter-link p {
-  text-align: center;
+  font-family: "Inter", sans-serif;
+  /* text-align: center; */
+  font-size: 14px;
+  letter-spacing: 0.08rem;
+  color: #3e99ea;
 }
 #tweet-share-buttons {
   margin-top: 0.5rem;
