@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@700&display=swap");
+
 .urbit-visor-share-tweet-button:hover {
   cursor: pointer;
 }
@@ -62,6 +64,11 @@
   justify-content: space-between;
   padding: 0.2rem 1rem;
 }
+#tweet-preview-header h3 {
+  font-family: "Inter", sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+}
 #visor-icon {
   width: 30px;
   height: auto;
@@ -72,6 +79,11 @@
   border-top: 1px solid grey;
   border-bottom: 1px solid grey;
   padding: 1rem;
+}
+.tweet-preview-tab {
+  font-family: "Inter", sans-serif;
+  font-weight: 600;
+  font-size: 14px;
 }
 .tweet-preview-tab:hover {
   cursor: pointer;
