@@ -62,12 +62,15 @@
 #tweet-preview-header {
   display: flex;
   justify-content: space-between;
-  padding: 0.2rem 1rem;
+  align-items: center;
+  padding: 12px 16px 0;
 }
 #tweet-preview-header h3 {
+  margin: 0;
   font-family: "Inter", sans-serif;
   font-size: 16px;
   font-weight: 700;
+  color: #182024;
 }
 #visor-icon {
   width: 30px;
@@ -76,14 +79,16 @@
 #tweet-preview-tabs {
   display: flex;
   justify-content: space-between;
-  border-top: 1px solid grey;
-  border-bottom: 1px solid grey;
+  border-top: 1px solid #edf2f3;
+  border-bottom: 1px solid #edf2f3;
+  margin-bottom: 16px;
   padding: 1rem;
 }
 .tweet-preview-tab {
   font-family: "Inter", sans-serif;
   font-weight: 600;
   font-size: 14px;
+  color: #566470;
 }
 .tweet-preview-tab:hover {
   cursor: pointer;
@@ -91,7 +96,7 @@
 }
 #tweet-share-payload-wrapper {
   border-bottom: 1px solid grey;
-  padding: 0.4rem;
+  padding: 0.4rem 0.4rem 32px;
   max-height: 240px;
   overflow-y: hidden;
 }
@@ -99,7 +104,7 @@
   display: none;
 }
 #tweet-share-payload {
-  border: 1px solid grey;
+  border: 1px solid #dee4e5;
   border-radius: 1rem;
   padding-top: 1%;
   padding-bottom: 0%;
@@ -107,10 +112,22 @@
   padding-left: 4% !important;
   height: 96%;
 }
+
+#preview-close-button {
+  margin: 0;
+}
+#preview-close-button:after {
+  display: inline-block;
+  content: "\00d7"; /* This will render the 'X' */
+  font-size: 26px;
+  margin: 0;
+  color: #1b231f;
+}
 #preview-close-button:hover {
   cursor: pointer;
   text-decoration: underline;
 }
+
 #tweet-preview #author,
 #tweet-quote-author {
   display: flex;

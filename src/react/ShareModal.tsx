@@ -133,10 +133,8 @@ export default function ShareModal(props: TwitterProps) {
   return (
     <div id="uv-twitter-share-modal">
       <div id="tweet-preview-header">
-        <p onClick={quit} id="preview-close-button">
-          X
-        </p>
-        <h3>Share via Urbit</h3>
+        <p onClick={quit} id="preview-close-button"></p>
+        <h3>Share on Urbit</h3>
         <img id="extension-icon" src={mainLogo} alt="" />
       </div>
       <div id="tweet-preview-tabs">
