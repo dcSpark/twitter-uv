@@ -136,16 +136,17 @@ export default function ShareModal(props: TwitterProps) {
         <p onClick={quit} id="preview-close-button"></p>
         <h3>Share on Urbit</h3>
         <img id="extension-icon" src={mainLogo} alt="" />
+        <p style={{ width: 12 }}></p>
       </div>
       <div id="tweet-preview-tabs">
         <div onClick={setFullTweet} className="tweet-preview-tab">
           <h4>Full Tweet</h4>
         </div>
         <div onClick={setLinkOnly} className="tweet-preview-tab">
-          <h4>Just the Link</h4>
+          <h4 style={{ textAlign: "center" }}>Just the Link</h4>
         </div>
         <div onClick={setUnroll} className="tweet-preview-tab">
-          <h4>Unroll Thread</h4>
+          <h4 style={{ textAlign: "right" }}>Unroll Thread</h4>
         </div>
       </div>
       <div id="tweet-share-payload-wrapper">
