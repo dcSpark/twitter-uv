@@ -142,7 +142,7 @@ export default function ShareModal(props: TwitterProps) {
           <h4>Full Tweet</h4>
         </div>
         <div onClick={setLinkOnly} className="tweet-preview-tab">
-          <h4>Link Only</h4>
+          <h4>Just the Link</h4>
         </div>
         <div onClick={setUnroll} className="tweet-preview-tab">
           <h4>Unroll Thread</h4>
