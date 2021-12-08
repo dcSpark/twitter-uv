@@ -1,7 +1,7 @@
 {
-    "name": "urbit-visor-twitter-extension",
-    "version": "0.1.1",
-    "description": "Browser Extension to provide Urbit Visor integration to Twitter.com",
+    "name": "twitter-uv",
+    "version": "0.1.0",
+    "description": "Browser Extension which enhances Twitter with Urbit Visor integration.",
     "scripts": {
         "start": "esbuild src/content.ts --outfile=dist/dev.js --bundle --watch --loader:.png=dataurl",
         "build": "esbuild src/content.ts --bundle --outfile=dist/prod.js --loader:.png=dataurl",
@@ -10,7 +10,9 @@
     "keywords": [
         "urbit",
         "twitter",
-        "urbit-visor"
+        "urbit-visor",
+        "visor",
+        "p2p"
     ],
     "author": "dcSpark.io",
     "license": "MIT",
