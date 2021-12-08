@@ -85,8 +85,8 @@ const createVisorButton = (tweet: Element, hasUserActions: boolean) => {
      </svg>
      `;
 
-  urbitButton.querySelector("svg").onmouseover = hoverButton;
-  urbitButton.querySelector("svg").onmouseout = unhoverButton;
+  urbitButton.onmouseover = hoverButton;
+  urbitButton.onmouseout = unhoverButton;
 
   // Thread parents require a slightly larger margin due to layout differences
   if (tweet && isThreadParent(tweet)) {
