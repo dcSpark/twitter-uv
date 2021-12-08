@@ -97,6 +97,7 @@ const createVisorButton = (tweet: Element, hasUserActions: boolean) => {
     if (tweet.querySelector(".ProfileTweet-action")) {
       const braveTip = tweet.querySelector(".ProfileTweet-action");
       setTimeout(() => {
+        // @ts-ignore: the class "ProfileTweet-action" is coming from outside injected code via Brave browser
         braveTip.style.minWidth = "43px";
       }, 1000);
     }
