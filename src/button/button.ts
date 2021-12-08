@@ -18,7 +18,7 @@ function hoverButton(e) {
   const action = e.target
     .closest(".urbit-visor-share-tweet-action")
     .querySelector("button");
-  action.style.backgroundColor = "rgb(248, 250, 157, 0.5)";
+  action.style.backgroundColor = "rgb(229, 248, 242, 0.5)";
   action.style.borderRadius = "50%";
   action.style.transitionDuration = "0.2s";
   action.style.transitionProperty = "background-color, box-shadow";
@@ -34,8 +34,8 @@ function hoverButton(e) {
   const path = e.target
     .closest(".urbit-visor-share-tweet-action")
     .querySelector("path");
-  circle.style.stroke = "rgb(251, 189, 10)";
-  path.style.fill = "rgb(251, 189, 10)";
+  circle.style.stroke = "rgb(0, 186, 124)";
+  path.style.fill = "rgb(0, 186, 124)";
 }
 function unhoverButton(e) {
   const action = e.target
@@ -57,7 +57,7 @@ const createVisorButton = (tweet: Element, hasUserActions: boolean) => {
   const shareAction = document.createElement("div");
   shareAction.className = "urbit-visor-share-tweet-action";
   shareAction.style.display = "flex";
-  shareAction.style.width = "32px";
+  shareAction.style.width = "38px";
   shareAction.style.textAlign = hasUserActions ? "center" : "start";
   shareAction.setAttribute("role", "button");
   shareAction.setAttribute("tabindex", "0");
@@ -92,6 +92,14 @@ const createVisorButton = (tweet: Element, hasUserActions: boolean) => {
   if (tweet && isThreadParent(tweet)) {
     urbitButton.style.marginLeft = "60px";
     urbitButton.style.marginTop = "13px";
+
+    // For pushing over Brave Tip button
+    if (tweet.querySelector(".ProfileTweet-action")) {
+      const braveTip = tweet.querySelector(".ProfileTweet-action");
+      setTimeout(() => {
+        braveTip.style.minWidth = "43px";
+      }, 1000);
+    }
   }
   shareAction.onclick = handleClick;
   shareAction.append(urbitButton);
