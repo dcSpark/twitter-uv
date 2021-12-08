@@ -29,7 +29,7 @@ function Welcome() {
       <h4>Welcome to the Twitter UV Extension</h4>
       <p>
         In order to use the extension you must first grant it permissions to
-        scry, subscribe and read your Urbit ships' name.
+        scry, subscribe, and read your Urbit ship's name.
       </p>
       <p>
         Click on the button below to request permissions, then click on your
