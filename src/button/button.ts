@@ -34,8 +34,8 @@ function hoverButton(e) {
   const path = e.target
     .closest(".urbit-visor-share-tweet-action")
     .querySelector("path");
-  circle.style.stroke = "rgb(0, 186, 124)";
-  path.style.fill = "rgb(0, 186, 124)";
+  circle.style.stroke = "rgb(255, 255, 255)";
+  path.style.fill = "rgb(255, 255, 255)";
 }
 function unhoverButton(e) {
   const action = e.target
