@@ -84,7 +84,6 @@
   justify-content: space-between;
   border-top: 1px solid #edf2f3;
   border-bottom: 1px solid #edf2f3;
-  margin-bottom: 14px;
   padding: 16px 32px;
 }
 .tweet-preview-tab {
@@ -99,8 +98,8 @@
   text-decoration: underline;
 }
 #tweet-share-payload-wrapper {
-  border-bottom: 1px solid grey;
-  padding: 0.4rem 0.4rem 32px;
+  border-bottom: 1px solid #edf2f3;
+  padding: 16px;
   max-height: 240px;
   overflow-y: hidden;
 }
@@ -110,11 +109,10 @@
 #tweet-share-payload {
   border: 1px solid #dee4e5;
   border-radius: 20px;
-  padding-top: 1%;
-  padding-bottom: 0%;
+  padding-top: 16px;
+  padding-bottom: 16px;
   padding-right: 4% !important;
   padding-left: 4% !important;
-  height: 96%;
 }
 
 #preview-close-button {
@@ -199,7 +197,7 @@ div#tweet-pictures img {
   margin: 0 auto;
 }
 div#twitter-link p {
-  margin: 10px auto;
+  margin: 0;
   font-family: "Inter", sans-serif;
   font-size: 14px;
   letter-spacing: 0.08rem;
