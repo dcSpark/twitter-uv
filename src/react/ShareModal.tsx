@@ -130,6 +130,11 @@ export default function ShareModal(props: TwitterProps) {
       });
     }
   }
+
+  // function applyActiveTab(event, tabName) {}
+  //   event.currentTarget.className  += " w3-red";
+  // }
+
   return (
     <div id="uv-twitter-share-modal">
       <div id="tweet-preview-header">

@@ -200,7 +200,8 @@ div#twitter-link p {
   margin: 0;
   font-family: "Inter", sans-serif;
   font-size: 14px;
-  letter-spacing: 0.08rem;
+  font-weight: 300;
+  letter-spacing: 0.03rem;
   color: #3e99ea;
 }
 #tweet-share-buttons {
