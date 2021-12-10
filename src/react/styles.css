@@ -97,6 +97,9 @@
   cursor: pointer;
   text-decoration: underline;
 }
+.active-tab {
+  border-bottom: 3px #009af0 solid;
+}
 #tweet-share-payload-wrapper {
   border-bottom: 1px solid #edf2f3;
   padding: 16px;

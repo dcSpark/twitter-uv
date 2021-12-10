@@ -131,9 +131,13 @@ export default function ShareModal(props: TwitterProps) {
     }
   }
 
-  // function applyActiveTab(event, tabName) {}
-  //   event.currentTarget.className  += " w3-red";
-  // }
+  function applyActiveTab(event) {
+    const tablinks = document.getElementsByClassName("tweet-preview-tab");
+    for (let i = 0; i < 3; i++) {
+      tablinks[i].className = tablinks[i].className.replace(" active-tab", "");
+    }
+    event.currentTarget.className += " active-tab";
+  }
 
   return (
     <div id="uv-twitter-share-modal">
@@ -144,13 +148,31 @@ export default function ShareModal(props: TwitterProps) {
         <p style={{ width: 12 }}></p>
       </div>
       <div id="tweet-preview-tabs">
-        <div onClick={setFullTweet} className="tweet-preview-tab">
+        <div
+          onClick={(event) => {
+            setFullTweet();
+            applyActiveTab(event);
+          }}
+          className="tweet-preview-tab"
+        >
           <h4>Full Tweet</h4>
         </div>
-        <div onClick={setLinkOnly} className="tweet-preview-tab">
+        <div
+          onClick={(event) => {
+            setLinkOnly();
+            applyActiveTab(event);
+          }}
+          className="tweet-preview-tab active-tab"
+        >
           <h4 style={{ textAlign: "center" }}>Just the Link</h4>
         </div>
-        <div onClick={setUnroll} className="tweet-preview-tab">
+        <div
+          onClick={(event) => {
+            setUnroll();
+            applyActiveTab(event);
+          }}
+          className="tweet-preview-tab"
+        >
           <h4 style={{ textAlign: "right" }}>Unroll Thread</h4>
         </div>
       </div>
