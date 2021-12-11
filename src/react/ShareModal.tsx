@@ -148,32 +148,38 @@ export default function ShareModal(props: TwitterProps) {
         <p style={{ width: 12 }}></p>
       </div>
       <div id="tweet-preview-tabs">
-        <div
-          onClick={(event) => {
-            setFullTweet();
-            applyActiveTab(event);
-          }}
-          className="tweet-preview-tab"
-        >
-          <h4>Full Tweet</h4>
+        <div className="preview-tab-container">
+          <div
+            className="tweet-preview-tab"
+            onClick={(event) => {
+              setFullTweet();
+              applyActiveTab(event);
+            }}
+          >
+            <h4>Full Tweet</h4>
+          </div>
         </div>
-        <div
-          onClick={(event) => {
-            setLinkOnly();
-            applyActiveTab(event);
-          }}
-          className="tweet-preview-tab active-tab"
-        >
-          <h4 style={{ textAlign: "center" }}>Just the Link</h4>
+        <div className="preview-tab-container">
+          <div
+            className="tweet-preview-tab active-tab"
+            onClick={(event) => {
+              setLinkOnly();
+              applyActiveTab(event);
+            }}
+          >
+            <h4 style={{ textAlign: "center" }}>Just the Link</h4>
+          </div>
         </div>
-        <div
-          onClick={(event) => {
-            setUnroll();
-            applyActiveTab(event);
-          }}
-          className="tweet-preview-tab"
-        >
-          <h4 style={{ textAlign: "right" }}>Unroll Thread</h4>
+        <div className="preview-tab-container">
+          <div
+            className="tweet-preview-tab"
+            onClick={(event) => {
+              setUnroll();
+              applyActiveTab(event);
+            }}
+          >
+            <h4 style={{ textAlign: "right" }}>Unroll Thread</h4>
+          </div>
         </div>
       </div>
       <div id="tweet-share-payload-wrapper">
