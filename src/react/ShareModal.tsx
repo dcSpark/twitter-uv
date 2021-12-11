@@ -157,6 +157,7 @@ export default function ShareModal(props: TwitterProps) {
             }}
           >
             <h4>Full Tweet</h4>
+            <div className="tab-underline"></div>
           </div>
         </div>
         <div className="preview-tab-container">
@@ -167,7 +168,8 @@ export default function ShareModal(props: TwitterProps) {
               applyActiveTab(event);
             }}
           >
-            <h4 style={{ textAlign: "center" }}>Just the Link</h4>
+            <h4>Just the Link</h4>
+            <div className="tab-underline"></div>
           </div>
         </div>
         <div className="preview-tab-container">
@@ -178,7 +180,8 @@ export default function ShareModal(props: TwitterProps) {
               applyActiveTab(event);
             }}
           >
-            <h4 style={{ textAlign: "right" }}>Unroll Thread</h4>
+            <h4>Unroll Thread</h4>
+            <div className="tab-underline"></div>
           </div>
         </div>
       </div>

@@ -86,35 +86,44 @@
   justify-content: space-between;
   border-top: 1px solid #edf2f3;
   border-bottom: 1px solid #edf2f3;
-  padding: 16px 32px;
+  padding: 0 32px;
 }
 .preview-tab-container {
   width: calc(100% / 3);
 }
+.preview-tab-container {
+  display: flex;
+}
+.preview-tab-container:first-child {
+  justify-content: left;
+}
+.preview-tab-container:nth-child(2) {
+  justify-content: center;
+}
+.preview-tab-container:last-child {
+  justify-content: right;
+}
 .tweet-preview-tab {
+  position: relative;
+  line-height: 50px;
   font-family: "Inter", sans-serif;
   font-weight: 600;
   font-size: 14px;
-}
-.preview-tab-container .tweet-preview-tab {
-  display: flex;
-}
-.preview-tab-container:first-child .tweet-preview-tab {
-  justify-content: left;
-}
-.preview-tab-container:nth-child(2) .tweet-preview-tab {
-  justify-content: center;
-}
-.preview-tab-container:last-child .tweet-preview-tab {
-  justify-content: right;
 }
 .tweet-preview-tab:hover {
   cursor: pointer;
   text-decoration: underline;
 }
 #uv-twitter-share-modal .active-tab h4 {
-  border-bottom: 3px #009af0 solid;
   color: #182024;
+}
+#uv-twitter-share-modal .active-tab .tab-underline {
+  position: absolute;
+  height: 3px;
+  background-color: #009af0;
+  width: 100%;
+  bottom: 0;
+  border-radius: 1000px;
 }
 #tweet-share-payload-wrapper {
   border-bottom: 1px solid #edf2f3;
