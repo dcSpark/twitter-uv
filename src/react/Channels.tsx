@@ -301,9 +301,11 @@ function UrbitKey({
         type="checkbox"
         name={keyString}
         id={keyString}
+        className="channel-tickbox"
         defaultChecked={checked}
         disabled={disabled}
       />
+      <label htmlFor={keyString}> Test</label>
       <div className="urbit-key-name">
         <p className="urbit-key-title">{metadata.title}</p>
         <p className="urbit-key-group">in {metadata.group}</p>
