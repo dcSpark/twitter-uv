@@ -336,10 +336,10 @@ div#twitter-link p {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #3e3e3e;
+  background: #d0d3d4;
   border-radius: 20px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #969494;
+  background: transparent;
 }
