@@ -18,7 +18,7 @@ function hoverButton(e) {
   const action = e.target
     .closest(".urbit-visor-share-tweet-action")
     .querySelector("button");
-  action.style.backgroundColor = "rgb(229, 248, 242, 0.5)";
+  action.style.backgroundColor = "rgba(0, 186, 124, 0.1)";
   action.style.borderRadius = "50%";
   action.style.transitionDuration = "0.2s";
   action.style.transitionProperty = "background-color, box-shadow";
@@ -34,8 +34,8 @@ function hoverButton(e) {
   const path = e.target
     .closest(".urbit-visor-share-tweet-action")
     .querySelector("path");
-  circle.style.stroke = "rgb(255, 255, 255)";
-  path.style.fill = "rgb(255, 255, 255)";
+  circle.style.stroke = "rgb(0, 186, 124)";
+  path.style.fill = "rgb(0, 186, 124)";
 }
 function unhoverButton(e) {
   const action = e.target
