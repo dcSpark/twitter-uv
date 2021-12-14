@@ -2,13 +2,21 @@ const threadsURL = "https://twitter.com/i/api/graphql/GpnXbjn5tx9tVXnVqmXpkA/Twe
 const tweetURL = `https://api.twitter.com/1.1/statuses/show.json?id=`;
 
 function headers() {
-  const cookieElems = document.cookie.split("; ")
-  const gt = cookieElems.find(elem => elem.includes("gt=")).replace("gt=", "")
-  const csrf = cookieElems.find(elem => elem.includes("ct0=")).replace("ct0=", "")
+  const cookieElems = document.cookie.split("; ");
+  const gt = cookieElems.find(elem => elem.includes("gt="))
+  let gts = "";
+  if (gt) gts = gt.replace("gt=", "");
+  const twid = cookieElems.find(elem => elem.includes("twid="));
+  let twids = "";
+  if (twid) twids = twid.replace("twid=u%3D", "");
+
+  const csrf = cookieElems.find(elem => elem.includes("ct0="));
+  let csrfs = "";
+  if (csrf) csrfs = csrf.replace("ct0=", "");
   const headers = {
     "Authorization": "Bearer AAAAAAAAAAAAAAAAAAAAANRILgAAAAAAnNwIzUejRCOuH5E6I8xnZz4puTs%3D1Zv7ttfk8LF81IUq16cHjhLTvJu4FA33AGWWjCpTnA",
-    "x-csrf-token": csrf,
-    "x-guest-token": gt
+    "x-csrf-token": csrfs,
+    "x-guest-token": twids || gts
   };
   const meta: RequestInit = {
     credentials: 'include',
@@ -17,6 +25,7 @@ function headers() {
     method: 'GET',
     redirect: 'follow'
   }
+  console.log(meta, "meta")
   return meta
 }
 
@@ -46,8 +55,8 @@ const fetchThread = async (id: string, cursor: string = null) => {
   ;
   const url = threadsURL + encodeURIComponent(JSON.stringify(variables));
   const res = await fetch(url, headers());
-  const json = await res.json();
-  return json
+  if (res.status === 200) return await res.json();
+  else return null
 }
 
 export async function getTweet(id: string) {
