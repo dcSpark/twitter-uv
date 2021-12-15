@@ -47,6 +47,7 @@
   color: black;
   margin: auto;
   height: 90%;
+  font-family: "Inter", sans-serif;
 }
 
 #uv-twitter-share-modal h4 {
@@ -166,10 +167,11 @@
   margin: 0 0 1rem 0;
 }
 #avatar {
-  border-radius: 2rem;
+  border-radius: 50%;
 }
 #tweet-author-name-wrapper {
   display: flex;
+  font-size: 14px;
 }
 #tweet-author-name,
 #tweet-quote-author-name {
@@ -180,6 +182,9 @@
 #tweet-quote-author-handle {
   margin-right: 2rem;
 }
+#tweet-author-handle {
+  color: #566470;
+}
 #tweet-body {
   margin-bottom: 1rem;
   overflow: hidden;
@@ -187,6 +192,9 @@
 #tweet-text {
   margin-bottom: 1rem;
   overflow: hidden;
+  font-size: 14px;
+  font-weight: 400;
+  color: #182024;
 }
 #tweet-pictures {
   width: 100%;
