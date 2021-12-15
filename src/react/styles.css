@@ -129,7 +129,7 @@
 #tweet-share-payload-wrapper {
   border-bottom: 1px solid #edf2f3;
   padding: 16px;
-  max-height: 240px;
+  /* max-height: 240px; */
   overflow-y: hidden;
 }
 #tweet-share-payload-wrapper::-webkit-scrollbar {
@@ -167,22 +167,40 @@
   margin: 0 0 1rem 0;
 }
 #avatar {
+  width: auto;
+  height: 41px;
   border-radius: 50%;
+}
+#tweet-author-date-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  padding-left: 12px;
 }
 #tweet-author-name-wrapper {
   display: flex;
+  line-height: 18px;
   font-size: 14px;
 }
-#tweet-author-name,
 #tweet-quote-author-name {
   margin: 1rem 0.2rem;
   font-weight: 700;
 }
-#tweet-author-handle,
+#tweet-author-name {
+  font-weight: 700;
+  color: #182024;
+}
 #tweet-quote-author-handle {
   margin-right: 2rem;
 }
 #tweet-author-handle {
+  padding-left: 4px;
+  color: #566470;
+}
+#tweet-date {
+  margin: 0;
+  line-height: 20px;
+  font-size: 12px;
   color: #566470;
 }
 #tweet-body {
