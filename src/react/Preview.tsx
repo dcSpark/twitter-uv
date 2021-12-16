@@ -20,8 +20,23 @@ interface PreviewProps {
   tweet: Tweet;
 }
 
+const parseText = (text: String) => {
+  console.log("original: ", text);
+  const textArr = text.split(/\r?\n/);
+  console.log("before parse:", textArr);
+  const cleanedArr = [];
+  for (let i = 0; i < textArr.length; i++) {
+    if (textArr[i].length !== 0) {
+      cleanedArr.push(textArr[i]);
+    }
+  }
+  console.log("cleanedArr: ", cleanedArr);
+  return cleanedArr;
+};
+
 function Preview({ tweet }: PreviewProps) {
   console.log(tweet, "tweet at preview");
+  console.log(tweet.text);
   return (
     <div id="tweet-preview">
       <div id="tweet-preview-author">
@@ -35,9 +50,12 @@ function Preview({ tweet }: PreviewProps) {
         </div>
       </div>
       <div id="tweet-body">
-        <p id="tweet-text">{tweet.text}</p>
-        {!tweet.video && tweet.pics.length > 0 && <Pics pics={tweet.pics} />}
-        {tweet.video && <Video video={tweet.video} />}
+        <div id="tweet-text">
+          {parseText(tweet.text).map((sentence) => (
+            <p>{sentence}</p>
+          ))}
+        </div>
+        {tweet.pics.length > 0 && <Pics pics={tweet.pics} />}
         {tweet.poll && <Poll poll={tweet.poll} />}
         {tweet.quote && <Quote quote={tweet.quote} />}
       </div>
