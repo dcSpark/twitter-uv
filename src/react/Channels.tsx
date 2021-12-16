@@ -103,7 +103,8 @@ export function ChannelSelectBox({
 
   function handleChange(e) {
     const inp = e.target.value.toLowerCase();
-    e.target.style.width = `${inp.length + 5}ch`;
+    const charWidth = inp.length < 20 ? 20 : inp.length + 5;
+    e.target.style.width = `${charWidth}ch`;
     setInput(e.target.value);
     if (inp.length > 0) {
       if (inp[0] === "~") {
@@ -114,9 +115,9 @@ export function ChannelSelectBox({
         setDMCandidate(null);
         const filtered = channels.filter((chan) => {
           return (
-            chan.name.includes(inp) ||
-            chan.group.includes(inp) ||
-            chan.title.includes(inp) ||
+            chan.title.toLowerCase().includes(inp) ||
+            chan.name.toLowerCase().includes(inp) ||
+            chan.group.toLowerCase().includes(inp) ||
             chan.ship.includes(inp)
           );
         });
@@ -139,6 +140,7 @@ export function ChannelSelectBox({
     const set = [data, ...dms.filter((dm) => dm.ship !== patp)];
     setDMs(set);
     setOptions([data, ...options.filter((dm) => dm.ship !== patp)]);
+    setDMCandidate(null);
   }
 
   function select(channel) {
