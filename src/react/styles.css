@@ -136,12 +136,9 @@
   display: none;
 }
 #tweet-share-payload {
-  border: 1px solid #dee4e5;
-  border-radius: 20px;
-  padding-top: 16px;
-  padding-bottom: 16px;
-  padding-right: 4% !important;
-  padding-left: 4% !important;
+  border: 1px solid #dee4e6;
+  border-radius: 16px;
+  padding: 16px;
 }
 
 #preview-close-button {
@@ -204,14 +201,13 @@
   color: #566470;
 }
 #tweet-body {
-  margin-bottom: 1rem;
   overflow: hidden;
 }
 #tweet-text {
-  margin-bottom: 1rem;
   overflow: hidden;
   font-size: 14px;
   font-weight: 400;
+  line-height: 18px;
   color: #182024;
 }
 #tweet-pictures {
@@ -347,7 +343,6 @@ div#twitter-link p {
 }
 #tweet-preview-author {
   display: flex;
-  padding: 5px;
 }
 #extension-icon {
   width: auto;
