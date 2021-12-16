@@ -146,6 +146,7 @@ function processThread(data: any): Tweet {
     const author = processAuthor(data.core.user.legacy);
     const pics = findPics(tweet.entities);
     const video = findVideo(tweet?.extended_entities);
+    const urls = tweet.entities.urls.map(u => u.expanded_url);
     const redundant_urls = scrubURLS(tweet.entities);
     const text = (redundant_urls.reduce((acc, i) => acc.replace(i, "").trim(), tweet.full_text)) + addFullURL(tweet.entities);
     // some quotes are "disabled" so they only show as urls on tweet.quoted_status_permalink
@@ -153,7 +154,7 @@ function processThread(data: any): Tweet {
     const poll = processPoll(data?.card?.legacy);
     const parent = tweet?.self_thread?.id_str || null
     const startsThread = parent && tweet.conversation_id_str === tweet.id_str
-    return { index: tweet.id_str, time: time, author: author, pics: pics, video: video, text: text, quote: quote, poll: poll, parent: parent, startsThread: startsThread }
+    return { index: tweet.id_str, time: time, author: author, pics: pics, video: video, urls: urls, text: text, quote: quote, poll: poll, parent: parent, startsThread: startsThread }
   }
 };
 function processAuthor(user: any): TweetAuthor {
@@ -186,6 +187,7 @@ export interface Tweet {
   author: TweetAuthor,
   pics: URL[],
   video: URL,
+  urls: URL[]
   text: string,
   quote: Tweet,
   poll: Poll,
