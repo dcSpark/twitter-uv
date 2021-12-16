@@ -107,11 +107,11 @@ export function ChannelSelectBox({
     e.target.style.width = `${charWidth}ch`;
     setInput(e.target.value);
     if (inp.length > 0) {
-      if (inp[0] === "~") {
-        const validPatp = liveCheckPatp(inp);
-        if (validPatp) setDMCandidate(inp.replace(/-+$/, ""));
-        else setDMCandidate(null);
-      } else {
+      // if (inp[0] === "~") {
+      //   const validPatp = liveCheckPatp(inp);
+      //   if (validPatp) setDMCandidate(inp.replace(/-+$/, ""));
+      //   else setDMCandidate(null);
+      // } else {
         setDMCandidate(null);
         const filtered = channels.filter((chan) => {
           return (
@@ -122,7 +122,7 @@ export function ChannelSelectBox({
           );
         });
         setOptions([...dms, ...filtered]);
-      }
+      // }
     } else {
       setOptions([...dms, ...channels]);
     }
