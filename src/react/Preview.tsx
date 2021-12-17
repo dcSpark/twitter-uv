@@ -34,9 +34,18 @@ const parseText = (text: String) => {
   return cleanedArr;
 };
 
+const imageOrientation = (pics) => {
+  const currentImage = new Image();
+  currentImage.src = pics[0].href;
+  console.log(currentImage);
+  console.log(currentImage.width, currentImage.height);
+
+  if (currentImage.width === currentImage.height) return "";
+
+  return currentImage.width > currentImage.height ? "landscape" : "portrait";
+};
+
 function Preview({ tweet }: PreviewProps) {
-  console.log(tweet, "tweet at preview");
-  console.log(tweet.text);
   return (
     <div id="tweet-preview">
       <div className="left-column">
@@ -65,6 +74,7 @@ function Preview({ tweet }: PreviewProps) {
         <div className="cropped">
           {tweet.pics.length > 0 && <Pics pics={tweet.pics} />}
         </div>
+        {/* <div>{determineOrientation(tweet)}</div> */}
       </div>
     </div>
   );
@@ -93,7 +103,12 @@ function Pics({ pics }) {
     <div id="tweet-pictures">
       {pics.map((pic, i) => {
         return (
-          <img key={i} className={`img-${pics.length}`} src={pic} alt="" />
+          <img
+            key={i}
+            className={`img-${pics.length} ${imageOrientation(pics)}`}
+            src={pic}
+            alt=""
+          />
         );
       })}
     </div>

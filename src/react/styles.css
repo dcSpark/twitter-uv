@@ -240,11 +240,18 @@
 }
 div#tweet-pictures img {
   /* max-width: 100% !important; */
+  width: 120px;
   height: 120px;
   /* border-radius: 16px; */
 }
+div#tweet-pictures img.portrait {
+  height: auto !important;
+}
+div#tweet-pictures img.landscape {
+  width: auto !important;
+}
 #tweet-pictures .img-1 {
-  width: auto;
+  /* width: auto; */
 }
 #tweet-pictures .img-2,
 #tweet-pictures .img-3,
