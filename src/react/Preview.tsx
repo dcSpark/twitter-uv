@@ -39,25 +39,32 @@ function Preview({ tweet }: PreviewProps) {
   console.log(tweet.text);
   return (
     <div id="tweet-preview">
-      <div id="tweet-preview-author">
-        <img id="avatar" src={tweet.author.avatar} alt="" />
-        <div id="tweet-author-date-wrapper">
-          <div id="tweet-author-name-wrapper">
-            <span id="tweet-author-name">{tweet.author.name}</span>
-            <span id="tweet-author-handle">@{tweet.author.handle}</span>
+      <div className="left-column">
+        <div id="tweet-preview-author">
+          <img id="avatar" src={tweet.author.avatar} alt="" />
+          <div id="tweet-author-date-wrapper">
+            <div id="tweet-author-name-wrapper">
+              <span id="tweet-author-name">{tweet.author.name}</span>
+              <span id="tweet-author-handle">@{tweet.author.handle}</span>
+            </div>
+            <p id="tweet-date">posted: {tweet.time}</p>
           </div>
-          <p id="tweet-date">posted: {tweet.time}</p>
+        </div>
+        <div id="tweet-body">
+          <div id="tweet-text">
+            {parseText(tweet.text).map((sentence) => (
+              <p>{sentence}</p>
+            ))}
+          </div>
+          {/* {tweet.pics.length > 0 && <Pics pics={tweet.pics} />} */}
+          {tweet.poll && <Poll poll={tweet.poll} />}
+          {tweet.quote && <Quote quote={tweet.quote} />}
         </div>
       </div>
-      <div id="tweet-body">
-        <div id="tweet-text">
-          {parseText(tweet.text).map((sentence) => (
-            <p>{sentence}</p>
-          ))}
+      <div className="right-column">
+        <div className="cropped">
+          {tweet.pics.length > 0 && <Pics pics={tweet.pics} />}
         </div>
-        {tweet.pics.length > 0 && <Pics pics={tweet.pics} />}
-        {tweet.poll && <Poll poll={tweet.poll} />}
-        {tweet.quote && <Quote quote={tweet.quote} />}
       </div>
     </div>
   );
@@ -73,7 +80,7 @@ function Quote({ quote }) {
       </div>
       <div id="tweet-quote-body">
         {quote.text}
-        {!quote.video && quote.pics.length > 0 && <Pics pics={quote.pics} />}
+        {/* {!quote.video && quote.pics.length > 0 && <Pics pics={quote.pics} />} */}
         {quote.video && <Video video={quote.video} />}
         {quote.poll && <Poll poll={quote.poll} />}
       </div>
