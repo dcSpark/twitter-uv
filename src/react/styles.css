@@ -238,14 +238,15 @@ div#twitter-link p {
 #uv-channel-selector {
   flex: 1 1 1px;
   overflow: auto;
-  padding: 0.4rem;
+  padding: 16px;
 }
 #uv-channel-selector-title {
+  padding-bottom: 16px;
   text-align: center;
 }
 #uv-channel-selector-searchbox {
   width: 100%;
-  margin: 0.5rem 0;
+  padding-bottom: 16px;
 }
 #uv-channel-selector-searchbox-wrapper {
   width: 100%;
@@ -275,6 +276,10 @@ div#twitter-link p {
   flex-wrap: wrap;
   width: 100%;
 }
+.urbit-key-wrapper {
+  width: 50%;
+}
+
 .urbit-key {
   position: relative;
   border: 1px solid grey;
@@ -282,9 +287,9 @@ div#twitter-link p {
   display: flex;
   position: relative;
   justify-content: space-between;
-  padding: 0.3rem 0.6rem;
-  margin: 0.2rem;
-  width: 45%;
+  margin: 4px;
+  /* width: 50%; */
+  box-sizing: border-box;
 }
 .urbit-key input[type="checkbox"] {
   width: 20px;

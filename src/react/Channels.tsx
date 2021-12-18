@@ -112,16 +112,16 @@ export function ChannelSelectBox({
       //   if (validPatp) setDMCandidate(inp.replace(/-+$/, ""));
       //   else setDMCandidate(null);
       // } else {
-        setDMCandidate(null);
-        const filtered = channels.filter((chan) => {
-          return (
-            chan.title.toLowerCase().includes(inp) ||
-            chan.name.toLowerCase().includes(inp) ||
-            chan.group.toLowerCase().includes(inp) ||
-            chan.ship.includes(inp)
-          );
-        });
-        setOptions([...dms, ...filtered]);
+      setDMCandidate(null);
+      const filtered = channels.filter((chan) => {
+        return (
+          chan.title.toLowerCase().includes(inp) ||
+          chan.name.toLowerCase().includes(inp) ||
+          chan.group.toLowerCase().includes(inp) ||
+          chan.ship.includes(inp)
+        );
+      });
+      setOptions([...dms, ...filtered]);
       // }
     } else {
       setOptions([...dms, ...channels]);
@@ -185,14 +185,16 @@ export function ChannelSelectBox({
           .map((k, index) => {
             const key = `${k.ship}/${k.name}`;
             return (
-              <UrbitKey
-                key={key}
-                keyString={key}
-                selected={selected}
-                select={select}
-                unselect={unselect}
-                metadata={k}
-              />
+              <div className="urbit-key-wrapper">
+                <UrbitKey
+                  key={key}
+                  keyString={key}
+                  selected={selected}
+                  select={select}
+                  unselect={unselect}
+                  metadata={k}
+                />
+              </div>
             );
           })}
       </div>
