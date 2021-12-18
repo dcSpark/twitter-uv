@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo, useRef, useEffect, useState } from "react";
 import { Tweet, Poll } from "../api/client";
 import { pollOptions } from "../utils/parsing";
 
@@ -21,7 +21,6 @@ interface PreviewProps {
 }
 
 const parseText = (text: String) => {
-  console.log("original: ", text);
   const textArr = text.split(/\r?\n/);
   console.log("before parse:", textArr);
   const cleanedArr = [];
@@ -37,8 +36,6 @@ const parseText = (text: String) => {
 const imageOrientation = (pics) => {
   const currentImage = new Image();
   currentImage.src = pics[0].href;
-  console.log(currentImage);
-  console.log(currentImage.width, currentImage.height);
 
   if (currentImage.width === currentImage.height) return "";
 
@@ -46,6 +43,8 @@ const imageOrientation = (pics) => {
 };
 
 function Preview({ tweet }: PreviewProps) {
+  const parsedText = parseText(tweet.text);
+
   return (
     <div id="tweet-preview">
       <div className="left-column">
@@ -61,8 +60,8 @@ function Preview({ tweet }: PreviewProps) {
         </div>
         <div id="tweet-body">
           <div id="tweet-text">
-            {parseText(tweet.text).map((sentence) => (
-              <p>{sentence}</p>
+            {parsedText.map((sentence) => (
+              <p key={parsedText.indexOf(sentence)}>{sentence}</p>
             ))}
           </div>
           {/* {tweet.pics.length > 0 && <Pics pics={tweet.pics} />} */}
@@ -74,7 +73,6 @@ function Preview({ tweet }: PreviewProps) {
         <div className="cropped">
           {tweet.pics.length > 0 && <Pics pics={tweet.pics} />}
         </div>
-        {/* <div>{determineOrientation(tweet)}</div> */}
       </div>
     </div>
   );
@@ -99,18 +97,26 @@ function Quote({ quote }) {
 }
 
 function Pics({ pics }) {
+  const [loaded, setLoaded] = useState(false);
+
+  const imageClass = useMemo(() => {
+    return loaded ? `img-${pics.length} ${imageOrientation(pics)}` : "";
+  }, [loaded]);
+
   return (
     <div id="tweet-pictures">
-      {pics.map((pic, i) => {
-        return (
-          <img
-            key={i}
-            className={`img-${pics.length} ${imageOrientation(pics)}`}
-            src={pic}
-            alt=""
-          />
-        );
-      })}
+      {pics &&
+        pics.map((pic, i) => {
+          return (
+            <img
+              key={i}
+              className={imageClass}
+              src={pic}
+              alt=""
+              onLoad={() => setLoaded(true)}
+            />
+          );
+        })}
     </div>
   );
 }
