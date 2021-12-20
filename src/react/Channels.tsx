@@ -308,10 +308,11 @@ function UrbitKey({
         defaultChecked={checked}
         disabled={disabled}
       />
+      <span class="checkmark"></span>
       <label htmlFor={keyString}> </label>
       <div className="urbit-key-name">
         <p className="urbit-key-title">{metadata.title}</p>
-        <p className="urbit-key-group">in {metadata.group}</p>
+        <p className="urbit-key-group">{metadata.group}</p>
       </div>
       <div className="urbit-key-type-icon">{icon}</div>
     </div>

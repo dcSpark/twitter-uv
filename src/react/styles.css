@@ -75,7 +75,7 @@
   font-family: "Inter", sans-serif;
   font-size: 16px;
   font-weight: 700;
-  color: #182024;
+  color: #566470;
 }
 #visor-icon {
   width: 30px;
@@ -243,6 +243,8 @@ div#twitter-link p {
 #uv-channel-selector-title {
   padding-bottom: 16px;
   text-align: center;
+  font-family: "Inter", sans-serif;
+  font-size: 14px;
 }
 #uv-channel-selector-searchbox {
   width: 100%;
@@ -253,8 +255,8 @@ div#twitter-link p {
   display: flex;
   border: none;
   outline: none;
-  background-color: rgb(200, 200, 200);
-  height: 30px;
+  background-color: #eff2f3;
+  height: 32px;
   border-radius: 1rem;
   cursor: text;
   box-sizing: border-box;
@@ -263,7 +265,9 @@ div#twitter-link p {
   border: none;
   outline: none;
   background-color: transparent;
-  padding: 0.5rem;
+  padding: 8px 16px;
+  font-family: "Inter", sans-serif;
+  /* color: red !important; */
 }
 .dm-candidate-chip {
   border-radius: 1rem;
@@ -282,8 +286,8 @@ div#twitter-link p {
 
 .urbit-key {
   position: relative;
-  border: 1px solid grey;
-  border-radius: 1rem;
+  border: 1px solid #dee4e6;
+  border-radius: 16px;
   display: flex;
   position: relative;
   justify-content: space-between;
@@ -292,9 +296,47 @@ div#twitter-link p {
   box-sizing: border-box;
 }
 .urbit-key input[type="checkbox"] {
-  width: 20px;
+  /* width: 20px;
   margin: auto 0;
-  width: 10%;
+  width: 10%; */
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+  border-radius: 4px;
+}
+.urbit-key input[type="checkbox"]:checked ~ .checkmark {
+  background-color: #3e99ea;
+}
+.checkmark {
+  position: absolute;
+  top: 18px;
+  left: 16px;
+  height: 16px;
+  width: 16px;
+  background-color: #ffffff;
+  border: 1px solid #b0b9bb;
+  border-radius: 4px;
+}
+.checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+.urbit-key input[type="checkbox"]:checked ~ .checkmark:after {
+  display: block;
+}
+.checkmark:after {
+  top: 2px;
+  left: 6px;
+  width: 3px;
+  height: 8px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  -webkit-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  transform: rotate(45deg);
 }
 .urbit-key label {
   position: absolute;
@@ -305,14 +347,31 @@ div#twitter-link p {
 }
 .urbit-key-name {
   width: 80%;
+  padding-left: 48px;
+  box-sizing: border-box;
+  font-family: "Inter", sans-serif;
 }
 .urbit-key-title {
-  font-weight: 700;
+  margin: 0;
+  padding: 10px 0 2px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #182024;
+}
+.urbit-key-group {
+  margin: 0;
+  padding: 2px 0 10px;
+  font-size: 12px;
+  color: #566470;
 }
 .urbit-key-type-icon {
-  width: 10%;
+  display: flex;
   width: 25px;
-  margin: auto 0;
+  padding-right: 18px;
+}
+
+.urbit-key-type-icon {
+  fill: #566470;
 }
 
 #tweet-share-button-wrapper {
