@@ -306,10 +306,11 @@ div#twitter-link p {
   width: 0;
   border-radius: 4px;
 }
-.urbit-key input[type="checkbox"]:checked ~ .checkmark {
+.urbit-key input[type="checkbox"]:checked ~ .check-mark {
   background-color: #3e99ea;
+  border: 1px solid #3e99ea;
 }
-.checkmark {
+.check-mark {
   position: absolute;
   top: 18px;
   left: 16px;
@@ -319,15 +320,15 @@ div#twitter-link p {
   border: 1px solid #b0b9bb;
   border-radius: 4px;
 }
-.checkmark:after {
+.check-mark:after {
   content: "";
   position: absolute;
   display: none;
 }
-.urbit-key input[type="checkbox"]:checked ~ .checkmark:after {
+.urbit-key input[type="checkbox"]:checked ~ .check-mark:after {
   display: block;
 }
-.checkmark:after {
+.check-mark:after {
   top: 2px;
   left: 6px;
   width: 3px;
@@ -346,7 +347,7 @@ div#twitter-link p {
   height: 100%;
 }
 .urbit-key-name {
-  width: 80%;
+  width: 91%;
   padding-left: 48px;
   box-sizing: border-box;
   font-family: "Inter", sans-serif;
@@ -366,7 +367,7 @@ div#twitter-link p {
 }
 .urbit-key-type-icon {
   display: flex;
-  width: 25px;
+  width: 9%;
   padding-right: 18px;
 }
 
