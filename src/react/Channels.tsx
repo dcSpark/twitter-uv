@@ -100,6 +100,28 @@ export function ChannelSelectBox({
   const [dmCandidate, setDMCandidate] = useState<string>(null);
   const [loading, setLoading] = useState(false);
   const [options, setOptions] = useState(channels);
+  const searchIcon = (
+    <svg
+      width="16"
+      height="16"
+      viewBox="0 0 16 16"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        fill-rule="evenodd"
+        clip-rule="evenodd"
+        d="M7.18365 1.30612C3.93758 1.30612 1.30612 3.93758 1.30612 7.18365C1.30612 10.4297 3.93758 13.0612 7.18365 13.0612C10.4297 13.0612 13.0612 10.4297 13.0612 7.18365C13.0612 3.93758 10.4297 1.30612 7.18365 1.30612ZM0 7.18365C0 3.21623 3.21623 0 7.18365 0C11.1511 0 14.3673 3.21623 14.3673 7.18365C14.3673 11.1511 11.1511 14.3673 7.18365 14.3673C3.21623 14.3673 0 11.1511 0 7.18365Z"
+        fill="#566470"
+      />
+      <path
+        fill-rule="evenodd"
+        clip-rule="evenodd"
+        d="M11.3456 11.3456C11.6006 11.0905 12.0141 11.0905 12.2691 11.3456L15.8087 14.8851C16.0638 15.1402 16.0638 15.5537 15.8087 15.8087C15.5537 16.0638 15.1402 16.0638 14.8851 15.8087L11.3456 12.2691C11.0905 12.0141 11.0905 11.6006 11.3456 11.3456Z"
+        fill="#566470"
+      />
+    </svg>
+  );
 
   function handleChange(e) {
     const inp = e.target.value.toLowerCase();
@@ -171,6 +193,7 @@ export function ChannelSelectBox({
             value={input}
             type="text"
           />
+          <div id="search-icon">{searchIcon}</div>
           {dmCandidate && (
             <button onClick={addDM} className="dm-candidate-chip">
               {dmCandidate}
