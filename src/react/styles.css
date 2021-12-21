@@ -310,6 +310,9 @@ div#twitter-link p {
   /* width: 50%; */
   box-sizing: border-box;
 }
+.urbit-key > input[type="checkbox"]:checked {
+  background-color: antiquewhite;
+}
 .urbit-key input[type="checkbox"] {
   /* width: 20px;
   margin: auto 0;
@@ -365,7 +368,7 @@ div#twitter-link p {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  width: 91%;
+  width: 92%;
   padding-left: 48px;
   box-sizing: border-box;
   font-family: "Inter", sans-serif;
@@ -384,7 +387,7 @@ div#twitter-link p {
 }
 .urbit-key-type-icon {
   display: flex;
-  width: 9%;
+  width: 8%;
   padding-right: 10px;
 }
 
