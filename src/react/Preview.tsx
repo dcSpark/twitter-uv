@@ -104,19 +104,19 @@ function Pics({ pics }) {
   }, [loaded]);
 
   return (
-    <div id="tweet-pictures">
-      {pics &&
-        pics.map((pic, i) => {
-          return (
-            <img
-              key={i}
-              className={imageClass}
-              src={pic}
-              alt=""
-              onLoad={() => setLoaded(true)}
-            />
-          );
-        })}
+    <div id="tweet-pictures" className={pics.length > 1 ? "multi-pics" : ""}>
+      {pics && (
+        <>
+          <img
+            className={imageClass}
+            src={pics[0]}
+            alt=""
+            onLoad={() => setLoaded(true)}
+          />
+          <div className="plus-sign">+</div>
+          <div className="pics-count">{pics.length - 1}</div>
+        </>
+      )}
     </div>
   );
 }

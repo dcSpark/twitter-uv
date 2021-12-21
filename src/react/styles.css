@@ -237,14 +237,13 @@
 #tweet-pictures {
   width: 100%;
   display: flex;
+  position: relative;
   flex-wrap: wrap;
   text-align: center;
 }
 div#tweet-pictures img {
-  /* max-width: 100% !important; */
   width: 120px;
   height: 120px;
-  /* border-radius: 16px; */
 }
 div#tweet-pictures img.portrait {
   height: auto !important;
@@ -252,14 +251,30 @@ div#tweet-pictures img.portrait {
 div#tweet-pictures img.landscape {
   width: auto !important;
 }
-#tweet-pictures .img-1 {
-  /* width: auto; */
+#tweet-pictures .plus-sign {
+  display: none;
 }
-#tweet-pictures .img-2,
-#tweet-pictures .img-3,
-#tweet-pictures .img-4 {
-  width: 48%;
-  margin: 0.1rem;
+#tweet-pictures.multi-pics img {
+  filter: brightness(60%);
+}
+#tweet-pictures.multi-pics .pics-count {
+  position: absolute;
+  top: 43px;
+  left: 60px;
+  font-size: 24px;
+  font-weight: 700;
+  font-family: "Inter", sans-serif;
+  color: white;
+}
+#tweet-pictures.multi-pics .plus-sign {
+  display: block;
+  position: absolute;
+  top: 41px;
+  left: 43px;
+  font-size: 24px;
+  font-weight: 700;
+  font-family: Inter, sans-serif;
+  color: white;
 }
 #twitter-poll {
   border-radius: 14px;
