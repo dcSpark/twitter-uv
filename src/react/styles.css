@@ -353,3 +353,31 @@ div#twitter-link p {
 ::-webkit-scrollbar-track {
   background: transparent;
 }
+
+/* minimodal */
+
+#uv-twitter-mini-modal{
+  display: flex;
+  width: 250px;
+  height: 70px;
+  position: fixed;
+  top: 50px;
+  right: 50px;
+  border: 1px solid black;
+  border-radius: 1rem;
+  background-color: white;
+  overflow: hidden;
+}
+#uv-twitter-mini-modal-icon{
+  width: 20%;
+  text-align: center;
+}
+#uv-twitter-mini-modal-message{
+  margin: auto;
+}
+.success-modal{
+  background-color: green;
+}
+.failure-modal{
+  background-color: red;
+}
