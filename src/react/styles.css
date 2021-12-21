@@ -378,21 +378,32 @@ div#twitter-link p {
 #tweet-share-button-wrapper {
   box-sizing: border-box;
   width: 100%;
-  padding: 0.5rem;
-  border-top: 0.5px solid grey;
+  padding: 16px;
+  border-top: 0.5px solid #eef3f4;
 }
 #tweet-share-button {
-  width: 100%;
-  background-color: black;
-  border-radius: 1rem;
-  height: 50px;
   display: flex;
+  align-items: center;
+  width: 100%;
+  height: 48px;
+  padding: 0;
+  background-color: #131b1f;
+  border-radius: 32px;
+  border: none;
   justify-content: center;
   color: white;
   cursor: pointer;
 }
 #tweet-share-button svg {
-  margin: 0.7em 0.5em 0.7em 0;
+  width: 21.23px;
+  padding-right: 4px;
+  box-sizing: border-box;
+}
+#tweet-share-button p {
+  margin: 0;
+  font-family: "Inter", sans-serif;
+  font-weight: 700;
+  font-size: 16px;
 }
 #tweet-preview-author {
   display: flex;
