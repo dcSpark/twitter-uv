@@ -75,7 +75,7 @@
   font-family: "Inter", sans-serif;
   font-size: 16px;
   font-weight: 700;
-  color: #182024;
+  color: #566470;
 }
 #visor-icon {
   width: 30px;
@@ -238,31 +238,43 @@ div#twitter-link p {
 #uv-channel-selector {
   flex: 1 1 1px;
   overflow: auto;
-  padding: 0.4rem;
+  padding: 16px;
 }
 #uv-channel-selector-title {
+  padding-bottom: 16px;
   text-align: center;
+  font-family: "Inter", sans-serif;
+  font-size: 14px;
 }
 #uv-channel-selector-searchbox {
   width: 100%;
-  margin: 0.5rem 0;
+  padding-bottom: 16px;
 }
 #uv-channel-selector-searchbox-wrapper {
-  width: 100%;
   display: flex;
+  position: relative;
+  width: 100%;
   border: none;
   outline: none;
-  background-color: rgb(200, 200, 200);
-  height: 30px;
+  background-color: #eff2f3;
+  height: 32px;
   border-radius: 1rem;
   cursor: text;
   box-sizing: border-box;
 }
+
 #uv-channel-selector-searchbox input {
   border: none;
   outline: none;
   background-color: transparent;
-  padding: 0.5rem;
+  padding: 8px 16px;
+  font-family: "Inter", sans-serif;
+  /* color: red !important; */
+}
+#uv-channel-selector-searchbox #search-icon {
+  position: absolute;
+  right: 16px;
+  top: 8px;
 }
 .dm-candidate-chip {
   border-radius: 1rem;
@@ -275,21 +287,75 @@ div#twitter-link p {
   flex-wrap: wrap;
   width: 100%;
 }
+.urbit-key-wrapper {
+  width: 50%;
+}
+
+.urbit-key-wrapper:nth-child(odd) .urbit-key {
+  margin: 4px 4px 4px 0;
+}
+.urbit-key-wrapper:nth-child(even) .urbit-key {
+  margin: 4px 0 4px 4px;
+}
+
 .urbit-key {
+  height: 56px;
   position: relative;
-  border: 1px solid grey;
-  border-radius: 1rem;
+  border: 1px solid #dee4e6;
+  border-radius: 16px;
   display: flex;
   position: relative;
   justify-content: space-between;
-  padding: 0.3rem 0.6rem;
-  margin: 0.2rem;
-  width: 45%;
+  margin: 4px;
+  /* width: 50%; */
+  box-sizing: border-box;
+}
+.urbit-key > input[type="checkbox"]:checked {
+  background-color: antiquewhite;
 }
 .urbit-key input[type="checkbox"] {
-  width: 20px;
+  /* width: 20px;
   margin: auto 0;
-  width: 10%;
+  width: 10%; */
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+  border-radius: 4px;
+}
+.urbit-key input[type="checkbox"]:checked ~ .check-mark {
+  background-color: #3e99ea;
+  border: 1px solid #3e99ea;
+}
+.check-mark {
+  position: absolute;
+  top: 18px;
+  left: 16px;
+  height: 16px;
+  width: 16px;
+  background-color: #ffffff;
+  border: 1px solid #b0b9bb;
+  border-radius: 4px;
+}
+.check-mark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+.urbit-key input[type="checkbox"]:checked ~ .check-mark:after {
+  display: block;
+}
+.check-mark:after {
+  top: 2px;
+  left: 6px;
+  width: 3px;
+  height: 8px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  -webkit-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  transform: rotate(45deg);
 }
 .urbit-key label {
   position: absolute;
@@ -299,35 +365,65 @@ div#twitter-link p {
   height: 100%;
 }
 .urbit-key-name {
-  width: 80%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 92%;
+  padding-left: 48px;
+  box-sizing: border-box;
+  font-family: "Inter", sans-serif;
 }
 .urbit-key-title {
-  font-weight: 700;
+  margin: 0;
+  padding-bottom: 4px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #182024;
+}
+.urbit-key-group {
+  margin: 0;
+  font-size: 12px;
+  color: #566470;
 }
 .urbit-key-type-icon {
-  width: 10%;
-  width: 25px;
-  margin: auto 0;
+  display: flex;
+  width: 8%;
+  padding-right: 10px;
+}
+
+.urbit-key-type-icon {
+  fill: #566470;
 }
 
 #tweet-share-button-wrapper {
   box-sizing: border-box;
   width: 100%;
-  padding: 0.5rem;
-  border-top: 0.5px solid grey;
+  padding: 16px;
+  border-top: 0.5px solid #eef3f4;
 }
 #tweet-share-button {
-  width: 100%;
-  background-color: black;
-  border-radius: 1rem;
-  height: 50px;
   display: flex;
+  align-items: center;
+  width: 100%;
+  height: 48px;
+  padding: 0;
+  background-color: #131b1f;
+  border-radius: 32px;
+  border: none;
   justify-content: center;
   color: white;
   cursor: pointer;
 }
 #tweet-share-button svg {
-  margin: 0.7em 0.5em 0.7em 0;
+  width: 21.23px;
+  padding-right: 4px;
+  box-sizing: border-box;
+}
+#tweet-share-button p {
+  margin: 0;
+  font-family: "Inter", sans-serif;
+  font-weight: 700;
+  font-size: 16px;
 }
 #tweet-preview-author {
   display: flex;
