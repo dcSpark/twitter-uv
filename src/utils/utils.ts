@@ -86,9 +86,10 @@ export function addDashes(p: string): string {
 }
 
 function tokenizeString(text: string){
+    console.log(text, "text to tokenize")
     const URL_REGEX = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,10}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/g
     const MD_regex = /(?<!!)\[http.+\)/g;
-    const urls = text.match(MD_regex);
+    const urls = text.match(MD_regex) || [];
     const urlc = urls.map(u => {
         const url = u.match(URL_REGEX)[0];
         console.log(url, "url")
