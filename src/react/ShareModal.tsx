@@ -44,8 +44,11 @@ const placeholder = {
     poll: null,
   },
 };
+interface ModalProps extends TwitterProps{
+  sendPoke: (data) => void
+}
 
-export default function ShareModal(props: TwitterProps) {
+export default function ShareModal(props: ModalProps) {
   useEffect(() => {
     let leakingMemory = true;
     urbitVisor.getShip().then((res) => {
@@ -77,21 +80,16 @@ export default function ShareModal(props: TwitterProps) {
   const [ship, setShip] = useState<string>(null);
   const [selected, setSelected] = useState<UrbitChannel[]>([]);
   const [channelFilters, setChannelFilters] = useState([]);
-  const [error, setError] = useState("");
+
+
+  const fullTweet = <Preview tweet={tweet.parent} />;
 
   function quit() {
     unmountComponentAtNode(
       document.getElementById("uv-twitter-extension-container")
     );
-  }
-  const fullTweet = <Preview tweet={tweet.parent} />;
-  function success() {
-    // TODO: show some message?
-    quit();
-  }
-  function failure() {
-    setError("Error sharing the Tweet, please try again later");
-  }
+  };
+
 
   function setFullTweet() {
     setChannelFilters(["link"]);
@@ -123,11 +121,7 @@ export default function ShareModal(props: TwitterProps) {
       else if (channel.type === "chat")
         data = buildChatPost(ship, channel, payload);
       console.log(data, "data");
-      urbitVisor.poke(data).then((res) => {
-        // TODO error handling
-        if (res.status === "ok") success();
-        else console.log(res, "poked");
-      });
+      props.sendPoke(data);
     }
   }
 
