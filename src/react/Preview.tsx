@@ -46,7 +46,14 @@ function Preview({ tweet }: PreviewProps) {
   const parsedText = parseText(tweet.text);
 
   return (
-    <div id="tweet-preview">
+    <div
+      id="tweet-preview"
+      className={
+        tweet.pics.length > 0 && !tweet.quote && !tweet.video && !tweet.poll
+          ? "tweet-contains-pics"
+          : ""
+      }
+    >
       <div className="left-column">
         <div id="tweet-preview-author">
           <img id="avatar" src={tweet.author.avatar} alt="" />

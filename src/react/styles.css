@@ -61,9 +61,16 @@
   overflow-y: scroll;
 }
 .left-column {
-  width: 74.681%;
+  width: 100%;
 }
 .right-column {
+  display: none;
+}
+.tweet-contains-pics .left-column {
+  width: 74.681%;
+}
+.tweet-contains-pics .right-column {
+  display: block;
   width: 25.319%;
   background-color: aquamarine;
 }
