@@ -71,7 +71,7 @@ function Preview({ tweet }: PreviewProps) {
               <p key={parsedText.indexOf(sentence)}>{sentence}</p>
             ))}
           </div>
-          {/* {tweet.pics.length > 0 && <Pics pics={tweet.pics} />} */}
+          {tweet.video && <Video pic={tweet.pics} />}
           {tweet.poll && <Poll poll={tweet.poll} />}
           {tweet.quote && <Quote quote={tweet.quote} />}
         </div>
@@ -96,7 +96,7 @@ function Quote({ quote }) {
       <div id="tweet-quote-body">
         {quote.text}
         {/* {!quote.video && quote.pics.length > 0 && <Pics pics={quote.pics} />} */}
-        {quote.video && <Video video={quote.video} />}
+        {quote.video && <Video pic={quote.video} />}
         {quote.poll && <Poll poll={quote.poll} />}
       </div>
     </div>
@@ -128,10 +128,10 @@ function Pics({ pics }) {
   );
 }
 
-function Video({ video }) {
+function Video({ pic }) {
   return (
     <div id="tweet-video">
-      <video preload="none" playsInline controls src={video}></video>
+      <img src={pic[0]} alt="" />
     </div>
   );
 }

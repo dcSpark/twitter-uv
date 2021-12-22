@@ -261,6 +261,9 @@ div#tweet-pictures img.landscape {
 #tweet-pictures .plus-sign {
   display: none;
 }
+#tweet-pictures .pics-count {
+  display: none;
+}
 #tweet-pictures.multi-pics img {
   filter: brightness(60%);
 }
