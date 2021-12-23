@@ -7,7 +7,7 @@
 #uv-twitter-extension-welcome {
   width: 650px;
   border: 1px solid white;
-  border-radius: 1rem;
+  border-radius: 16px;
   background-color: white;
   color: black;
   margin: auto;
@@ -46,8 +46,10 @@
   background-color: white;
   color: black;
   margin: auto;
-  height: 90%;
+  height: calc(90% - 80px);
   font-family: "Inter", sans-serif;
+  position: relative;
+  padding-bottom: 80px;
 }
 
 #uv-twitter-share-modal h4 {
@@ -108,6 +110,9 @@
   width: 30px;
   height: auto;
 }
+#scroll-wrapper {
+  overflow-y: scroll;
+}
 #tweet-preview-tabs {
   display: flex;
   justify-content: space-between;
@@ -156,7 +161,7 @@
   border-bottom: 1px solid #edf2f3;
   padding: 16px;
   /* max-height: 240px; */
-  overflow-y: hidden;
+  /* overflow-y: hidden; */
 }
 #tweet-share-payload-wrapper::-webkit-scrollbar {
   display: none;
@@ -316,7 +321,7 @@ div#twitter-link p {
 }
 #uv-channel-selector {
   flex: 1 1 1px;
-  overflow: auto;
+  overflow: unset;
   padding: 0.4rem;
 }
 #uv-channel-selector-title {
@@ -384,6 +389,11 @@ div#twitter-link p {
   width: 100%;
   padding: 0.5rem;
   border-top: 0.5px solid grey;
+  position: absolute;
+  width: inherit;
+  bottom: 0;
+  background-color: white;
+  border-radius: 0px 0px 16px 16px;
 }
 #tweet-share-button {
   width: 100%;
