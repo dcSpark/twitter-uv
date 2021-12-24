@@ -76,6 +76,11 @@
   width: 25.319%;
   background-color: aquamarine;
 }
+.quote-contains-pics .right-column {
+  display: block;
+  width: 25.319%;
+  background-color: aquamarine;
+}
 .right-column .cropped {
   width: 120px; /* width of container */
   height: 120px; /* height of container */
@@ -302,11 +307,12 @@ div#tweet-pictures img.landscape {
   justify-content: space-between;
 }
 #tweet-quote {
-  width: 80%;
-  border: 1px solid grey;
-  border-radius: 0.5rem;
-  padding: 0.5rem;
-  margin: 0 auto;
+  width: 100%;
+  margin: 0;
+  border: 1px solid #dee4e6;
+  border-radius: 16px;
+  padding: 16px;
+  box-sizing: border-box;
 }
 div#twitter-link p {
   margin: 0;

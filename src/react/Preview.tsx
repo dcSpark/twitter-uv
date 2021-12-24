@@ -87,17 +87,27 @@ function Preview({ tweet }: PreviewProps) {
 
 function Quote({ quote }) {
   return (
-    <div id="tweet-quote">
-      <div id="tweet-quote-author">
-        <p id="tweet-quote-author-name">{quote.author.name}</p>
-        <p id="tweet-quote-author-handle">@{quote.author.handle}</p>
-        <p id="tweet-quote-time">{quote.time}</p>
+    <div
+      id="tweet-quote"
+      className={quote.pics.length > 0 ? "tweet-contains-pics" : ""}
+    >
+      <div className="left-column">
+        <div id="tweet-quote-author">
+          <p id="tweet-quote-author-name">{quote.author.name}</p>
+          <p id="tweet-quote-author-handle">@{quote.author.handle}</p>
+          <p id="tweet-quote-time">{quote.time}</p>
+        </div>
+        <div id="tweet-quote-body">
+          {quote.text}
+          {/* {!quote.video && quote.pics.length > 0 && <Pics pics={quote.pics} />} */}
+          {quote.video && <Video pic={quote.video} />}
+          {quote.poll && <Poll poll={quote.poll} />}
+        </div>
       </div>
-      <div id="tweet-quote-body">
-        {quote.text}
-        {/* {!quote.video && quote.pics.length > 0 && <Pics pics={quote.pics} />} */}
-        {quote.video && <Video pic={quote.video} />}
-        {quote.poll && <Poll poll={quote.poll} />}
+      <div className="right-column">
+        <div className="cropped">
+          {quote.pics.length > 0 && <Pics pics={quote.pics} />}
+        </div>
       </div>
     </div>
   );
