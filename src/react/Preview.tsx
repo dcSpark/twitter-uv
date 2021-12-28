@@ -68,7 +68,7 @@ function Preview({ tweet }: PreviewProps) {
           </div>
         </div>
         <div id="tweet-body">
-          <div id="tweet-text">
+          <div className="tweet-text">
             {parsedText.map((sentence) => (
               <p key={parsedText.indexOf(sentence)}>{sentence}</p>
             ))}
@@ -88,6 +88,8 @@ function Preview({ tweet }: PreviewProps) {
 }
 
 function Quote({ quote }) {
+  const parsedText = parseText(quote.text);
+
   return (
     <div
       id="tweet-quote"
@@ -107,7 +109,11 @@ function Quote({ quote }) {
           </div>
         </div>
         <div id="tweet-body">
-          {quote.text}
+          <div className="tweet-text">
+            {parsedText.map((sentence) => (
+              <p key={parsedText.indexOf(sentence)}>{sentence}</p>
+            ))}
+          </div>
           {/* {!quote.video && quote.pics.length > 0 && <Pics pics={quote.pics} />} */}
           {quote.video && <Video pic={quote.video} />}
           {quote.poll && <Poll poll={quote.poll} />}
