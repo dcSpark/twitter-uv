@@ -55,14 +55,16 @@ function Preview({ tweet }: PreviewProps) {
       }
     >
       <div className="left-column">
-        <div id="tweet-preview-author">
-          <img id="avatar" src={tweet.author.avatar} alt="" />
-          <div id="tweet-author-date-wrapper">
-            <div id="tweet-author-name-wrapper">
-              <span id="tweet-author-name">{tweet.author.name}</span>
-              <span id="tweet-author-handle">@{tweet.author.handle}</span>
+        <div className="tweet-author-wrapper">
+          <img className="avatar" src={tweet.author.avatar} alt="" />
+          <div className="tweet-author-date-wrapper">
+            <div className="tweet-author-name-wrapper">
+              <span className="tweet-author-name">{tweet.author.name}</span>
+              <span className="tweet-author-handle">
+                @{tweet.author.handle}
+              </span>
             </div>
-            <p id="tweet-date">posted: {tweet.time}</p>
+            <p className="tweet-date">posted: {tweet.time}</p>
           </div>
         </div>
         <div id="tweet-body">
@@ -92,12 +94,19 @@ function Quote({ quote }) {
       className={quote.pics.length > 0 ? "tweet-contains-pics" : ""}
     >
       <div className="left-column">
-        <div id="tweet-quote-author">
-          <p id="tweet-quote-author-name">{quote.author.name}</p>
-          <p id="tweet-quote-author-handle">@{quote.author.handle}</p>
-          <p id="tweet-quote-time">{quote.time}</p>
+        <div className="tweet-author-wrapper">
+          <img className="avatar" src={quote.author.avatar} alt="" />
+          <div className="tweet-author-date-wrapper">
+            <div className="tweet-author-name-wrapper">
+              <span className="tweet-author-name">{quote.author.name}</span>
+              <span className="tweet-author-handle">
+                @{quote.author.handle}
+              </span>
+            </div>
+            <p className="tweet-date">posted: {quote.time}</p>
+          </div>
         </div>
-        <div id="tweet-quote-body">
+        <div id="tweet-body">
           {quote.text}
           {/* {!quote.video && quote.pics.length > 0 && <Pics pics={quote.pics} />} */}
           {quote.video && <Video pic={quote.video} />}
