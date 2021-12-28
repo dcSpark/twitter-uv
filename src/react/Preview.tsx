@@ -49,7 +49,7 @@ function Preview({ tweet }: PreviewProps) {
     <div
       id="tweet-preview"
       className={
-        tweet.pics.length > 0 && !tweet.quote && !tweet.video && !tweet.poll
+        tweet.pics.length > 0 && !tweet.quote && !tweet.poll
           ? "tweet-contains-pics"
           : ""
       }
@@ -73,14 +73,14 @@ function Preview({ tweet }: PreviewProps) {
               <p key={parsedText.indexOf(sentence)}>{sentence}</p>
             ))}
           </div>
-          {tweet.video && <Video pic={tweet.pics} />}
           {tweet.poll && <Poll poll={tweet.poll} />}
           {tweet.quote && <Quote quote={tweet.quote} />}
         </div>
       </div>
       <div className="right-column">
-        <div className="cropped">
+        <div id={tweet.video ? "video-tweet" : ""} className="cropped">
           {tweet.pics.length > 0 && <Pics pics={tweet.pics} />}
+          {tweet.video && <Pics pics={tweet.pics} />}
         </div>
       </div>
     </div>
@@ -147,6 +147,22 @@ function Pics({ pics }) {
           />
           <div className="plus-sign">+</div>
           <div className="pics-count">{pics.length - 1}</div>
+          <div className="play-button">
+            <svg
+              width="32"
+              height="40"
+              viewBox="0 0 32 40"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                fill-rule="evenodd"
+                clip-rule="evenodd"
+                d="M30.896 17.9439L3.78414 0.471124C2.17573 -0.395167 0.333252 -0.305255 0.333252 2.80454V37.2107C0.333252 40.0536 2.30988 40.5017 3.78414 39.5441L30.896 22.0713C32.0121 20.931 32.0121 19.0842 30.896 17.9439Z"
+                fill="white"
+              />
+            </svg>
+          </div>
         </>
       )}
     </div>

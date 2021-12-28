@@ -280,7 +280,20 @@
 #tweet-pictures.multi-pics img {
   filter: brightness(60%);
 }
+#video-tweet img {
+  filter: brightness(60%);
+}
+.play-button {
+  position: absolute;
+  top: 35px;
+  left: 45px;
+}
+#tweet-quote .play-button {
+  top: 30px;
+  left: 42px;
+}
 #tweet-pictures.multi-pics .pics-count {
+  display: block;
   position: absolute;
   top: 43px;
   left: 60px;
