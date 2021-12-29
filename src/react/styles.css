@@ -62,7 +62,6 @@
   max-height: 100%;
   overflow-y: scroll;
   justify-content: space-between;
-  margin: 0 0 1rem 0;
 }
 .left-column {
   width: 100%;
@@ -246,7 +245,10 @@
   color: #182024;
 }
 .tweet-text p {
-  margin: 0 0 18px;
+  margin: 0 0 2px;
+}
+.tweet-text p.line-break {
+  height: 20px;
 }
 #tweet-pictures {
   width: 100%;

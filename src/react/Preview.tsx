@@ -21,16 +21,11 @@ interface PreviewProps {
 }
 
 const parseText = (text: String) => {
-  const textArr = text.split(/\r?\n/);
+  let textArr = text.split(/\r?\n/);
   console.log("before parse:", textArr);
-  const cleanedArr = [];
-  for (let i = 0; i < textArr.length; i++) {
-    if (textArr[i].length !== 0) {
-      cleanedArr.push(textArr[i]);
-    }
-  }
-  console.log("cleanedArr: ", cleanedArr);
-  return cleanedArr;
+  textArr = textArr.slice(0, textArr.length - 2);
+  console.log("after parse:", textArr);
+  return textArr;
 };
 
 const imageOrientation = (pics) => {
@@ -70,7 +65,12 @@ function Preview({ tweet }: PreviewProps) {
         <div id="tweet-body">
           <div className="tweet-text">
             {parsedText.map((sentence) => (
-              <p key={parsedText.indexOf(sentence)}>{sentence}</p>
+              <p
+                key={parsedText.indexOf(sentence)}
+                className={sentence.length < 1 ? "line-break" : ""}
+              >
+                {sentence}
+              </p>
             ))}
           </div>
           {tweet.poll && <Poll poll={tweet.poll} />}
@@ -113,7 +113,12 @@ function Quote({ quote }) {
         <div id="tweet-body">
           <div className="tweet-text">
             {parsedText.map((sentence) => (
-              <p key={parsedText.indexOf(sentence)}>{sentence}</p>
+              <p
+                key={parsedText.indexOf(sentence)}
+                className={sentence.length < 1 ? "line-break" : ""}
+              >
+                {sentence}
+              </p>
             ))}
           </div>
           {quote.video && <Video pic={quote.video} />}
