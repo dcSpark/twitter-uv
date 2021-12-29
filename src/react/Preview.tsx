@@ -37,6 +37,23 @@ const imageOrientation = (pics) => {
   return currentImage.width > currentImage.height ? "landscape" : "portrait";
 };
 
+const findSymbolWords = (sentence: String) => {
+  const regex = /\B\@\w+/;
+  const found = sentence.match(regex);
+  if (found) {
+    let arr = sentence.split(" ");
+    for (let i = 0; i < arr.length; i++) {
+      if (arr[i] === found[0]) {
+        arr[i] = <span>{found}</span>;
+      }
+    }
+
+    return arr;
+  }
+
+  return sentence;
+};
+
 function Preview({ tweet }: PreviewProps) {
   const parsedText = parseText(tweet.text);
 
@@ -69,7 +86,7 @@ function Preview({ tweet }: PreviewProps) {
                 key={parsedText.indexOf(sentence)}
                 className={sentence.length < 1 ? "line-break" : ""}
               >
-                {sentence}
+                {findSymbolWords(sentence)}
               </p>
             ))}
           </div>
