@@ -84,9 +84,9 @@ function Preview({ tweet }: PreviewProps) {
             {parsedText.map((sentence) => (
               <p
                 key={parsedText.indexOf(sentence)}
-                className={sentence.length < 1 ? "line-break" : ""}
+                className={sentence.length < 1 ? "line-break" : null}
               >
-                {findSymbolWords(sentence)}
+                {sentence}
               </p>
             ))}
           </div>

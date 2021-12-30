@@ -75,6 +75,15 @@ function findPics(entities: any): URL[] {
     return urls;
   } else return [];
 }
+function findEntities(entities: any): TweetEntity[] {
+  if (entities.user_mentions || entities.hashtags || entities.symbols) {
+    let foundEntities = [];
+    entities.user_mentions.map((mention) => foundEntities.push(mention));
+    entities.hashtags.map((hashtag) => foundEntities.push(hashtag));
+    entities.symbols.map((symbol) => foundEntities.push(symbol));
+    return foundEntities;
+  } else return [];
+}
 function findVideo(entities: any): URL {
   if (!entities) return null;
   else if (entities.media && entities.media[0].video_info) {
@@ -106,6 +115,7 @@ function addFullURL(entities: any) {
 
 export async function getThread(id: string) {
   const res = await fetchThread(id);
+  console.log("our response:", res);
   const tweets =
     res.data.threaded_conversation_with_injections.instructions.find(
       (el) => el.type === "TimelineAddEntries"
@@ -181,6 +191,7 @@ function processThread(data: any): Tweet {
     const time = dateString(translateDate(tweet.created_at));
     const author = processAuthor(data.core.user.legacy);
     const pics = findPics(tweet.entities);
+    const foundEntities = findEntities(tweet.entities);
     const video = findVideo(tweet?.extended_entities);
     const redundant_urls = scrubURLS(tweet.entities);
     const text =
@@ -204,6 +215,7 @@ function processThread(data: any): Tweet {
       poll: poll,
       parent: parent,
       startsThread: startsThread,
+      entities: foundEntities,
     };
   }
 }
@@ -232,6 +244,18 @@ export interface Thread {
   children: Tweet[];
 }
 
+interface TextEntity {
+  indices: number[];
+  text: string;
+}
+
+interface UserEntity {
+  indices: number[];
+  screen_name: string;
+}
+
+type TweetEntity = TextEntity | UserEntity;
+
 export interface Tweet {
   time: string;
   author: TweetAuthor;
@@ -243,6 +267,7 @@ export interface Tweet {
   index: string;
   parent: string;
   startsThread: boolean;
+  entities: TweetEntity[];
 }
 
 interface TweetAuthor {

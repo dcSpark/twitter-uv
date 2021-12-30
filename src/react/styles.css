@@ -98,9 +98,6 @@
   border: 1px solid #dee4e6;
   box-sizing: border-box;
 }
-.right-column .cropped img {
-  /* margin: -10px 0px 0px -180px; */
-}
 #tweet-preview::-webkit-scrollbar {
   display: none;
 }
