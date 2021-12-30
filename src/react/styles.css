@@ -77,6 +77,9 @@
   width: 25.319%;
   background-color: aquamarine;
 }
+.tweet-text + #tweet-quote {
+  margin-top: 16px;
+}
 .quote-contains-pics .right-column {
   display: block;
   width: 25.319%;
