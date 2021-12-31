@@ -75,7 +75,6 @@
 .tweet-contains-pics .right-column {
   display: block;
   width: 25.319%;
-  background-color: aquamarine;
 }
 .tweet-text + #tweet-quote {
   margin-top: 16px;
@@ -83,19 +82,18 @@
 .quote-contains-pics .right-column {
   display: block;
   width: 25.319%;
-  background-color: aquamarine;
 }
 #tweet-preview .right-column .cropped {
-  width: 120px; /* width of container */
-  height: 120px; /* height of container */
+  width: 120px;
+  height: 120px;
   overflow: hidden;
   border-radius: 16px;
   border: 1px solid #dee4e6;
   box-sizing: border-box;
 }
 #tweet-quote .right-column .cropped {
-  width: 110px; /* width of container */
-  height: 110px; /* height of container */
+  width: 110px;
+  height: 110px;
   overflow: hidden;
   border-radius: 16px;
   border: 1px solid #dee4e6;
@@ -174,8 +172,6 @@
 #tweet-share-payload-wrapper {
   border-bottom: 1px solid #edf2f3;
   padding: 16px;
-  /* max-height: 240px; */
-  /* overflow-y: hidden; */
 }
 #tweet-share-payload-wrapper::-webkit-scrollbar {
   display: none;
@@ -219,8 +215,15 @@
   font-size: 14px;
 }
 .tweet-author-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 250px;
   font-weight: 700;
   color: #182024;
+  white-space: nowrap;
+}
+.tweet-contains-pics .tweet-author-name {
+  max-width: 155px;
 }
 .tweet-author-handle {
   padding-left: 4px;
@@ -276,12 +279,6 @@
 #tweet-quote div#tweet-pictures img.landscape {
   width: auto !important;
 }
-/* #tweet-pictures .plus-sign {play-button
-  display: none;
-}
-#tweet-pictures .pics-count {
-  display: none;
-} */
 #tweet-pictures.multi-pics img {
   filter: brightness(60%);
 }
