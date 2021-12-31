@@ -115,7 +115,6 @@ function addFullURL(entities: any) {
 
 export async function getThread(id: string) {
   const res = await fetchThread(id);
-  console.log("our response:", res);
   const tweets =
     res.data.threaded_conversation_with_injections.instructions.find(
       (el) => el.type === "TimelineAddEntries"

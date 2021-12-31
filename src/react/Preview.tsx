@@ -1,4 +1,4 @@
-import React, { useMemo, useRef, useEffect, useState } from "react";
+import React, { useMemo, useState } from "react";
 import { Tweet, Poll } from "../api/client";
 import { pollOptions } from "../utils/parsing";
 
@@ -20,12 +20,23 @@ interface PreviewProps {
   tweet: Tweet;
 }
 
-const parseText = (text: String) => {
-  let textArr = text.split(/\r?\n/);
-  console.log("before parse:", textArr);
-  textArr = textArr.slice(0, textArr.length - 2);
-  console.log("after parse:", textArr);
-  return textArr;
+const parseText = (text: String, entities?: any[]) => {
+  let indices = [];
+  let textArr = [...text];
+
+  if (entities) {
+    entities.map((entity) => {
+      indices.push(entity.indices[0]);
+      indices.push(entity.indices[1]);
+    });
+  }
+
+  while (indices.length > 0) {
+    textArr[indices[0]] = `<span>${textArr[indices[0]]}`;
+    textArr[indices[1]] = `${textArr[indices[1]]}</span>`;
+    indices.splice(0, 2);
+  }
+  return textArr.join("").split(/\r?\n/);
 };
 
 const imageOrientation = (pics) => {
@@ -37,25 +48,8 @@ const imageOrientation = (pics) => {
   return currentImage.width > currentImage.height ? "landscape" : "portrait";
 };
 
-const findSymbolWords = (sentence: String) => {
-  const regex = /\B\@\w+/;
-  const found = sentence.match(regex);
-  if (found) {
-    let arr = sentence.split(" ");
-    for (let i = 0; i < arr.length; i++) {
-      if (arr[i] === found[0]) {
-        arr[i] = <span>{found}</span>;
-      }
-    }
-
-    return arr;
-  }
-
-  return sentence;
-};
-
 function Preview({ tweet }: PreviewProps) {
-  const parsedText = parseText(tweet.text);
+  const parsedText = parseText(tweet.text, tweet.entities);
 
   return (
     <div
@@ -85,9 +79,8 @@ function Preview({ tweet }: PreviewProps) {
               <p
                 key={parsedText.indexOf(sentence)}
                 className={sentence.length < 1 ? "line-break" : null}
-              >
-                {sentence}
-              </p>
+                dangerouslySetInnerHTML={{ __html: sentence }}
+              ></p>
             ))}
           </div>
           {tweet.poll && <Poll poll={tweet.poll} />}
