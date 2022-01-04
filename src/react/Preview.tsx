@@ -204,8 +204,19 @@ function Video({ pic }) {
   );
 }
 
+function numberWithCommas(n) {
+  return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+
+function calculateVotePercent(choiceVotes, totalVotes): string {
+  return ((choiceVotes / totalVotes) * 100).toFixed(1);
+}
+
 function Poll({ poll }) {
   const options = pollOptions(poll);
+  const totalVotes = options
+    .map((item) => parseInt(item.count, 10))
+    .reduce((prev, next) => prev + next);
 
   return (
     <div id="twitter-poll">
@@ -213,10 +224,11 @@ function Poll({ poll }) {
         return (
           <div key={i} className="twitter-poll-option">
             <p>{opt.label}</p>
-            <p>{opt.count}</p>
+            <p>{calculateVotePercent(opt.count, totalVotes)}%</p>
           </div>
         );
       })}
+      <div>{numberWithCommas(totalVotes)} votes</div>
     </div>
   );
 }

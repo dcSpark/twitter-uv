@@ -319,9 +319,6 @@
   color: white;
 }
 #twitter-poll {
-  border-radius: 14px;
-  border: 1px solid grey;
-  margin: 0 1rem;
   padding: 0 1rem;
 }
 .twitter-poll-option {
