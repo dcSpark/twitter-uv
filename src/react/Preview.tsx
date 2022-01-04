@@ -36,7 +36,11 @@ const parseText = (text: String, entities?: any[]) => {
     textArr[indices[1]] = `${textArr[indices[1]]}</span>`;
     indices.splice(0, 2);
   }
-  return textArr.join("").split(/\r?\n/);
+
+  textArr = textArr.join("").split(/\r?\n/);
+
+  // remove last 2 empty lines in tweet text
+  return textArr.slice(0, textArr.length - 2);
 };
 
 const imageOrientation = (pics) => {
@@ -131,7 +135,6 @@ function Quote({ quote }) {
               </p>
             ))}
           </div>
-          {quote.video && <Video pic={quote.video} />}
           {quote.poll && <Poll poll={quote.poll} />}
         </div>
       </div>

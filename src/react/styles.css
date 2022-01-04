@@ -225,6 +225,9 @@
 .tweet-contains-pics .tweet-author-name {
   max-width: 155px;
 }
+#tweet-quote.tweet-contains-pics .tweet-author-name {
+  max-width: 125px;
+}
 .tweet-author-handle {
   padding-left: 4px;
   color: #566470;
@@ -249,6 +252,7 @@
 }
 .tweet-text p {
   margin: 0 0 2px;
+  overflow-wrap: break-word;
 }
 .tweet-text p.line-break {
   height: 20px;
