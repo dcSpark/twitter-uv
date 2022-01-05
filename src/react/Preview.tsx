@@ -217,6 +217,9 @@ function Poll({ poll }) {
   const totalVotes = options
     .map((item) => parseInt(item.count, 10))
     .reduce((prev, next) => prev + next);
+  const majorityVote = options.reduce((prev, current) =>
+    parseInt(prev.count) > parseInt(current.count) ? prev.count : current.count
+  );
 
   return (
     <div id="twitter-poll">
@@ -226,7 +229,14 @@ function Poll({ poll }) {
         };
 
         return (
-          <div key={i} className="twitter-poll-option">
+          <div
+            key={i}
+            className={
+              opt.count === majorityVote
+                ? "twitter-poll-option majority"
+                : "twitter-poll-option"
+            }
+          >
             <div style={barPercentage} className="vote-percentage-bar"></div>
             <p className="vote-label">{opt.label}</p>
             <p className="vote-count">

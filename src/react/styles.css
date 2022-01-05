@@ -341,12 +341,19 @@
   border-radius: 4px;
   height: 100%;
 }
+.majority .vote-percentage-bar {
+  background-color: #86c3f2;
+}
+#twitter-poll .majority p {
+  font-weight: 600;
+}
 p.vote-label {
   z-index: 10;
   padding-left: 16px;
 }
 #total-votes {
   margin-top: 16px;
+  color: #566470;
 }
 #tweet-quote {
   display: flex;
