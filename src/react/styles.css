@@ -323,7 +323,17 @@
 }
 .twitter-poll-option {
   display: flex;
+  position: relative;
   justify-content: space-between;
+}
+.vote-percentage-bar {
+  z-index: 0;
+  position: absolute;
+  background-color: aquamarine;
+  height: 39px;
+}
+p.vote-label {
+  z-index: 10;
 }
 #tweet-quote {
   display: flex;

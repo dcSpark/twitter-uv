@@ -221,10 +221,17 @@ function Poll({ poll }) {
   return (
     <div id="twitter-poll">
       {options.map((opt, i) => {
+        const barPercentage = {
+          width: calculateVotePercent(opt.count, totalVotes) + "%",
+        };
+
         return (
           <div key={i} className="twitter-poll-option">
-            <p>{opt.label}</p>
-            <p>{calculateVotePercent(opt.count, totalVotes)}%</p>
+            <div style={barPercentage} className="vote-percentage-bar"></div>
+            <p className="vote-label">{opt.label}</p>
+            <p className="vote-count">
+              {calculateVotePercent(opt.count, totalVotes)}%
+            </p>
           </div>
         );
       })}
