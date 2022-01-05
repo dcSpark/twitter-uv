@@ -319,21 +319,34 @@
   color: white;
 }
 #twitter-poll {
-  padding: 0 1rem;
+  margin-top: 16px;
+}
+#twitter-poll p {
+  display: flex;
+  align-items: center;
+  margin: 0;
+  color: #182024;
 }
 .twitter-poll-option {
   display: flex;
   position: relative;
   justify-content: space-between;
+  height: 39px;
+  margin-bottom: 8px;
 }
 .vote-percentage-bar {
   z-index: 0;
   position: absolute;
-  background-color: aquamarine;
-  height: 39px;
+  background-color: #cfd8dd;
+  border-radius: 4px;
+  height: 100%;
 }
 p.vote-label {
   z-index: 10;
+  padding-left: 16px;
+}
+#total-votes {
+  margin-top: 16px;
 }
 #tweet-quote {
   display: flex;

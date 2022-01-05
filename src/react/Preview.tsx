@@ -235,7 +235,7 @@ function Poll({ poll }) {
           </div>
         );
       })}
-      <div>{numberWithCommas(totalVotes)} votes</div>
+      <div id="total-votes">{numberWithCommas(totalVotes)} votes</div>
     </div>
   );
 }
