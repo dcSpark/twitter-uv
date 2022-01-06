@@ -34,9 +34,17 @@ const parseText = (text: String, entities?: any[]) => {
   let currentIndex = 0;
 
   while (indices.length > 0) {
-    // if(entities[currentIndex].)
-    textArr[indices[0]] = `<span>${textArr[indices[0]]}`;
-    textArr[indices[1]] = `${textArr[indices[1]]}</span>`;
+    if (entities[currentIndex].url) {
+      textArr[indices[0]] = `<a href="${
+        entities[currentIndex].expanded_url
+      }" target="_blank" rel="noopener noreferrer"><span>${
+        textArr[indices[0]]
+      }`;
+      textArr[indices[1]] = `${textArr[indices[1]]}</span></a>`;
+    } else {
+      textArr[indices[0]] = `<span>${textArr[indices[0]]}`;
+      textArr[indices[1]] = `${textArr[indices[1]]}</span>`;
+    }
     indices.splice(0, 2);
     currentIndex++;
   }
