@@ -31,16 +31,21 @@ const parseText = (text: String, entities?: any[]) => {
     });
   }
 
+  let currentIndex = 0;
+
   while (indices.length > 0) {
+    // if(entities[currentIndex].)
     textArr[indices[0]] = `<span>${textArr[indices[0]]}`;
     textArr[indices[1]] = `${textArr[indices[1]]}</span>`;
     indices.splice(0, 2);
+    currentIndex++;
   }
 
   textArr = textArr.join("").split(/\r?\n/);
 
   // remove last 2 empty lines in tweet text
-  return textArr.slice(0, textArr.length - 2);
+  // return textArr.slice(0, textArr.length - 2);
+  return textArr;
 };
 
 const imageOrientation = (pics) => {

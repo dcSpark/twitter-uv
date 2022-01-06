@@ -76,11 +76,17 @@ function findPics(entities: any): URL[] {
   } else return [];
 }
 function findEntities(entities: any): TweetEntity[] {
-  if (entities.user_mentions || entities.hashtags || entities.symbols) {
+  if (
+    entities.user_mentions ||
+    entities.hashtags ||
+    entities.symbols ||
+    entities.urls
+  ) {
     let foundEntities = [];
     entities.user_mentions.map((mention) => foundEntities.push(mention));
     entities.hashtags.map((hashtag) => foundEntities.push(hashtag));
     entities.symbols.map((symbol) => foundEntities.push(symbol));
+    entities.urls.map((url) => foundEntities.push(url));
     return foundEntities;
   } else return [];
 }
@@ -192,12 +198,13 @@ function processThread(data: any): Tweet {
     const pics = findPics(tweet.entities);
     const foundEntities = findEntities(tweet.entities);
     const video = findVideo(tweet?.extended_entities);
-    const redundant_urls = scrubURLS(tweet.entities);
-    const text =
-      redundant_urls.reduce(
-        (acc, i) => acc.replace(i, "").trim(),
-        tweet.full_text
-      ) + addFullURL(tweet.entities);
+    // const redundant_urls = scrubURLS(tweet.entities);
+    const text = tweet.full_text;
+    // const text =
+    //   redundant_urls.reduce(
+    //     (acc, i) => acc.replace(i, "").trim(),
+    //     tweet.full_text
+    //   ) + addFullURL(tweet.entities);
     // some quotes are "disabled" so they only show as urls on tweet.quoted_status_permalink
     const quote = processThread(data?.quoted_status_result?.result);
     const poll = processPoll(data?.card?.legacy);
@@ -253,7 +260,12 @@ interface UserEntity {
   screen_name: string;
 }
 
-type TweetEntity = TextEntity | UserEntity;
+interface UrlEntity {
+  indices: number[];
+  display_url: string;
+}
+
+type TweetEntity = TextEntity | UserEntity | UrlEntity;
 
 export interface Tweet {
   time: string;
