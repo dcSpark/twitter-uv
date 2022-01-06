@@ -257,6 +257,9 @@
 .tweet-text p.line-break {
   height: 20px;
 }
+.tweet-text p:last-child.line-break {
+  display: none;
+}
 .tweet-text p span {
   color: #5699e4;
 }

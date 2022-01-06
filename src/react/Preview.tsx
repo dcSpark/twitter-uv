@@ -40,7 +40,7 @@ const parseText = (text: String, entities?: any[]) => {
       }" target="_blank" rel="noopener noreferrer"><span>${
         textArr[indices[0]]
       }`;
-      textArr[indices[1]] = `${textArr[indices[1]]}</span></a>`;
+      textArr[indices[1]] = `${textArr[indices[1]]}</span></a>\n`;
     } else {
       textArr[indices[0]] = `<span>${textArr[indices[0]]}`;
       textArr[indices[1]] = `${textArr[indices[1]]}</span>`;
@@ -51,8 +51,6 @@ const parseText = (text: String, entities?: any[]) => {
 
   textArr = textArr.join("").split(/\r?\n/);
 
-  // remove last 2 empty lines in tweet text
-  // return textArr.slice(0, textArr.length - 2);
   return textArr;
 };
 
