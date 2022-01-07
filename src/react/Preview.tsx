@@ -21,38 +21,44 @@ interface PreviewProps {
 }
 
 const parseText = (text: String, entities?: any[]) => {
-  let indices = [];
-  let textArr = [...text];
+  let output = text;
 
-  if (entities) {
-    entities.map((entity) => {
-      indices.push(entity.indices[0]);
-      indices.push(entity.indices[1]);
-    });
+  if (!entities) {
+    return [...text].join("").split(/\r?\n/);
   }
 
-  let currentIndex = 0;
+  for (let i = 0; i < entities.length; i++) {
+    const current = entities[i];
 
-  while (indices.length > 0) {
-    // check if entity is from media or urls
-    if (entities[currentIndex].url) {
-      textArr[indices[0]] = `\n<a href="${
-        entities[currentIndex].expanded_url
-      }" target="_blank" rel="noopener noreferrer"><span>${
-        textArr[indices[0]]
-      }`;
-      textArr[indices[1]] = `${textArr[indices[1] - 1]}</span></a>\n`;
-    } else {
-      textArr[indices[0]] = `<span>${textArr[indices[0]]}`;
-      textArr[indices[1]] = `${textArr[indices[1]]}</span>`;
+    if (current.url) {
+      output = output.replace(
+        current.url,
+        `<a href="${current.expanded_url}" target="_blank" rel="noopener noreferrer"<span>${current.display_url}</span></a>`
+      );
     }
-    indices.splice(0, 2);
-    currentIndex++;
+    if (current.screen_name) {
+      output = output.replace(
+        `@${current.screen_name}`,
+        `<span>@${current.screen_name}</span>`
+      );
+    }
+
+    if (current.entity_type === "hashtag") {
+      output = output.replace(
+        `#${current.text}`,
+        `<span>#${current.text}</span>`
+      );
+    }
+
+    if (current.entity_type === "symbol") {
+      output = output.replace(
+        `$${current.text}`,
+        `<span>$${current.text}</span>`
+      );
+    }
   }
 
-  const parsedTextArr = textArr.join("").split(/\r?\n/);
-
-  return parsedTextArr;
+  return [...output].join("").split(/\r?\n/);
 };
 
 const imageOrientation = (pics) => {

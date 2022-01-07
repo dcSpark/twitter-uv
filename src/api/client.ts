@@ -83,6 +83,18 @@ function findEntities(entities: any): TweetEntity[] {
     entities.urls ||
     entities.media
   ) {
+    if (entities.hashtags) {
+      entities.hashtags = entities.hashtags.map((obj) => ({
+        ...obj,
+        entity_type: "hashtag",
+      }));
+    }
+    if (entities.symbols) {
+      entities.symbols = entities.symbols.map((obj) => ({
+        ...obj,
+        entity_type: "symbol",
+      }));
+    }
     let foundEntities = [];
     entities.user_mentions.map((mention) => foundEntities.push(mention));
     entities.hashtags.map((hashtag) => foundEntities.push(hashtag));
@@ -194,6 +206,7 @@ async function getSubsequentChildren(id: string, cursor: string, acc: any[]) {
 }
 
 function processThread(data: any): Tweet {
+  console.log("our DATA:", data);
   if (!data) return null;
   else {
     const tweet = data.legacy;
@@ -257,6 +270,7 @@ export interface Thread {
 interface TextEntity {
   indices: number[];
   text: string;
+  entity_type: string;
 }
 
 interface UserEntity {

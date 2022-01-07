@@ -261,7 +261,8 @@
 .tweet-text p:last-child.line-break {
   display: none;
 }
-.tweet-text p span {
+.tweet-text p span,
+.tweet-text a {
   color: #5699e4;
 }
 #tweet-pictures {
