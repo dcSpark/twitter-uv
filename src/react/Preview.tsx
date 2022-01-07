@@ -16,6 +16,13 @@ const placeholder = {
   poll: null,
 };
 
+let mapKeyCounter = 0;
+
+const generateMapKey = () => {
+  mapKeyCounter++;
+  return mapKeyCounter;
+};
+
 interface PreviewProps {
   tweet: Tweet;
 }
@@ -35,21 +42,22 @@ const parseText = (text: String, entities?: any[]) => {
         current.url,
         `<a href="${current.expanded_url}" target="_blank" rel="noopener noreferrer"<span>${current.display_url}</span></a>`
       );
+      continue;
     }
     if (current.screen_name) {
       output = output.replace(
         `@${current.screen_name}`,
         `<span>@${current.screen_name}</span>`
       );
+      continue;
     }
-
     if (current.entity_type === "hashtag") {
       output = output.replace(
         `#${current.text}`,
         `<span>#${current.text}</span>`
       );
+      continue;
     }
-
     if (current.entity_type === "symbol") {
       output = output.replace(
         `$${current.text}`,
@@ -72,7 +80,6 @@ const imageOrientation = (pics) => {
 
 function Preview({ tweet }: PreviewProps) {
   const parsedText = parseText(tweet.text, tweet.entities);
-  let keyCounter = 0;
 
   return (
     <div
@@ -100,7 +107,7 @@ function Preview({ tweet }: PreviewProps) {
           <div className="tweet-text">
             {parsedText.map((sentence) => (
               <p
-                key={parsedText.indexOf(sentence)}
+                key={generateMapKey()}
                 className={sentence.length < 1 ? "line-break" : null}
                 dangerouslySetInnerHTML={{ __html: sentence }}
               ></p>
@@ -211,14 +218,6 @@ function Pics({ pics, isVideo }) {
           )}
         </>
       )}
-    </div>
-  );
-}
-
-function Video({ pic }) {
-  return (
-    <div id="tweet-video">
-      <img src={pic[0]} alt="" />
     </div>
   );
 }

@@ -120,20 +120,6 @@ function findVideo(entities: any): URL {
     return new URL(v.url);
   } else return null;
 }
-function scrubURLS(entities: any): URL[] {
-  const list: Array<URL> = [];
-  // will probably need to return to this one
-  entities.urls.forEach((m) => list.push(new URL(m.url)));
-  if (entities.media) entities.media.forEach((m) => list.push(new URL(m.url)));
-  return list;
-}
-
-function addFullURL(entities: any) {
-  return `\n${entities.urls.reduce(
-    (acc, item) => acc + `[${item.expanded_url}](${item.expanded_url})\n`,
-    ""
-  )}\n`;
-}
 
 export async function getThread(id: string) {
   const res = await fetchThread(id);
@@ -206,7 +192,6 @@ async function getSubsequentChildren(id: string, cursor: string, acc: any[]) {
 }
 
 function processThread(data: any): Tweet {
-  console.log("our DATA:", data);
   if (!data) return null;
   else {
     const tweet = data.legacy;
@@ -215,13 +200,7 @@ function processThread(data: any): Tweet {
     const pics = findPics(tweet.entities);
     const foundEntities = findEntities(tweet.entities);
     const video = findVideo(tweet?.extended_entities);
-    // const redundant_urls = scrubURLS(tweet.entities);
     const text = tweet.full_text;
-    // const text =
-    //   redundant_urls.reduce(
-    //     (acc, i) => acc.replace(i, "").trim(),
-    //     tweet.full_text
-    //   ) + addFullURL(tweet.entities);
     // some quotes are "disabled" so they only show as urls on tweet.quoted_status_permalink
     const quote = processThread(data?.quoted_status_result?.result);
     const poll = processPoll(data?.card?.legacy);
