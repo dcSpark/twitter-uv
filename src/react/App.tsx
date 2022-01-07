@@ -32,7 +32,7 @@ function App(props: TwitterProps) {
     left: 0,
     width: "100%",
     height: "100%",
-    backgroundColor: minimodal ? "" : "rgb(25, 25, 25, 0.9",
+    backgroundColor: minimodal ? "" : "rgb(25, 25, 25, 0.9)",
     display: "flex",
   };
 
