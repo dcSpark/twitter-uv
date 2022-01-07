@@ -1,6 +1,6 @@
 import React from "react";
 import { unmountComponentAtNode } from "react-dom";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { TwitterProps } from "./App";
 import { urbitVisor } from "@dcspark/uv-core";
 import { getTweet, getThread, Tweet, Poll } from "../api/client";
@@ -49,6 +49,7 @@ interface ModalProps extends TwitterProps{
 }
 
 export default function ShareModal(props: ModalProps) {
+  const ref = useRef();
   useEffect(() => {
     let leakingMemory = true;
     urbitVisor.getShip().then((res) => {
@@ -62,7 +63,15 @@ export default function ShareModal(props: ModalProps) {
         setLoading(false);
       }
     });
-    return () => (leakingMemory = false);
+
+    const checkIfClickedOutside = e => {
+      if (ref.current && !ref.current.contains(e.target))  quit()
+    }
+    document.addEventListener("mousedown", checkIfClickedOutside)
+    return () => {
+      document.removeEventListener("mousedown", checkIfClickedOutside)
+      leakingMemory = false
+    };
   }, []);
   const linkOnly = (
     <div id="twitter-link">
@@ -89,7 +98,12 @@ export default function ShareModal(props: ModalProps) {
       document.getElementById("uv-twitter-extension-container")
     );
   };
-
+  document.addEventListener('keydown', function(e){
+    if(e.key=='Escape'||e.key=='Esc'){
+        e.preventDefault();
+        quit()
+    }
+}, true);
 
   function setFullTweet() {
     setChannelFilters(["link"]);
@@ -134,7 +148,7 @@ export default function ShareModal(props: ModalProps) {
   }
 
   return (
-    <div id="uv-twitter-share-modal">
+    <div ref={ref} id="uv-twitter-share-modal">
       <div id="tweet-preview-header">
         <p onClick={quit} id="preview-close-button"></p>
         <h3>Share on Urbit</h3>
