@@ -80,13 +80,17 @@ function findEntities(entities: any): TweetEntity[] {
     entities.user_mentions ||
     entities.hashtags ||
     entities.symbols ||
-    entities.urls
+    entities.urls ||
+    entities.media
   ) {
     let foundEntities = [];
     entities.user_mentions.map((mention) => foundEntities.push(mention));
     entities.hashtags.map((hashtag) => foundEntities.push(hashtag));
     entities.symbols.map((symbol) => foundEntities.push(symbol));
     entities.urls.map((url) => foundEntities.push(url));
+    if (entities.media) {
+      entities.media.map((med) => foundEntities.push(med));
+    }
     return foundEntities;
   } else return [];
 }
@@ -260,12 +264,17 @@ interface UserEntity {
   screen_name: string;
 }
 
+interface MediaEntity {
+  indices: number[];
+  url: string;
+}
+
 interface UrlEntity {
   indices: number[];
   display_url: string;
 }
 
-type TweetEntity = TextEntity | UserEntity | UrlEntity;
+type TweetEntity = TextEntity | UserEntity | UrlEntity | MediaEntity;
 
 export interface Tweet {
   time: string;

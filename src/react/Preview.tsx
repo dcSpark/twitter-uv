@@ -34,13 +34,14 @@ const parseText = (text: String, entities?: any[]) => {
   let currentIndex = 0;
 
   while (indices.length > 0) {
+    // check if entity is from media or urls
     if (entities[currentIndex].url) {
-      textArr[indices[0]] = `<a href="${
+      textArr[indices[0]] = `\n<a href="${
         entities[currentIndex].expanded_url
       }" target="_blank" rel="noopener noreferrer"><span>${
         textArr[indices[0]]
       }`;
-      textArr[indices[1]] = `${textArr[indices[1]]}</span></a>\n`;
+      textArr[indices[1]] = `${textArr[indices[1] - 1]}</span></a>\n`;
     } else {
       textArr[indices[0]] = `<span>${textArr[indices[0]]}`;
       textArr[indices[1]] = `${textArr[indices[1]]}</span>`;
@@ -49,9 +50,9 @@ const parseText = (text: String, entities?: any[]) => {
     currentIndex++;
   }
 
-  textArr = textArr.join("").split(/\r?\n/);
+  const parsedTextArr = textArr.join("").split(/\r?\n/);
 
-  return textArr;
+  return parsedTextArr;
 };
 
 const imageOrientation = (pics) => {
@@ -65,6 +66,7 @@ const imageOrientation = (pics) => {
 
 function Preview({ tweet }: PreviewProps) {
   const parsedText = parseText(tweet.text, tweet.entities);
+  let keyCounter = 0;
 
   return (
     <div

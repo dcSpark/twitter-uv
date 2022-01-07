@@ -257,6 +257,7 @@
 .tweet-text p.line-break {
   height: 20px;
 }
+.tweet-text p:first-child.line-break,
 .tweet-text p:last-child.line-break {
   display: none;
 }
