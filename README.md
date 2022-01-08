@@ -1,9 +1,12 @@
-# Urbit Visor Twitter Extension
+<h1 align="center">
+  <img src="assets/twitter-uv-logo.png" width="224px"/><br/>
+  Twitter UV
+</h1>
+<p align="center">Twitter UV is a web extension which bridges Twitter and Urbit. It allows users to easily share tweets and unroll whole threads at the click of a button directly onto their ships for sharing with others or archival purposes.
 
-This extension adds Urbit functionality to Twitter.com through inter-operation with Urbit Visor.
-You need to have Urbit Visor installed to use this extension.
+<p align="center"><img src="https://img.shields.io/badge/version-v0.1.0-blue?style=for-the-badge&logo=none" />&nbsp;&nbsp;<img src="https://img.shields.io/badge/license-mit-blue?style=for-the-badge&logo=none" alt="license" /></p>
 
-## Get started
+## Building Locally
 
 1. Clone this repo
 2. Go to `chrome://extensions` on your browser (or `brave://extensions` if using Brave)
@@ -11,16 +14,7 @@ You need to have Urbit Visor installed to use this extension.
 4. Run `npm run start` on the terminal.
 5. Add the ./dist folder.
 
-## Test functionality
+## Development
 
-The extension should inject an Urbit icon in the button row under any tweet read at twitter.com.
-Click the button and it will (assuming Visor permissions exist, if not it'll ask for them) show up a floating window at the top of the page with a list of channels your ship is subscribed to.
-Click on a channel and it will post the tweet URL to the channel.
-
-## Develop
-
-This is a very bare-bones setup, no background script, no popup page, just a content script injecting code to twitter.com
-At present we're using esbuild to build the extension.
 Run `npm start` to start a dev server and build the extension, add the dist folder to your chrome extensions.
 Remember to reload the extension at your extensions page, then reload the Twitter.com after any update.
-esbuild doesn't check types, run `tsc --noemit` for that.

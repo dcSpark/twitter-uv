@@ -1,33 +1,33 @@
 const threadsURL =
-  "https://twitter.com/i/api/graphql/GpnXbjn5tx9tVXnVqmXpkA/TweetDetail?variables=";
+  'https://twitter.com/i/api/graphql/GpnXbjn5tx9tVXnVqmXpkA/TweetDetail?variables=';
 const tweetURL = `https://api.twitter.com/1.1/statuses/show.json?id=`;
 
 function headers() {
-  const cookieElems = document.cookie.split("; ");
-  const gt = cookieElems.find((elem) => elem.includes("gt="));
-  let gts = "";
-  if (gt) gts = gt.replace("gt=", "");
-  const twid = cookieElems.find((elem) => elem.includes("twid="));
-  let twids = "";
-  if (twid) twids = twid.replace("twid=u%3D", "");
+  const cookieElems = document.cookie.split('; ');
+  const gt = cookieElems.find(elem => elem.includes('gt='));
+  let gts = '';
+  if (gt) gts = gt.replace('gt=', '');
+  const twid = cookieElems.find(elem => elem.includes('twid='));
+  let twids = '';
+  if (twid) twids = twid.replace('twid=u%3D', '');
 
-  const csrf = cookieElems.find((elem) => elem.includes("ct0="));
-  let csrfs = "";
-  if (csrf) csrfs = csrf.replace("ct0=", "");
+  const csrf = cookieElems.find(elem => elem.includes('ct0='));
+  let csrfs = '';
+  if (csrf) csrfs = csrf.replace('ct0=', '');
   const headers = {
     Authorization:
-      "Bearer AAAAAAAAAAAAAAAAAAAAANRILgAAAAAAnNwIzUejRCOuH5E6I8xnZz4puTs%3D1Zv7ttfk8LF81IUq16cHjhLTvJu4FA33AGWWjCpTnA",
-    "x-csrf-token": csrfs,
-    "x-guest-token": twids || gts,
+      'Bearer AAAAAAAAAAAAAAAAAAAAANRILgAAAAAAnNwIzUejRCOuH5E6I8xnZz4puTs%3D1Zv7ttfk8LF81IUq16cHjhLTvJu4FA33AGWWjCpTnA',
+    'x-csrf-token': csrfs,
+    'x-guest-token': twids || gts,
   };
   const meta: RequestInit = {
-    credentials: "include",
+    credentials: 'include',
     headers: { ...headers },
-    referrerPolicy: "no-referrer-when-downgrade",
-    method: "GET",
-    redirect: "follow",
+    referrerPolicy: 'no-referrer-when-downgrade',
+    method: 'GET',
+    redirect: 'follow',
   };
-  console.log(meta, "meta");
+  console.log(meta, 'meta');
   return meta;
 }
 
@@ -36,7 +36,7 @@ const baseVariables = {
   withHighlightedLabel: false,
   withCommunity: false,
   with_rux_injections: false,
-  referrer: "tweet",
+  referrer: 'tweet',
   withTweetQuoteCount: true,
   withBirdwatchNotes: false,
   withBirdwatchPivots: false,
@@ -71,7 +71,7 @@ function translateDate(date: string): Date {
 }
 function findPics(entities: any): URL[] {
   if (entities.media) {
-    const urls = entities.media.map((pic) => new URL(pic.media_url_https));
+    const urls = entities.media.map(pic => new URL(pic.media_url_https));
     return urls;
   } else return [];
 }
@@ -84,24 +84,24 @@ function findEntities(entities: any): TweetEntity[] {
     entities.media
   ) {
     if (entities.hashtags) {
-      entities.hashtags = entities.hashtags.map((obj) => ({
+      entities.hashtags = entities.hashtags.map(obj => ({
         ...obj,
-        entity_type: "hashtag",
+        entity_type: 'hashtag',
       }));
     }
     if (entities.symbols) {
-      entities.symbols = entities.symbols.map((obj) => ({
+      entities.symbols = entities.symbols.map(obj => ({
         ...obj,
-        entity_type: "symbol",
+        entity_type: 'symbol',
       }));
     }
     let foundEntities = [];
-    entities.user_mentions.map((mention) => foundEntities.push(mention));
-    entities.hashtags.map((hashtag) => foundEntities.push(hashtag));
-    entities.symbols.map((symbol) => foundEntities.push(symbol));
-    entities.urls.map((url) => foundEntities.push(url));
+    entities.user_mentions.map(mention => foundEntities.push(mention));
+    entities.hashtags.map(hashtag => foundEntities.push(hashtag));
+    entities.symbols.map(symbol => foundEntities.push(symbol));
+    entities.urls.map(url => foundEntities.push(url));
     if (entities.media) {
-      entities.media.map((med) => foundEntities.push(med));
+      entities.media.map(med => foundEntities.push(med));
     }
     return foundEntities;
   } else return [];
@@ -110,8 +110,7 @@ function findVideo(entities: any): URL {
   if (!entities) return null;
   else if (entities.media && entities.media[0].video_info) {
     const v = entities.media[0].video_info.variants.reduce((prev, next) => {
-      if (next?.bitrate && prev?.bitrate)
-        return next.bitrate > prev.bitrate ? next : prev;
+      if (next?.bitrate && prev?.bitrate) return next.bitrate > prev.bitrate ? next : prev;
       else {
         if (next.bitrate) return next;
         else return prev;
@@ -123,40 +122,33 @@ function findVideo(entities: any): URL {
 
 export async function getThread(id: string) {
   const res = await fetchThread(id);
-  const tweets =
-    res.data.threaded_conversation_with_injections.instructions.find(
-      (el) => el.type === "TimelineAddEntries"
-    );
-  const parent = tweets.entries.find((el) => el.entryId.includes(id));
-  const children = tweets.entries.filter((el) =>
-    el.entryId.includes("conversationthread")
+  const tweets = res.data.threaded_conversation_with_injections.instructions.find(
+    el => el.type === 'TimelineAddEntries'
   );
+  const parent = tweets.entries.find(el => el.entryId.includes(id));
+  const children = tweets.entries.filter(el => el.entryId.includes('conversationthread'));
   const placeholder = { content: { items: [] } };
 
   const threadChildren =
-    children.find((subthread) =>
+    children.find(subthread =>
       subthread.content.items.find(
-        (child) => child.item.itemContent.tweetDisplayType === "SelfThread"
+        child => child.item.itemContent.tweetDisplayType === 'SelfThread'
       )
     ) || placeholder;
-  const processedParent = processThread(
-    parent.content.itemContent.tweet_results.result
-  );
+  const processedParent = processThread(parent.content.itemContent.tweet_results.result);
   const cursorObject = threadChildren.content.items.find(
-    (child) => child.item.itemContent.itemType === "TimelineTimelineCursor"
+    child => child.item.itemContent.itemType === 'TimelineTimelineCursor'
   );
   const cursorString = cursorObject?.item?.itemContent?.value;
   let processedChildren = [];
   if (threadChildren) {
     processedChildren = threadChildren.content.items
       .filter(
-        (child) =>
-          child.item.itemContent.itemType === "TimelineTweet" &&
-          child.item.itemContent.tweetDisplayType === "SelfThread"
+        child =>
+          child.item.itemContent.itemType === 'TimelineTweet' &&
+          child.item.itemContent.tweetDisplayType === 'SelfThread'
       )
-      .map((child) =>
-        processThread(child.item.itemContent.tweet_results.result)
-      );
+      .map(child => processThread(child.item.itemContent.tweet_results.result));
   }
   let more = [];
   if (cursorString) {
@@ -169,25 +161,17 @@ export async function getThread(id: string) {
 async function getSubsequentChildren(id: string, cursor: string, acc: any[]) {
   const res = await fetchThread(id, cursor);
   const data = res.data.threaded_conversation_with_injections.instructions.find(
-    (el) => el.type === "TimelineAddToModule"
+    el => el.type === 'TimelineAddToModule'
   );
   const children = data.moduleItems.filter(
-    (el) =>
-      el.entryId.includes("tweet") &&
-      el.item.itemContent.tweetDisplayType === "SelfThread"
+    el => el.entryId.includes('tweet') && el.item.itemContent.tweetDisplayType === 'SelfThread'
   );
-  const newCursor = data.moduleItems.find((el) =>
-    el.entryId.includes("cursor")
-  );
+  const newCursor = data.moduleItems.find(el => el.entryId.includes('cursor'));
   const cursorString = newCursor?.item?.itemContent?.value;
-  const processedChildren = children.map((child) =>
+  const processedChildren = children.map(child =>
     processThread(child.item.itemContent.tweet_results.result)
   );
-  if (cursorString)
-    return getSubsequentChildren(id, cursorString, [
-      ...acc,
-      ...processedChildren,
-    ]);
+  if (cursorString) return getSubsequentChildren(id, cursorString, [...acc, ...processedChildren]);
   else return [...acc, ...processedChildren];
 }
 
@@ -230,7 +214,7 @@ function processAuthor(user: any): TweetAuthor {
 }
 
 function processPoll(poll: any): Poll {
-  if (!poll || !poll.name.includes("choice")) return null;
+  if (!poll || !poll.name.includes('choice')) return null;
   else {
     return poll.binding_values.reduce((acc, item) => {
       const obj = {};

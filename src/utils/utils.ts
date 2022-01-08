@@ -85,7 +85,25 @@ export function addDashes(p: string): string {
     return "~" + list.join("-")
 }
 
+function tokenizeString(text: string){
+    console.log(text, "text to tokenize")
+    const URL_REGEX = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,10}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/g
+    const MD_regex = /(?<!!)\[http.+\)/g;
+    const urls = text.match(MD_regex) || [];
+    const urlc = urls.map(u => {
+        const url = u.match(URL_REGEX)[0];
+        console.log(url, "url")
+        return {url: url}
+    })
+    const newtext = urls.reduce((acc, item) => {
+        return acc.replaceAll(item, "")
+    }, text)
+    return [{text: newtext}, ...urlc]
+}
+
 export function buildChatPost(author, resource, text) {
+    console.log(text, "argh")
+    const contents = tokenizeString(text);
     return {
         app: "graph-push-hook", mark: "graph-update-3", json: {
             "add-nodes": {
@@ -95,7 +113,7 @@ export function buildChatPost(author, resource, text) {
                         children: null,
                         post: {
                             author: "~" + author,
-                            contents: [{text: text}],
+                            contents: contents,
                             hash: null,
                             index: "/9",
                             signatures: [],

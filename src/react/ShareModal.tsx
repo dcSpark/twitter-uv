@@ -1,6 +1,6 @@
 import React from "react";
 import { unmountComponentAtNode } from "react-dom";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { TwitterProps } from "./App";
 import { urbitVisor } from "@dcspark/uv-core";
 import { getTweet, getThread, Tweet, Poll } from "../api/client";
@@ -44,8 +44,12 @@ const placeholder = {
     poll: null,
   },
 };
+interface ModalProps extends TwitterProps{
+  sendPoke: (data) => void
+}
 
-export default function ShareModal(props: TwitterProps) {
+export default function ShareModal(props: ModalProps) {
+  const ref = useRef();
   useEffect(() => {
     let leakingMemory = true;
     urbitVisor.getShip().then((res) => {
@@ -59,7 +63,15 @@ export default function ShareModal(props: TwitterProps) {
         setLoading(false);
       }
     });
-    return () => (leakingMemory = false);
+
+    const checkIfClickedOutside = e => {
+      if (ref.current && !ref.current.contains(e.target))  quit()
+    }
+    document.addEventListener("mousedown", checkIfClickedOutside)
+    return () => {
+      document.removeEventListener("mousedown", checkIfClickedOutside)
+      leakingMemory = false
+    };
   }, []);
   const linkOnly = (
     <div id="twitter-link">
@@ -77,21 +89,21 @@ export default function ShareModal(props: TwitterProps) {
   const [ship, setShip] = useState<string>(null);
   const [selected, setSelected] = useState<UrbitChannel[]>([]);
   const [channelFilters, setChannelFilters] = useState([]);
-  const [error, setError] = useState("");
+
+
+  const fullTweet = <Preview tweet={tweet.parent} />;
 
   function quit() {
     unmountComponentAtNode(
       document.getElementById("uv-twitter-extension-container")
     );
-  }
-  const fullTweet = <Preview tweet={tweet.parent} />;
-  function success() {
-    // TODO: show some message?
-    quit();
-  }
-  function failure() {
-    setError("Error sharing the Tweet, please try again later");
-  }
+  };
+  document.addEventListener('keydown', function(e){
+    if(e.key=='Escape'||e.key=='Esc'){
+        e.preventDefault();
+        quit()
+    }
+}, true);
 
   function setFullTweet() {
     setChannelFilters(["link"]);
@@ -123,11 +135,7 @@ export default function ShareModal(props: TwitterProps) {
       else if (channel.type === "chat")
         data = buildChatPost(ship, channel, payload);
       console.log(data, "data");
-      urbitVisor.poke(data).then((res) => {
-        // TODO error handling
-        if (res.status === "ok") success();
-        else console.log(res, "poked");
-      });
+      props.sendPoke(data);
     }
   }
 
@@ -140,7 +148,7 @@ export default function ShareModal(props: TwitterProps) {
   }
 
   return (
-    <div id="uv-twitter-share-modal">
+    <div ref={ref} id="uv-twitter-share-modal">
       <div id="tweet-preview-header">
         <p onClick={quit} id="preview-close-button"></p>
         <h3>Share on Urbit</h3>
