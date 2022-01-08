@@ -233,7 +233,7 @@ export interface Thread {
 interface TextEntity {
   indices: number[];
   text: string;
-  entity_type: string;
+  entity_type: 'hashtag' | 'symbol';
 }
 
 interface UserEntity {
@@ -241,17 +241,16 @@ interface UserEntity {
   screen_name: string;
 }
 
-interface MediaEntity {
-  indices: number[];
-  url: string;
-}
-
 interface UrlEntity {
   indices: number[];
+  url: string;
   display_url: string;
+  expanded_url: string;
 }
 
-type TweetEntity = TextEntity | UserEntity | UrlEntity | MediaEntity;
+interface MediaEntity extends UrlEntity {}
+
+export type TweetEntity = UserEntity | UrlEntity | MediaEntity | TextEntity;
 
 export interface Tweet {
   time: string;

@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from "react";
-import { Tweet, Poll } from "../api/client";
+import { Tweet, Poll, TweetEntity } from "../api/client";
 import { pollOptions } from "../utils/parsing";
 
 const placeholder = {
@@ -27,7 +27,7 @@ interface PreviewProps {
   tweet: Tweet;
 }
 
-const parseText = (text: String, entities?: any[]) => {
+const parseText = (text: String, entities?: TweetEntity[]) => {
   let output = text;
 
   if (!entities) {
@@ -37,14 +37,14 @@ const parseText = (text: String, entities?: any[]) => {
   for (let i = 0; i < entities.length; i++) {
     const current = entities[i];
 
-    if (current.url) {
+    if ('url' in current ) {
       output = output.replace(
         current.url,
         `<a href="${current.expanded_url}" target="_blank" rel="noopener noreferrer"<span>${current.display_url}</span></a>`
       );
       continue;
     }
-    if (current.screen_name) {
+    if (`screen_name` in current) {
       output = output.replace(
         `@${current.screen_name}`,
         `<span>@${current.screen_name}</span>`
