@@ -193,14 +193,16 @@ export default function ShareModal(props: ModalProps) {
           </div>
         </div>
       </div>
-      <div id="tweet-share-payload-wrapper">
-        <div id="tweet-share-payload">{preview}</div>
+      <div id="scroll-wrapper">
+        <div id="tweet-share-payload-wrapper">
+          <div id="tweet-share-payload">{preview}</div>
+        </div>
+        <Channels
+          selected={selected}
+          setSelected={setSelected}
+          exclude={channelFilters}
+        />
       </div>
-      <Channels
-        selected={selected}
-        setSelected={setSelected}
-        exclude={channelFilters}
-      />
       <div id="tweet-share-button-wrapper">
         <button disabled={loading} onClick={shareTweet} id="tweet-share-button">
           <svg
