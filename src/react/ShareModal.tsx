@@ -78,12 +78,12 @@ export default function ShareModal(props: ModalProps) {
   const [tweet, setTweet] = useState<Tweet>(placeholder);
   const [title, setTitle] = useState('');
   const [payload, setPayload] = useState(`[${props.url.href}](${props.url.href})`);
-  const [preview, setPreview] = useState(linkOnly);
   const [ship, setShip] = useState<string>(null);
   const [selected, setSelected] = useState<UrbitChannel[]>([]);
   const [channelFilters, setChannelFilters] = useState([]);
 
   const fullTweet = <Preview tweet={tweet.parent} />;
+  const [preview, setPreview] = useState(fullTweet);
 
   function quit() {
     unmountComponentAtNode(document.getElementById('uv-twitter-extension-container'));
@@ -107,7 +107,7 @@ export default function ShareModal(props: ModalProps) {
   }
   function setLinkOnly() {
     setChannelFilters([]);
-    setPreview(linkOnly);
+    setPreview(fullTweet);
     setTitle('Tweet ' + titleFromTweet(tweet.parent));
     setPayload(`[${props.url.href}](${props.url.href})`);
   }
