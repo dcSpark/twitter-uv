@@ -15,6 +15,7 @@ import { buildDM, buildChatPost, buildCollectionPost, buildNotebookPost } from '
 import Preview from './Preview';
 import Channels from './Channels';
 import mainLogo from './icon128.png';
+import { useMemo } from 'react';
 
 interface UrbitChannel {
   title: string;
@@ -54,6 +55,7 @@ export default function ShareModal(props: ModalProps) {
       if (leakingMemory) {
         // error handling here, shit happens
         setTweet(tweet);
+        setPreview(<Preview tweet={tweet.parent} />);
         setTitle('Tweet ' + titleFromTweet(tweet.parent));
         setLoading(false);
       }
@@ -68,11 +70,6 @@ export default function ShareModal(props: ModalProps) {
       leakingMemory = false;
     };
   }, []);
-  const linkOnly = (
-    <div id="twitter-link">
-      <p>{props.url.href}</p>
-    </div>
-  );
 
   const [loading, setLoading] = useState(true);
   const [tweet, setTweet] = useState<Tweet>(placeholder);
@@ -82,8 +79,8 @@ export default function ShareModal(props: ModalProps) {
   const [selected, setSelected] = useState<UrbitChannel[]>([]);
   const [channelFilters, setChannelFilters] = useState([]);
 
-  const fullTweet = <Preview tweet={tweet.parent} />;
-  const [preview, setPreview] = useState(fullTweet);
+  const fullTweet = useMemo(() => <Preview tweet={tweet.parent} />, [tweet]);
+  const [preview, setPreview] = useState(<div>...loading...</div>);
 
   function quit() {
     unmountComponentAtNode(document.getElementById('uv-twitter-extension-container'));
