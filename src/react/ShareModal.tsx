@@ -15,7 +15,6 @@ import { buildDM, buildChatPost, buildCollectionPost, buildNotebookPost } from '
 import Preview from './Preview';
 import Channels from './Channels';
 import mainLogo from './icon128.png';
-import { useMemo } from 'react';
 
 interface UrbitChannel {
   title: string;
@@ -79,7 +78,7 @@ export default function ShareModal(props: ModalProps) {
   const [selected, setSelected] = useState<UrbitChannel[]>([]);
   const [channelFilters, setChannelFilters] = useState([]);
 
-  const fullTweet = useMemo(() => <Preview tweet={tweet.parent} />, [tweet]);
+  const fullTweet = <Preview tweet={tweet.parent} />;
   const [preview, setPreview] = useState(<div>...loading...</div>);
 
   function quit() {
