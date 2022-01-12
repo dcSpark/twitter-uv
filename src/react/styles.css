@@ -625,3 +625,40 @@ div#twitter-link p {
 .failure-modal {
   background-color: red;
 }
+
+/* loading icon */
+
+.loading-container {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  padding-top: 16px;
+}
+.loader {
+  border: 3px solid #b7e9d7;
+  border-radius: 50%;
+  border-top: 3px solid #10b87c;
+  width: 18px;
+  height: 18px;
+  -webkit-animation: spin 0.75s linear infinite; /* Safari */
+  animation: spin 0.75s linear infinite;
+}
+
+/* Safari */
+@-webkit-keyframes spin {
+  0% {
+    -webkit-transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+  }
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
