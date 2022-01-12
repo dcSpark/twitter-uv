@@ -1,21 +1,21 @@
-import React from "react";
-import { useState, useEffect, useRef } from "react";
-import { urbitVisor } from "@dcspark/uv-core";
-import { liveCheckPatp } from "../utils/utils";
+import React from 'react';
+import { useState, useEffect, useRef } from 'react';
+import { urbitVisor } from '@dcspark/uv-core';
+import { liveCheckPatp } from '../utils/utils';
 interface UrbitKey {
   ship: string;
   name: string;
 }
 interface UrbitChannel {
   title: string;
-  type: "post" | "chat" | "link" | "publish" | null;
+  type: 'post' | 'chat' | 'link' | 'publish' | null;
   group: string;
   ship: string;
   name: string;
 }
 
 function referenceMetadata(channel: any, metadata: any): UrbitChannel {
-  const url: string | undefined = Object.keys(metadata).find((el) =>
+  const url: string | undefined = Object.keys(metadata).find(el =>
     el.includes(`${channel.ship}/${channel.name}`)
   );
 
@@ -34,8 +34,8 @@ function referenceMetadata(channel: any, metadata: any): UrbitChannel {
     };
   } else
     return {
-      title: "",
-      group: "",
+      title: '',
+      group: '',
       type: null,
       ship: channel.ship,
       name: channel.name,
@@ -48,66 +48,50 @@ interface ChannelBoxProps {
   setSelected: (keys) => void;
 }
 
-export function ChannelSelectBox({
-  exclude,
-  selected,
-  setSelected,
-}: ChannelBoxProps) {
+export function ChannelSelectBox({ exclude, selected, setSelected }: ChannelBoxProps) {
   useEffect(() => {
     let leakingMemory = true;
     let sub: number;
     setLoading(true);
     const subscription = urbitVisor.on(
-      "sse",
-      ["metadata-update", "associations"],
+      'sse',
+      ['metadata-update', 'associations'],
       async (data: any) => {
-        console.log(data, "metadata coming in");
+        console.log(data, 'metadata coming in');
         console.log(leakingMemory);
         if (leakingMemory) {
           const keys = await urbitVisor.scry({
-            app: "graph-store",
-            path: "/keys",
+            app: 'graph-store',
+            path: '/keys',
           });
           setLoading(false);
-          const list = keys.response["graph-update"].keys.map((channel: any) =>
+          const list = keys.response['graph-update'].keys.map((channel: any) =>
             referenceMetadata(channel, data)
           );
-          const channels = list.filter(
-            (chan) => chan.name !== "dm-inbox" && chan.group !== ""
-          );
+          const channels = list.filter(chan => chan.name !== 'dm-inbox' && chan.group !== '');
           setChannels(channels);
           setOptions(channels);
           setLoading(false);
-          urbitVisor
-            .unsubscribe(sub)
-            .then((res) => console.log(res, "unsubscribed"));
+          urbitVisor.unsubscribe(sub).then(res => console.log(res, 'unsubscribed'));
         }
       }
     );
-    urbitVisor
-      .subscribe({ app: "metadata-store", path: "/all" })
-      .then((res) => {
-        console.log(res, "subscribed to resource");
-        if (leakingMemory) sub = res.response;
-      });
+    urbitVisor.subscribe({ app: 'metadata-store', path: '/all' }).then(res => {
+      console.log(res, 'subscribed to resource');
+      if (leakingMemory) sub = res.response;
+    });
     return () => (leakingMemory = false);
   }, []);
 
   const inputRef = useRef();
-  const [input, setInput] = useState("");
+  const [input, setInput] = useState('');
   const [channels, setChannels] = useState<UrbitChannel[]>([]);
   const [dms, setDMs] = useState([]);
   const [dmCandidate, setDMCandidate] = useState<string>(null);
   const [loading, setLoading] = useState(false);
   const [options, setOptions] = useState(channels);
   const searchIcon = (
-    <svg
-      width="16"
-      height="16"
-      viewBox="0 0 16 16"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path
         fillRule="evenodd"
         clipRule="evenodd"
@@ -135,7 +119,7 @@ export function ChannelSelectBox({
       //   else setDMCandidate(null);
       // } else {
       setDMCandidate(null);
-      const filtered = channels.filter((chan) => {
+      const filtered = channels.filter(chan => {
         return (
           chan.title.toLowerCase().includes(inp) ||
           chan.name.toLowerCase().includes(inp) ||
@@ -153,15 +137,15 @@ export function ChannelSelectBox({
   function addDM() {
     const patp = dmCandidate;
     const data = {
-      group: "Direct Messages",
-      name: "dm",
+      group: 'Direct Messages',
+      name: 'dm',
       ship: patp,
       title: patp,
-      type: "DM",
+      type: 'DM',
     };
-    const set = [data, ...dms.filter((dm) => dm.ship !== patp)];
+    const set = [data, ...dms.filter(dm => dm.ship !== patp)];
     setDMs(set);
-    setOptions([data, ...options.filter((dm) => dm.ship !== patp)]);
+    setOptions([data, ...options.filter(dm => dm.ship !== patp)]);
     setDMCandidate(null);
   }
 
@@ -170,9 +154,7 @@ export function ChannelSelectBox({
   }
 
   function unselect(channel) {
-    const newlist = selected.filter(
-      (c) => !(c.ship === channel.ship && c.name === channel.name)
-    );
+    const newlist = selected.filter(c => !(c.ship === channel.ship && c.name === channel.name));
     setSelected(newlist);
   }
   function focusOnInput() {
@@ -202,9 +184,13 @@ export function ChannelSelectBox({
         </div>
       </div>
       <div id="urbit-key-container">
-        {loading && <p>... loading ...</p>}
+        {loading && (
+          <div className="loading-container">
+            <div class="loader"></div>
+          </div>
+        )}
         {options
-          .filter((chan) => !exclude.includes(chan.type))
+          .filter(chan => !exclude.includes(chan.type))
           .map((k, index) => {
             const key = `${k.ship}/${k.name}`;
             return (
@@ -234,16 +220,8 @@ interface UrbitKeyProps {
   unselect: (key) => void;
   selected: UrbitChannel[];
 }
-function UrbitKey({
-  keyString,
-  metadata,
-  selected,
-  select,
-  unselect,
-}: UrbitKeyProps) {
-  const checked = !!selected.find(
-    (c) => c.ship === metadata.ship && c.name === metadata.name
-  );
+function UrbitKey({ keyString, metadata, selected, select, unselect }: UrbitKeyProps) {
+  const checked = !!selected.find(c => c.ship === metadata.ship && c.name === metadata.name);
   function handleSelect(e) {
     if (e.target.checked) select(metadata);
     else unselect(metadata);
@@ -271,11 +249,7 @@ function UrbitKey({
         clipRule="evenodd"
         d="M2 2H14V6H13V12.5C13 13.3284 12.3284 14 11.5 14H4.5C3.67157 14 3 13.3284 3 12.5V6H2V2ZM3 5H4V12.5C4 12.7761 4.22386 13 4.5 13H11.5C11.7761 13 12 12.7761 12 12.5V5H13V3H3V5ZM9.5 9H6.5V8H9.5V9Z"
       ></path>
-      <path
-        fillRule="evenodd"
-        clipRule="evenodd"
-        d="M12.5 6H3.5V5H12.5V6Z"
-      ></path>
+      <path fillRule="evenodd" clipRule="evenodd" d="M12.5 6H3.5V5H12.5V6Z"></path>
     </svg>
   );
   const feedIcon = (
@@ -317,10 +291,10 @@ function UrbitKey({
     </svg>
   );
   let icon = chatIcon;
-  if (metadata.type == "post") icon = feedIcon;
-  if (metadata.type == "publish") icon = notebookIcon;
-  if (metadata.type == "link") icon = collectionIcon;
-  if (metadata.type == "DM") icon = dmIcon;
+  if (metadata.type == 'post') icon = feedIcon;
+  if (metadata.type == 'publish') icon = notebookIcon;
+  if (metadata.type == 'link') icon = collectionIcon;
+  if (metadata.type == 'DM') icon = dmIcon;
   return (
     <div className="urbit-key">
       <input
