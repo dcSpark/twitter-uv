@@ -244,11 +244,14 @@
 .tweet-text {
   overflow: hidden;
   padding-top: 18px;
-  padding-right: 16px;
   font-size: 14px;
   font-weight: 400;
   line-height: 18px;
   color: #182024;
+}
+
+.tweet-contains-pics .tweet-text {
+  padding-right: 16px;
 }
 .tweet-text p {
   margin: 0 0 2px;
