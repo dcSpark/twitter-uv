@@ -79,7 +79,11 @@ export default function ShareModal(props: ModalProps) {
   const [channelFilters, setChannelFilters] = useState([]);
 
   const fullTweet = <Preview tweet={tweet.parent} />;
-  const [preview, setPreview] = useState(<div>...loading...</div>);
+  const [preview, setPreview] = useState(
+    <div className="loading-container">
+      <div class="loader"></div>
+    </div>
+  );
 
   function quit() {
     unmountComponentAtNode(document.getElementById('uv-twitter-extension-container'));
