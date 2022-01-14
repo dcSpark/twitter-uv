@@ -186,7 +186,7 @@ export function ChannelSelectBox({ exclude, selected, setSelected }: ChannelBoxP
       <div id="urbit-key-container">
         {loading && (
           <div className="loading-container">
-            <div class="loader"></div>
+            <div className="loader"></div>
           </div>
         )}
         {options
@@ -194,9 +194,8 @@ export function ChannelSelectBox({ exclude, selected, setSelected }: ChannelBoxP
           .map((k, index) => {
             const key = `${k.ship}/${k.name}`;
             return (
-              <div className="urbit-key-wrapper">
+              <div className="urbit-key-wrapper" key={key}>
                 <UrbitKey
-                  key={key}
                   keyString={key}
                   selected={selected}
                   select={select}
@@ -213,7 +212,6 @@ export function ChannelSelectBox({ exclude, selected, setSelected }: ChannelBoxP
 
 export default ChannelSelectBox;
 interface UrbitKeyProps {
-  key: string;
   keyString: string;
   metadata: any;
   select: (key) => void;
@@ -305,7 +303,7 @@ function UrbitKey({ keyString, metadata, selected, select, unselect }: UrbitKeyP
         defaultChecked={checked}
         disabled={disabled}
       />
-      <span class="check-mark"></span>
+      <span className="check-mark"></span>
       <label htmlFor={keyString}> </label>
       <div className="urbit-key-name">
         <p className="urbit-key-title">{metadata.title}</p>
