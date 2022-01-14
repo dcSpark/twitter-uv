@@ -187,7 +187,8 @@ export default function ShareModal(props: ModalProps) {
         <Channels selected={selected} setSelected={setSelected} exclude={channelFilters} />
         <div id="uv-twitter-mini-modal">
           <div id="uv-twitter-mini-modal-icon" className="success-modal">
-            <p>✔️</p>
+            <div className="success-check-mark"></div>
+            <div className="success-circle"></div>
           </div>
           <div id="uv-twitter-mini-modal-message">Tweet shared succesfully</div>
         </div>
