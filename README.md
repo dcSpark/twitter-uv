@@ -9,7 +9,7 @@
 ## FAQ
 
 #### After using Twitter UV for a while, why do the list of Group channels randomly stop loading and the spinner is stuck?
-This happens due to the fact that Eyre channels have an unfortunate bug which causes them to randomly drop. Urbit Visor attempts to patch over this as best as possible, however there are edge cases that get through and become evident to the user. We look forward to Tlon fixing this issue in the near future so that users of Twitter UV and other app in the UV ecosystem can have a seamless experience.
+This happens due to the fact that there is an unfortunate bug which causes some calls to stall through the JS airlock library. We look forward to fixes being issued for this in the airlock library (or in the Urbit runtime depending where the bug is present) in the near future so that users of Twitter UV and other app in the UV ecosystem can have a seamless experience.
 
 **How To Fix:** Simply disconnect/reconnect to your ship on Urbit Visor and refresh the page.
 
