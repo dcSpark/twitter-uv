@@ -5,18 +5,30 @@
 }
 
 #uv-twitter-extension-welcome {
-  width: 650px;
-  border: 1px solid white;
+  width: 400px;
+  margin: 32px auto 0;
   border-radius: 16px;
   background-color: white;
   color: black;
-  margin: auto;
-  height: 320px;
-  padding: 1rem;
+  padding: 40px 40px 32px;
+  font-family: 'Inter', sans-serif;
+  /* temp */
+  /* position: absolute;
+  top: -1120px;
+  border: 1px solid firebrick; */
 }
 
 #uv-twitter-extension-welcome h4 {
+  padding-bottom: 8px;
   text-align: center;
+  font-size: 24px;
+  color: #182024;
+}
+#uv-twitter-extension-welcome p {
+  margin: 24px 0;
+  font-size: 16px;
+  line-height: 22px;
+  color: #182024;
 }
 
 #uv-twitter-extension-welcome-icon {
@@ -27,14 +39,29 @@
   width: 50px;
 }
 
+.permission-button-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 40px;
+}
+
 #uv-twitter-extension-welcome-button {
-  margin: 3rem auto;
-  display: block;
-  background-color: black;
-  color: white;
+  display: flex;
   cursor: pointer;
   border-radius: 1rem;
-  height: 50px;
+  align-items: center;
+  width: 100%;
+  height: 48px;
+  background-color: rgb(19, 27, 31);
+  justify-content: center;
+  border-radius: 32px;
+  border-style: none;
+}
+
+#uv-twitter-extension-welcome-button p {
+  margin: 0;
+  padding-left: 1px;
+  color: #ffffff;
 }
 
 #uv-twitter-share-modal {
@@ -566,13 +593,14 @@ div#twitter-link p {
   color: white;
   cursor: pointer;
 }
-#tweet-share-button svg {
+svg.urbit-icon {
   width: 21.23px;
   padding-right: 4px;
   box-sizing: border-box;
 }
 #tweet-share-button p {
   margin: 0;
+  padding-left: 1px;
   font-family: 'Inter', sans-serif;
   font-weight: 700;
   font-size: 16px;

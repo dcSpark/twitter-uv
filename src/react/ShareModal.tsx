@@ -15,6 +15,7 @@ import { buildDM, buildChatPost, buildCollectionPost, buildNotebookPost } from '
 import Preview from './Preview';
 import Channels from './Channels';
 import mainLogo from './icon128.png';
+import Welcome from './Welcome';
 
 interface UrbitChannel {
   title: string;
@@ -198,6 +199,7 @@ export default function ShareModal(props: ModalProps) {
             viewBox="0 0 32 32"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
+            className="urbit-icon"
           >
             <circle cx="16" cy="16" r="13" fill="white" stroke="currentcolor" strokeWidth="2" />
             <path
