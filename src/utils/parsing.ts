@@ -56,7 +56,7 @@ function tweetToMarkdown(tweet: Tweet): string {
       ) +
       '\n'
     : withQuote;
-  return text;
+  return withPoll;
 }
 
 export function tweetToGraphStore(tweet: Tweet) {
