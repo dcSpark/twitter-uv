@@ -81,7 +81,7 @@ export default function ShareModal(props: ModalProps) {
   const fullTweet = <Preview tweet={tweet.parent} />;
   const [preview, setPreview] = useState(
     <div className="loading-container">
-      <div class="loader"></div>
+      <div className="loader"></div>
     </div>
   );
 

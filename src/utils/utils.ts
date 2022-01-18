@@ -102,8 +102,8 @@ function tokenizeString(text: string){
 }
 
 export function buildChatPost(author, resource, text) {
-    console.log(text, "argh")
     const contents = tokenizeString(text);
+    console.log(contents, "tokenized string")
     return {
         app: "graph-push-hook", mark: "graph-update-3", json: {
             "add-nodes": {

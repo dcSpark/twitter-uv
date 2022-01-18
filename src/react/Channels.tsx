@@ -57,8 +57,6 @@ export function ChannelSelectBox({ exclude, selected, setSelected }: ChannelBoxP
       'sse',
       ['metadata-update', 'associations'],
       async (data: any) => {
-        console.log(data, 'metadata coming in');
-        console.log(leakingMemory);
         if (leakingMemory) {
           const keys = await urbitVisor.scry({
             app: 'graph-store',
@@ -77,7 +75,6 @@ export function ChannelSelectBox({ exclude, selected, setSelected }: ChannelBoxP
       }
     );
     urbitVisor.subscribe({ app: 'metadata-store', path: '/all' }).then(res => {
-      console.log(res, 'subscribed to resource');
       if (leakingMemory) sub = res.response;
     });
     return () => (leakingMemory = false);
@@ -122,7 +119,7 @@ export function ChannelSelectBox({ exclude, selected, setSelected }: ChannelBoxP
       const filtered = channels.filter(chan => {
         return (
           chan.title.toLowerCase().includes(inp) ||
-          chan.name.toLowerCase().includes(inp) ||
+          chan.name.toLowerCase().includes(inp)  ||
           chan.group.toLowerCase().includes(inp) ||
           chan.ship.includes(inp)
         );
@@ -164,7 +161,7 @@ export function ChannelSelectBox({ exclude, selected, setSelected }: ChannelBoxP
   return (
     <div id="uv-channel-selector">
       <div id="uv-channel-selector-title">
-        <h4>Select Channels ({selected.length}/3)</h4>
+        <h4>Select Channels ({selected.length}/{options.filter(chan => !exclude.includes(chan.type)).length})</h4>
       </div>
       <div id="uv-channel-selector-searchbox">
         <div onClick={focusOnInput} id="uv-channel-selector-searchbox-wrapper">

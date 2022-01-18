@@ -1,0 +1,1 @@
+chrome.runtime.sendMessage({app: "urbit-visor-internal", action: "get_ships"}, response => console.log(response, "sent message"))
