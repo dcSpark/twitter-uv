@@ -1,11 +1,11 @@
-import React from "react";
-import { unmountComponentAtNode } from "react-dom";
-import { useEffect, useState } from "react";
-import ShareModal from "./ShareModal";
-import MiniModal from "./MiniModal";
-import Welcome from "./Welcome";
-import "./styles.css";
-import { urbitVisor } from "@dcspark/uv-core";
+import React from 'react';
+import { unmountComponentAtNode } from 'react-dom';
+import { useEffect, useState } from 'react';
+import ShareModal from './ShareModal';
+import MiniModal from './MiniModal';
+import Welcome from './Welcome';
+import './styles.css';
+import { urbitVisor } from '@dcspark/uv-core';
 
 export interface TwitterProps {
   url: URL;
@@ -17,9 +17,7 @@ function App(props: TwitterProps) {
   const [havePerms, setHavePerms] = useState(false);
   const [loading, setLoading] = useState(true);
   const [bigmodal, setBigmodal] = useState(false);
-  const [minimodal, setMinimodal] = useState<"success" | "failure" | null>(
-    null
-  );
+  const [minimodal, setMinimodal] = useState<'success' | 'failure' | null>(null);
   useEffect(() => {
     let leakingMemory = true;
     if (leakingMemory) checkPerms();
@@ -27,27 +25,25 @@ function App(props: TwitterProps) {
   }, [havePerms]);
 
   const styles = {
-    position: "fixed" as any,
+    position: 'fixed' as any,
     top: 0,
     left: 0,
-    width: "100%",
-    height: "100%",
-    backgroundColor: minimodal ? "" : "rgb(25, 25, 25, 0.9)",
-    display: "flex",
+    width: '100%',
+    height: '100%',
+    backgroundColor: minimodal ? '' : 'rgb(25, 25, 25, 0.9)',
+    display: !havePerms ? 'block' : 'flex',
   };
 
   async function checkPerms(): Promise<void> {
-    urbitVisor.on("permissions_granted", [], (perms) => {
-      console.log(perms, "perms read");
+    urbitVisor.on('permissions_granted', [], perms => {
+      console.log(perms, 'perms read');
       setHavePerms(true);
     });
     const res = await urbitVisor.authorizedPermissions();
-    if (res.status === "locked")
-      unmountComponentAtNode(
-        document.getElementById("uv-twitter-extension-container")
-      );
+    if (res.status === 'locked')
+      unmountComponentAtNode(document.getElementById('uv-twitter-extension-container'));
     else {
-      const ok = ["shipName", "scry", "subscribe", "poke"].every((perm) =>
+      const ok = ['shipName', 'scry', 'subscribe', 'poke'].every(perm =>
         res.response.includes(perm)
       );
       setHavePerms(ok);
@@ -56,24 +52,22 @@ function App(props: TwitterProps) {
     }
   }
   function quit() {
-    unmountComponentAtNode(
-      document.getElementById("uv-twitter-extension-container")
-    );
+    unmountComponentAtNode(document.getElementById('uv-twitter-extension-container'));
   }
   function shareTweet(data: any) {
     setBigmodal(false);
-    let action = "";
+    let action = '';
     setTimeout(() => {
-      if (action === "ok") success();
-      else if (action === "ng") failure();
-      else action = "waiting";
+      if (action === 'ok') success();
+      else if (action === 'ng') failure();
+      else action = 'waiting';
     }, 2000);
-    urbitVisor.poke(data).then((res) => {
-      if (res.status === "ok") {
-        if (!action) action = "ok";
+    urbitVisor.poke(data).then(res => {
+      if (res.status === 'ok') {
+        if (!action) action = 'ok';
         else success();
       } else {
-        if (!action) action = "ng";
+        if (!action) action = 'ng';
         else failure();
       }
     });
@@ -82,11 +76,11 @@ function App(props: TwitterProps) {
   function shareAgain(data: any) {}
 
   function success() {
-    setMinimodal("success");
+    setMinimodal('success');
     setTimeout(() => quit(), 3000);
   }
   function failure() {
-    setMinimodal("failure");
+    setMinimodal('failure');
     setTimeout(() => quit(), 3000);
   }
 

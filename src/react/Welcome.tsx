@@ -3,24 +3,9 @@ import { urbitVisor } from '@dcspark/uv-core';
 import mainLogo from './icon128.png';
 
 function Welcome() {
-  const styles = {
-    position: 'fixed' as any,
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    width: '500px',
-    height: '500px',
-    backgroundColor: 'lightgrey',
-    padding: '1rem',
-  };
-  // async function requestPerms(): Promise<void> {
-  //   await urbitVisor.requestPermissions([
-  //     "shipName",
-  //     "scry",
-  //     "subscribe",
-  //     "poke",
-  //   ]);
-  // }
+  async function requestPerms(): Promise<void> {
+    await urbitVisor.requestPermissions(['shipName', 'scry', 'subscribe', 'poke']);
+  }
   return (
     <div id="uv-twitter-extension-welcome">
       <div id="uv-twitter-extension-welcome-icon">
@@ -37,7 +22,7 @@ function Welcome() {
       </p>
 
       <div className="permission-button-container">
-        <button id="uv-twitter-extension-welcome-button">
+        <button id="uv-twitter-extension-welcome-button" onClick={requestPerms}>
           <svg
             width="24"
             height="24"
