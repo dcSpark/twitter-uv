@@ -6,6 +6,13 @@
 
 <p align="center"><img src="https://img.shields.io/badge/version-v0.1.0-blue?style=for-the-badge&logo=none" />&nbsp;&nbsp;<img src="https://img.shields.io/badge/license-mit-blue?style=for-the-badge&logo=none" alt="license" /></p>
 
+## FAQ
+
+#### After using Twitter UV for a while, why do the list of Group channels randomly stop loading and the spinner is stuck?
+
+This happens due to the fact that Eyre appears to have an unfortunate bug where calls via a given airlock session appear to randomly get "stuck" and take a very long time to respond. We look forward to this issue being fixed in the near future by the core devs so that users of Twitter UV and other app in the UV ecosystem can have a seamless experience.
+
+**Temporary Fix:** Simply disconnect/reconnect to your ship on Urbit Visor and refresh the page.
 
 ## Building Locally
 
