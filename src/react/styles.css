@@ -166,13 +166,13 @@
   display: flex;
 }
 .preview-tab-container:first-child {
-  justify-content: left;
+  justify-content: flex-start;
 }
 .preview-tab-container:nth-child(2) {
   justify-content: center;
 }
 .preview-tab-container:last-child {
-  justify-content: right;
+  justify-content: flex-end;
 }
 .tweet-preview-tab {
   position: relative;
