@@ -3,6 +3,10 @@
 .urbit-visor-share-tweet-button:hover {
   cursor: pointer;
 }
+.urbit-visor-share-tweet-button:active {
+  cursor: pointer;
+  background-color: rgba(0, 186, 124, 0.3) !important;
+}
 
 #uv-twitter-extension-welcome {
   width: 400px;
@@ -12,10 +16,6 @@
   color: black;
   padding: 40px 40px 32px;
   font-family: 'Inter', sans-serif;
-  /* temp */
-  /* position: absolute;
-  top: -1120px;
-  border: 1px solid firebrick; */
 }
 
 #uv-twitter-extension-welcome h4 {
