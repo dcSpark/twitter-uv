@@ -84,17 +84,26 @@
   margin: 0;
   color: #566470;
 }
-#tweet-preview {
+/* #tweet-preview {
+} */
+.preview-container {
   display: flex;
-  max-height: 100%;
-  overflow-y: scroll;
   justify-content: space-between;
+  padding: 16px;
 }
 .left-column {
   width: 100%;
 }
 .right-column {
   display: none;
+}
+.unroll-thread-count {
+  padding: 10px 0;
+  text-align: center;
+  border-radius: 0 0px 16px 16px;
+  background-color: aquamarine;
+  color: #182024;
+  font-size: 12px;
 }
 .tweet-contains-pics .left-column {
   width: 74.681%;
@@ -206,7 +215,6 @@
 #tweet-share-payload {
   border: 1px solid #dee4e6;
   border-radius: 16px;
-  padding: 16px;
 }
 
 #preview-close-button {
