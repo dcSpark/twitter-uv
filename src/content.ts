@@ -58,9 +58,6 @@ window.addEventListener("beforeunload", function (e) {
   urbitVisor.unsubscribe(metaSub);
 });
 
-async function sendToBackground(message) {
-  return new Promise((res, rej) => chrome.runtime.sendMessage(message, response => res(response)));
-}
 function listenerFromTabToContent() {
   window.addEventListener('message', async function (e) {
     const request = e.data;
@@ -86,8 +83,6 @@ function setData() {
   console.log('setting data');
   urbitVisor.getShip().then(res => {
     ship = res.response;
-    console.log('sending ship to background');
-    sendToBackground({ ship: ship });
   });
   urbitVisor.on('sse', ['graph-update', 'keys'], updateKeys);
   urbitVisor
@@ -98,13 +93,11 @@ function setData() {
   .then(res => metaSub = res.response);
 }
 function updateKeys(keyUpdate: Key[]) {
-  keys = keyUpdate;
-  console.log(keys, 'keys updated'); // lol this gives you the whole keys again, not incremental
-  // and it's {name: "channel", ship: "zod" } // no tilde!
+  keys = keyUpdate; // this gives you the whole keys again, not incremental
 };
 function updateMetadata(metadataUpdate: any){
-  console.log(metadataUpdate, "metadata-update")
   metadata = metadataUpdate;
+  inject();
 }
 
 async function inject() {
@@ -116,5 +109,4 @@ async function inject() {
   injectButtons();
 }
 init();
-inject();
 listenerFromTabToContent();
