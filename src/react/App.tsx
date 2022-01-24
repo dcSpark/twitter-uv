@@ -13,6 +13,26 @@ export interface TwitterProps {
   screenshot: any;
 }
 
+export function query({action}) {
+  return new Promise((res, rej) => {
+    const requestId = Math.random().toString(36).substr(2, 9);
+    // first add listener for the eventual response
+    window.addEventListener('message', function responseHandler(e) {
+      const response = e.data;
+      // ignore messages with the wrong request id
+      if (response.id !== `${requestId}-res`) return;
+      console.log(response, "got response from content")
+      // remove listener else they keep stacking up
+      window.removeEventListener('message', responseHandler);
+      // reject promise if there's an error
+      if (response.error) rej(response.error);
+      // resolve if fine
+      else res(response);
+    });
+    window.postMessage({ action, id: requestId }, window.origin);
+  });
+}
+
 function App(props: TwitterProps) {
   const [havePerms, setHavePerms] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -42,25 +62,7 @@ function App(props: TwitterProps) {
       setBigmodal(true);
       setLoading(false);
   };
-  function query({action}) {
-    return new Promise((res, rej) => {
-      const requestId = Math.random().toString(36).substr(2, 9);
-      // first add listener for the eventual response
-      window.addEventListener('message', function responseHandler(e) {
-        const response = e.data;
-        // ignore messages with the wrong request id
-        if (response.id !== `${requestId}-res`) return;
-        console.log(response, "got response from content")
-        // remove listener else they keep stacking up
-        window.removeEventListener('message', responseHandler);
-        // reject promise if there's an error
-        if (response.error) rej(response.error);
-        // resolve if fine
-        else res(response);
-      });
-      window.postMessage({ action, id: requestId }, window.origin);
-    });
-  }
+
   function quit() {
     unmountComponentAtNode(document.getElementById('uv-twitter-extension-container'));
   }
