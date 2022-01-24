@@ -18,6 +18,8 @@ function App(props: TwitterProps) {
   const [loading, setLoading] = useState(true);
   const [bigmodal, setBigmodal] = useState(false);
   const [minimodal, setMinimodal] = useState<'success' | 'failure' | null>(null);
+  console.log(loading, "loading")
+
   useEffect(() => {
     let leakingMemory = true;
     if (leakingMemory) checkPerms();
@@ -35,21 +37,29 @@ function App(props: TwitterProps) {
   };
 
   async function checkPerms(): Promise<void> {
-    urbitVisor.on('permissions_granted', [], perms => {
-      console.log(perms, 'perms read');
-      setHavePerms(true);
-    });
-    const res = await urbitVisor.authorizedPermissions();
-    if (res.status === 'locked')
-      unmountComponentAtNode(document.getElementById('uv-twitter-extension-container'));
-    else {
-      const ok = ['shipName', 'scry', 'subscribe', 'poke'].every(perm =>
-        res.response.includes(perm)
-      );
-      setHavePerms(ok);
+      const res = await query({action: "check_perms"});
+      setHavePerms((res as any).perms_granted);
       setBigmodal(true);
       setLoading(false);
-    }
+  };
+  function query({action}) {
+    return new Promise((res, rej) => {
+      const requestId = Math.random().toString(36).substr(2, 9);
+      // first add listener for the eventual response
+      window.addEventListener('message', function responseHandler(e) {
+        const response = e.data;
+        // ignore messages with the wrong request id
+        if (response.id !== `${requestId}-res`) return;
+        console.log(response, "got response from content")
+        // remove listener else they keep stacking up
+        window.removeEventListener('message', responseHandler);
+        // reject promise if there's an error
+        if (response.error) rej(response.error);
+        // resolve if fine
+        else res(response);
+      });
+      window.postMessage({ action, id: requestId }, window.origin);
+    });
   }
   function quit() {
     unmountComponentAtNode(document.getElementById('uv-twitter-extension-container'));
