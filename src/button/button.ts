@@ -108,6 +108,7 @@ const createVisorButton = (tweet: Element, hasUserActions: boolean) => {
 };
 
 async function handleClick(event) {
+  console.log("clicking")
   const tweet = event.target.closest("article");
   const url = Array.from(tweet.closest("article").querySelectorAll("a"))
     .map((el: HTMLAnchorElement) => el.href)
@@ -117,6 +118,7 @@ async function handleClick(event) {
   const id = strings[statusAt + 1];
   const div = document.getElementById("uv-twitter-extension-container");
   const react = React.createElement(App, { id: id, url: new URL(url) });
+  console.log("all ready...")
   ReactDOM.render(react, div);
 }
 
