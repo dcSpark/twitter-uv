@@ -84,8 +84,6 @@
   margin: 0;
   color: #566470;
 }
-/* #tweet-preview {
-} */
 .preview-container {
   display: flex;
   justify-content: space-between;
@@ -100,8 +98,9 @@
 .unroll-thread-count {
   padding: 10px 0;
   text-align: center;
+  border-top: 1px solid #dee4e6;
   border-radius: 0 0px 16px 16px;
-  background-color: aquamarine;
+  background-color: #f7f9f9;
   color: #182024;
   font-size: 12px;
 }
@@ -452,7 +451,6 @@ div#twitter-link p {
   background-color: transparent;
   padding: 8px 16px;
   font-family: 'Inter', sans-serif;
-  /* color: red !important; */
 }
 #uv-channel-selector-searchbox #search-icon {
   position: absolute;
@@ -490,16 +488,12 @@ div#twitter-link p {
   position: relative;
   justify-content: space-between;
   margin: 4px;
-  /* width: 50%; */
   box-sizing: border-box;
 }
 .urbit-key > input[type='checkbox']:checked {
   background-color: antiquewhite;
 }
 .urbit-key input[type='checkbox'] {
-  /* width: 20px;
-  margin: auto 0;
-  width: 10%; */
   position: absolute;
   opacity: 0;
   cursor: pointer;
