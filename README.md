@@ -8,11 +8,9 @@
 
 ## FAQ
 
-#### After using Twitter UV for a while, why do the list of Group channels randomly stop loading and the spinner is stuck?
+#### Why can I can only select three channels to share in?
 
-This happens due to what appears to be (from what we can tell) a bug in Eyre where calls via a given airlock session randomly get "stuck" and take a very long time to respond. We look forward to this issue being fixed in the near future by the core devs so that users of Twitter UV and other apps in the UV ecosystem can have a seamless experience.
-
-**Temporary Fix:** Simply disconnect/reconnect to your ship on Urbit Visor and refresh the page.
+This was purposefully implemented inside of the extension to prevent users from spamming every group at the exact same time. This doesn't prevent them from doing so completely, but makes it less friendly from a UX perspective while not impeding on normal users at all.
 
 ## Building Locally
 
