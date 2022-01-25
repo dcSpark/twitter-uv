@@ -25,6 +25,7 @@ const generateMapKey = () => {
 
 interface PreviewProps {
   tweet: Tweet;
+  threadCount?: boolean;
 }
 
 const parseText = (text: String, entities?: TweetEntity[]) => {
@@ -69,7 +70,7 @@ const imageOrientation = pics => {
   return currentImage.width > currentImage.height ? 'landscape' : 'portrait';
 };
 
-function Preview({ tweet }: PreviewProps) {
+function Preview({ tweet, threadCount }: PreviewProps) {
   const parsedText = parseText(tweet.text, tweet.entities);
 
   return (
@@ -111,7 +112,7 @@ function Preview({ tweet }: PreviewProps) {
         </div>
       </div>
       {/* Logic for only showing on Unroll Thread that contains tweets */}
-      <div className="unroll-thread-count">And {`{16}`} more tweets</div>
+      {threadCount && <div className="unroll-thread-count">And {`{16}`} more tweets</div>}
     </div>
   );
 }
