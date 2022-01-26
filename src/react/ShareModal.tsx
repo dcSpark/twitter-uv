@@ -115,7 +115,7 @@ export default function ShareModal(props: ModalProps) {
   }
   function setUnroll() {
     setChannelFilters(['chat', 'link', 'post']);
-    setPreview(fullTweetWithCount); // temporary implementation
+    setPreview(fullTweetWithCount); // (temporary) note: logic should be like => tweet.hasThreadCount ? fullTweetWithCount : fullTweet
     setTitle('Unrolled Thread ' + titleFromTweet(tweet.parent));
     setPayload(threadToGraphStore(tweet));
   }
