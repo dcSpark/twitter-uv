@@ -2,7 +2,7 @@ import React from 'react';
 import { useState, useEffect, useRef } from 'react';
 import { urbitVisor } from '@dcspark/uv-core';
 import { liveCheckPatp } from '../utils/utils';
-import {query} from "./App";
+import { query } from './App';
 interface UrbitKey {
   ship: string;
   name: string;
@@ -15,7 +15,6 @@ interface UrbitChannel {
   name: string;
 }
 
-
 interface ChannelBoxProps {
   exclude: string[];
   selected: UrbitChannel[];
@@ -27,9 +26,10 @@ export function ChannelSelectBox({ exclude, selected, setSelected }: ChannelBoxP
     let leakingMemory = true;
     let sub: number;
     setLoading(true);
-    query({action: "fetch_keys"})
-    .then(res => {
-      const channels = (res as any).channels.filter(chan => chan.name !== 'dm-inbox' && chan.group !== '');
+    query({ action: 'fetch_keys' }).then(res => {
+      const channels = (res as any).channels.filter(
+        chan => chan.name !== 'dm-inbox' && chan.group !== ''
+      );
       setChannels(channels);
       setOptions(channels);
       setLoading(false);
@@ -76,7 +76,7 @@ export function ChannelSelectBox({ exclude, selected, setSelected }: ChannelBoxP
       const filtered = channels.filter(chan => {
         return (
           chan.title.toLowerCase().includes(inp) ||
-          chan.name.toLowerCase().includes(inp)  ||
+          chan.name.toLowerCase().includes(inp) ||
           chan.group.toLowerCase().includes(inp) ||
           chan.ship.includes(inp)
         );
@@ -118,7 +118,7 @@ export function ChannelSelectBox({ exclude, selected, setSelected }: ChannelBoxP
   return (
     <div id="uv-channel-selector">
       <div id="uv-channel-selector-title">
-        <h4>Select Channels ({selected.length}/{options.filter(chan => !exclude.includes(chan.type)).length})</h4>
+        <h4>Select Channels ({selected.length}/3)</h4>
       </div>
       <div id="uv-channel-selector-searchbox">
         <div onClick={focusOnInput} id="uv-channel-selector-searchbox-wrapper">
