@@ -1,5 +1,8 @@
 import { injectButtons } from './button/button';
 import { urbitVisor } from '@dcspark/uv-core';
+import React from 'react';
+import ReactDOM from 'react-dom';
+import App2 from './react/App2';
 
 let ok = false;
 let keySub;
@@ -51,28 +54,36 @@ function init() {
     .registerName('Twitter UV')
     .then(res => console.log(res, 'Twitter extension registered with Urbit Visor'));
   urbitVisor.require(['shipName', 'scry', 'subscribe', 'poke'], setData);
+  urbitVisor.on('permissions_granted', [], setData);
+  urbitVisor.authorizedPermissions().then(res => {
+    const ok = ['shipName', 'scry', 'subscribe', 'poke'].every(perm => res.response.includes(perm));
+    if (!ok) showWelcomeScreen();
+  });
 }
 
-window.addEventListener("beforeunload", function (e) {
+window.addEventListener('beforeunload', function (e) {
   urbitVisor.unsubscribe(keySub);
   urbitVisor.unsubscribe(metaSub);
 });
+
+function showWelcomeScreen() {
+  const div = document.getElementById('uv-twitter-extension-container');
+  const react = React.createElement(App2);
+  ReactDOM.render(react, div);
+}
 
 function listenerFromTabToContent() {
   window.addEventListener('message', async function (e) {
     const request = e.data;
     request.origin = e.origin;
-    console.log(request, "content script listening to")
-    switch (request.action){
-      case "check_perms": 
-      window.postMessage({id: request.id+ "-res", perms_granted: ok}, window.origin)
+    switch (request.action) {
+      case 'check_perms':
+        window.postMessage({ id: request.id + '-res', perms_granted: ok }, window.origin);
         break;
-      case "fetch_keys":
-      const list = keys.map((channel: any) =>
-        referenceMetadata(channel, metadata)
-      );
-      window.postMessage({id: request.id+ "-res", channels: list}, window.origin)
-      break;
+      case 'fetch_keys':
+        const list = keys.map((channel: any) => referenceMetadata(channel, metadata));
+        window.postMessage({ id: request.id + '-res', channels: list }, window.origin);
+        break;
     }
     return;
   });
@@ -80,24 +91,22 @@ function listenerFromTabToContent() {
 
 function setData() {
   ok = true;
-  console.log('setting data');
   urbitVisor.getShip().then(res => {
     ship = res.response;
   });
   urbitVisor.on('sse', ['graph-update', 'keys'], updateKeys);
-  urbitVisor
-    .subscribe({ app: 'graph-store', path: '/keys' })
-    .then(res => keySub = res.response);
-    urbitVisor.on('sse',['metadata-update', 'associations'],updateMetadata);
-  urbitVisor.subscribe({ app: 'metadata-store', path: '/all' })
-  .then(res => metaSub = res.response);
+  urbitVisor.subscribe({ app: 'graph-store', path: '/keys' }).then(res => (keySub = res.response));
+  urbitVisor.on('sse', ['metadata-update', 'associations'], updateMetadata);
+  urbitVisor.subscribe({ app: 'metadata-store', path: '/all' }).then(res => {
+    metaSub = res.response;
+    injectButtons();
+  });
 }
 function updateKeys(keyUpdate: Key[]) {
   keys = keyUpdate; // this gives you the whole keys again, not incremental
-};
-function updateMetadata(metadataUpdate: any){
+}
+function updateMetadata(metadataUpdate: any) {
   metadata = metadataUpdate;
-  inject();
 }
 
 async function inject() {
@@ -106,7 +115,7 @@ async function inject() {
   div.id = 'uv-twitter-extension-container';
   document.body.appendChild(div);
   console.log('uv twitter extension injected');
-  injectButtons();
 }
 init();
+inject();
 listenerFromTabToContent();

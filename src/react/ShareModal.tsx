@@ -121,12 +121,10 @@ export default function ShareModal(props: ModalProps) {
   async function shareTweet() {
     for (let channel of selected) {
       let data;
-      console.log(channel, 'channel');
       if (channel.type === 'DM') data = buildDM(ship, channel.ship, payload);
       else if (channel.type === 'publish') data = buildNotebookPost(ship, channel, title, payload);
       else if (channel.type === 'link') data = buildCollectionPost(ship, channel, title, payload);
       else if (channel.type === 'chat') data = buildChatPost(ship, channel, payload);
-      console.log(data, 'data');
       props.sendPoke(data);
     }
   }
