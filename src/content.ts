@@ -104,9 +104,13 @@ function setData() {
 }
 function updateKeys(keyUpdate: Key[]) {
   keys = keyUpdate; // this gives you the whole keys again, not incremental
+  urbitVisor.unsubscribe(keySub);
+  console.log("keys set")
 }
 function updateMetadata(metadataUpdate: any) {
   metadata = metadataUpdate;
+  urbitVisor.unsubscribe(metaSub);
+  console.log("metadata set")
 }
 
 async function inject() {
