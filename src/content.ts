@@ -81,7 +81,7 @@ function require(perms) {
         if (ok) setData()
         else showWelcomeScreen();
       });
-    }
+    } else urbitVisor.promptConnection();
   });
 }
 
