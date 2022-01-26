@@ -7,13 +7,13 @@ import App2 from './react/App2';
 let ok = false;
 let keySub;
 let metaSub;
-let ship = '';
+
+let keys: Key[] = [];
+let metadata;
 interface Key {
   name: string;
   entity: string;
 }
-let keys: Key[] = [];
-let metadata;
 interface UrbitChannel {
   title: string;
   type: 'post' | 'chat' | 'link' | 'publish' | null;
@@ -53,11 +53,35 @@ function init() {
   urbitVisor
     .registerName('Twitter UV')
     .then(res => console.log(res, 'Twitter extension registered with Urbit Visor'));
-  urbitVisor.require(['shipName', 'scry', 'subscribe', 'poke'], setData);
-  urbitVisor.on('permissions_granted', [], setData);
-  urbitVisor.authorizedPermissions().then(res => {
-    const ok = ['shipName', 'scry', 'subscribe', 'poke'].every(perm => res.response.includes(perm));
-    if (!ok) showWelcomeScreen();
+  require(['shipName', 'scry', 'subscribe', 'poke']);
+}
+
+function wipeData(){
+  ok = null;
+  keySub = null;
+  metaSub = null
+  keys = [];
+  metadata = {};
+}
+
+function require(perms) {
+  const sub = urbitVisor.on('connected', [], () => require(perms));
+  const sub2 = urbitVisor.on('disconnected', [], () => {
+    wipeData()
+    require(perms)
+  });
+  urbitVisor.isConnected().then(res => {
+    if (res.response) {
+      urbitVisor.off(sub);
+      urbitVisor.on('permissions_granted', [], setData);
+      urbitVisor.authorizedPermissions().then(res => {
+        const ok = ['shipName', 'scry', 'subscribe', 'poke'].every(perm =>
+          res.response.includes(perm)
+        );
+        if (ok) setData()
+        else showWelcomeScreen();
+      });
+    }
   });
 }
 
@@ -105,12 +129,12 @@ function setData() {
 function updateKeys(keyUpdate: Key[]) {
   keys = keyUpdate; // this gives you the whole keys again, not incremental
   urbitVisor.unsubscribe(keySub);
-  console.log("keys set")
+  console.log('keys set');
 }
 function updateMetadata(metadataUpdate: any) {
   metadata = metadataUpdate;
   urbitVisor.unsubscribe(metaSub);
-  console.log("metadata set")
+  console.log('metadata set');
 }
 
 async function inject() {

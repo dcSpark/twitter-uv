@@ -14,9 +14,13 @@ function App2() {
     backgroundColor: 'rgb(25, 25, 25, 0.9)',
     display:'block'
   };
+  const wrapperStyles = {
+    position: "relative"
+  };
 
     return (
       <div style={styles}>
+        <div className="welcome-wrapper" style={wrapperStyles}></div>
         <Welcome />
       </div>
     );
