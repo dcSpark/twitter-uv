@@ -68,7 +68,7 @@ function require(perms) {
   const sub = urbitVisor.on('connected', [], () => require(perms));
   const sub2 = urbitVisor.on('disconnected', [], () => {
     wipeData()
-    require(perms)
+    // require(perms)
   });
   urbitVisor.isConnected().then(res => {
     if (res.response) {
