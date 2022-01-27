@@ -7,7 +7,20 @@
   cursor: pointer;
   background-color: rgba(0, 186, 124, 0.3) !important;
 }
-
+.unroll-button {
+  background-color: aquamarine;
+  color: black;
+  width: 71px;
+  height: 30px;
+  border-radius: 50px;
+  line-height: 28px;
+  font-size: 14px;
+}
+.urbit-visor-unroll-tweet-button {
+  top: 6px;
+  left: 514px;
+  z-index: 10;
+}
 #uv-twitter-extension-welcome {
   width: 400px;
   /* margin: 32px auto 0; */

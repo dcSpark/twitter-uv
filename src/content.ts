@@ -1,4 +1,4 @@
-import { injectButtons } from './button/button';
+import { injectButtons, injectUnrollButton } from './button/button';
 import { urbitVisor } from '@dcspark/uv-core';
 import React from 'react';
 import ReactDOM from 'react-dom';
@@ -56,10 +56,10 @@ function init() {
   require(['shipName', 'scry', 'subscribe', 'poke']);
 }
 
-function wipeData(){
+function wipeData() {
   ok = null;
   keySub = null;
-  metaSub = null
+  metaSub = null;
   keys = [];
   metadata = {};
 }
@@ -67,8 +67,8 @@ function wipeData(){
 function require(perms) {
   const sub = urbitVisor.on('connected', [], () => require(perms));
   const sub2 = urbitVisor.on('disconnected', [], () => {
-    wipeData()
-    require(perms)
+    wipeData();
+    require(perms);
   });
   urbitVisor.isConnected().then(res => {
     if (res.response) {
@@ -78,7 +78,7 @@ function require(perms) {
         const ok = ['shipName', 'scry', 'subscribe', 'poke'].every(perm =>
           res.response.includes(perm)
         );
-        if (ok) setData()
+        if (ok) setData();
         else showWelcomeScreen();
       });
     } else urbitVisor.promptConnection();
@@ -124,6 +124,7 @@ function setData() {
   urbitVisor.subscribe({ app: 'metadata-store', path: '/all' }).then(res => {
     metaSub = res.response;
     injectButtons();
+    injectUnrollButton();
   });
 }
 function updateKeys(keyUpdate: Key[]) {

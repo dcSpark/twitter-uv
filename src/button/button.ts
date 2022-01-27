@@ -40,6 +40,38 @@ function unhoverButton(e) {
   path.style.fill = 'currentcolor';
 }
 
+const createUnrollButton = () => {
+  const unrollAction = document.createElement('div');
+  unrollAction.className = 'urbit-visor-unroll-tweet-action';
+  unrollAction.style.display = 'flex';
+  unrollAction.style.width = '38px';
+  unrollAction.setAttribute('role', 'button');
+  unrollAction.setAttribute('tabindex', '0');
+
+  // Create the Twitter UV button
+  const urbitButton = document.createElement('button');
+  urbitButton.className = 'urbit-visor-unroll-tweet-button';
+  urbitButton.style.background = 'transparent';
+  urbitButton.style.border = '0';
+  urbitButton.style.color = '#657786';
+  urbitButton.style.display = 'inline-block';
+  urbitButton.style.fontSize = '16px';
+  urbitButton.style.lineHeight = '1';
+  urbitButton.style.outline = '0';
+  urbitButton.style.padding = '0';
+  urbitButton.style.width = '24px';
+  urbitButton.style.height = '24px';
+  urbitButton.style.position = 'absolute';
+  urbitButton.style.top = '68px;';
+  urbitButton.style.left = '467px;';
+  urbitButton.type = 'button';
+  urbitButton.innerHTML = `<p class="unroll-button">Unroll</p>`;
+
+  unrollAction.append(urbitButton);
+
+  return unrollAction;
+};
+
 const createVisorButton = (tweet: Element, hasUserActions: boolean) => {
   // Create the Twitter UV action
   const shareAction = document.createElement('div');
@@ -105,9 +137,15 @@ async function handleClick(event) {
   const id = strings[statusAt + 1];
   const div = document.getElementById('uv-twitter-extension-container');
   const react = React.createElement(App, { id: id, url: new URL(url) });
-  console.log("all ready...")
+  console.log('all ready...');
   ReactDOM.render(react, div);
 }
+
+export const injectUnrollButton = () => {
+  const columnTop = document.querySelector('[data-testid="primaryColumn"]');
+  const unrollAction = createUnrollButton();
+  columnTop.prepend(unrollAction);
+};
 
 export const injectButtons = () => {
   let timeout;
