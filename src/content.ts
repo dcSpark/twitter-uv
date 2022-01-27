@@ -115,16 +115,11 @@ function listenerFromTabToContent() {
 
 function setData() {
   ok = true;
-  urbitVisor.getShip().then(res => {
-    ship = res.response;
-  });
   urbitVisor.on('sse', ['graph-update', 'keys'], updateKeys);
   urbitVisor.subscribe({ app: 'graph-store', path: '/keys' }).then(res => (keySub = res.response));
   urbitVisor.on('sse', ['metadata-update', 'associations'], updateMetadata);
-  urbitVisor.subscribe({ app: 'metadata-store', path: '/all' }).then(res => {
-    metaSub = res.response;
-    injectButtons();
-  });
+  urbitVisor.subscribe({ app: 'metadata-store', path: '/all' })
+  .then(res => metaSub = res.response);
 }
 function updateKeys(keyUpdate: Key[]) {
   keys = keyUpdate; // this gives you the whole keys again, not incremental
@@ -135,6 +130,7 @@ function updateMetadata(metadataUpdate: any) {
   metadata = metadataUpdate;
   urbitVisor.unsubscribe(metaSub);
   console.log('metadata set');
+  injectButtons();
 }
 
 async function inject() {
