@@ -18,11 +18,19 @@
   height: 32px;
   align-items: center;
   position: absolute;
-  top: 6px;
+  top: 11px;
   right: 12px;
   background-color: #131b1f;
   color: white;
   border-radius: 50px;
+  border-bottom-width: 1px;
+  border-left-width: 1px;
+  border-right-width: 1px;
+  border-top-width: 1px;
+  border-bottom-color: white;
+  border-left-color: white;
+  border-right-color: white;
+  border-top-color: white;
   line-height: 32px;
 }
 .urbit-visor-unroll-tweet-button svg {
