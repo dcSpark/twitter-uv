@@ -116,8 +116,6 @@ async function handleClick(event) {
   const statusAt = strings.indexOf("status");
   const id = strings[statusAt + 1];
   const div = document.getElementById("uv-twitter-extension-container");
-  console.log(id, "id")
-  console.log(url, "url")
   const react = React.createElement(App, { id: id, url: new URL(url) });
   console.log("clicking, all ready...")
   ReactDOM.render(react, div);
