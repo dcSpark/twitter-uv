@@ -3,8 +3,8 @@
   "version": "0.1.1",
   "description": "Browser Extension which enhances Twitter with Urbit Visor integration.",
   "scripts": {
-    "start": "esbuild src/content.ts --outfile=dist/dev.js --bundle --watch --loader:.png=dataurl",
-    "build": "esbuild src/content.ts --bundle --outfile=dist/prod.js --loader:.png=dataurl",
+    "start": "esbuild src/content.ts --outfile=dist/dev.js --bundle --watch --loader:.png=dataurl --loader:.scss=css",
+    "build": "esbuild src/content.ts --bundle --outfile=dist/prod.js --loader:.png=dataurl --loader:.scss=css",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
@@ -23,6 +23,7 @@
   "dependencies": {
     "@dcspark/uv-core": "^0.3.0",
     "esbuild": "^0.13.4",
+    "esbuild-sass-plugin": "^2.2.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "urbit-ob": "^5.0.1"

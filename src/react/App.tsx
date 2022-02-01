@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import ShareModal from './ShareModal';
 import MiniModal from './MiniModal';
 import Welcome from './Welcome';
-import './styles.css';
+import './styles.scss';
 import { urbitVisor } from '@dcspark/uv-core';
 
 export interface TwitterProps {
