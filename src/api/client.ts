@@ -1,5 +1,5 @@
 const threadsURL =
-  'https://twitter.com/i/api/graphql/GpnXbjn5tx9tVXnVqmXpkA/TweetDetail?variables=';
+  '/i/api/graphql/GpnXbjn5tx9tVXnVqmXpkA/TweetDetail?variables=';
 const tweetURL = `https://api.twitter.com/1.1/statuses/show.json?id=`;
 
 function headers() {
@@ -53,7 +53,7 @@ const fetchThread = async (id: string, cursor: string = null) => {
   const variables = cursor
     ? { ...baseVariables, ...{ focalTweetId: id, cursor: cursor } }
     : { ...baseVariables, ...{ focalTweetId: id } };
-  const url = threadsURL + encodeURIComponent(JSON.stringify(variables));
+  const url = window.location.origin + threadsURL + encodeURIComponent(JSON.stringify(variables));
   const res = await fetch(url, headers());
   if (res.status === 200) return await res.json();
   else return null;
@@ -241,7 +241,7 @@ interface UserEntity {
   screen_name: string;
 }
 
-interface UrlEntity {
+export interface UrlEntity {
   indices: number[];
   url: string;
   display_url: string;
