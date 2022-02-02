@@ -131,6 +131,7 @@ function Preview({ tweet }: PreviewProps) {
 
 function Quote({ quote }) {
   const parsedText = parseText(quote.text);
+  console.log(parsedText, "parsed text")
 
   return (
     <div
@@ -152,9 +153,9 @@ function Quote({ quote }) {
         </div>
         <div id="tweet-body">
           <div className="tweet-text">
-            {parsedText.map((sentence) => (
+            {parsedText.map((sentence, index) => (
               <p
-                key={parsedText.indexOf(sentence)}
+                key={index}
                 className={sentence.length < 1 ? "line-break" : ""}
               >
                 {sentence}
