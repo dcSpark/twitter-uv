@@ -1,6 +1,6 @@
 {
   "name": "Twitter UV",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "description": "Browser Extension which enhances Twitter with Urbit Visor integration.",
   "manifest_version": 3,
   "icons": {
@@ -20,7 +20,9 @@
       "16": "./public/images/icon16.png",
       "48": "./public/images/icon48.png",
       "128": "./public/images/icon128.png"
-    }
+    },
+     "default_popup": "./popup.html",
+     "default_title": "Twitter UV"
   },
   "permissions": [],
   "host_permissions": ["*://*.twitter.com/*"]
