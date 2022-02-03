@@ -55,7 +55,7 @@ export default function ShareModal(props: ModalProps) {
       if (leakingMemory) {
         // error handling here, shit happens
         setTweet(tweet);
-        setPreview(<Preview tweet={tweet.parent} />);
+        setPreview(<Preview tweet={tweet.parent} threadCount={false} />);
         setTitle('Tweet ' + titleFromTweet(tweet.parent));
         setLoading(false);
       }
@@ -79,7 +79,8 @@ export default function ShareModal(props: ModalProps) {
   const [selected, setSelected] = useState<UrbitChannel[]>([]);
   const [channelFilters, setChannelFilters] = useState([]);
 
-  const fullTweet = <Preview tweet={tweet.parent} />;
+  const fullTweet = <Preview tweet={tweet.parent} threadCount={false} />;
+  const fullTweetWithCount = <Preview tweet={tweet.parent} threadCount={true} />;
   const [preview, setPreview] = useState(
     <div className="loading-container">
       <div className="loader"></div>
@@ -114,7 +115,7 @@ export default function ShareModal(props: ModalProps) {
   }
   function setUnroll() {
     setChannelFilters(['chat', 'link', 'post']);
-    setPreview(fullTweet);
+    setPreview(fullTweetWithCount); // (temporary) note: logic should be like => tweet.hasThreadCount ? fullTweetWithCount : fullTweet
     setTitle('Unrolled Thread ' + titleFromTweet(tweet.parent));
     setPayload(threadToGraphStore(tweet));
   }
