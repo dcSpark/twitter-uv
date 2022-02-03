@@ -55,7 +55,8 @@ export default function ShareModal(props: ModalProps) {
       if (leakingMemory) {
         // error handling here, shit happens
         setTweet(tweet);
-        setPreview(<Preview tweet={tweet.parent} threadCount={false} />);
+        setChildren(tweet.children.length)
+        setPreview(<Preview tweet={tweet.parent}/>);
         setTitle('Tweet ' + titleFromTweet(tweet.parent));
         setLoading(false);
       }
@@ -78,9 +79,7 @@ export default function ShareModal(props: ModalProps) {
   const [ship, setShip] = useState<string>(null);
   const [selected, setSelected] = useState<UrbitChannel[]>([]);
   const [channelFilters, setChannelFilters] = useState([]);
-
-  const fullTweet = <Preview tweet={tweet.parent} threadCount={false} />;
-  const fullTweetWithCount = <Preview tweet={tweet.parent} threadCount={true} />;
+  const [children, setChildren] = useState(0);
   const [preview, setPreview] = useState(
     <div className="loading-container">
       <div className="loader"></div>
@@ -103,19 +102,19 @@ export default function ShareModal(props: ModalProps) {
 
   function setFullTweet() {
     setChannelFilters(['link']);
-    setPreview(fullTweet);
+    setPreview(<Preview tweet={tweet.parent}/>);
     setTitle('Tweet ' + titleFromTweet(tweet.parent));
     setPayload(tweetToGraphStore(tweet.parent));
   }
   function setLinkOnly() {
     setChannelFilters([]);
-    setPreview(fullTweet);
+    setPreview(<Preview tweet={tweet.parent}/>);
     setTitle('Tweet ' + titleFromTweet(tweet.parent));
     setPayload(`[${props.url.href}](${props.url.href})`);
   }
   function setUnroll() {
     setChannelFilters(['chat', 'link', 'post']);
-    setPreview(fullTweetWithCount); // (temporary) note: logic should be like => tweet.hasThreadCount ? fullTweetWithCount : fullTweet
+    setPreview(<Preview tweet={tweet.parent} threadCount={children} />); // (temporary) note: logic should be like => tweet.hasThreadCount ? fullTweetWithCount : fullTweet
     setTitle('Unrolled Thread ' + titleFromTweet(tweet.parent));
     setPayload(threadToGraphStore(tweet));
   }
