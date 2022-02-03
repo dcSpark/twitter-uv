@@ -25,7 +25,7 @@ const generateMapKey = () => {
 
 interface PreviewProps {
   tweet: Tweet;
-  threadCount?: boolean;
+  threadCount: number;
 }
 
 const parseText = (text: String, entities?: TweetEntity[]) => {
@@ -112,7 +112,7 @@ function Preview({ tweet, threadCount }: PreviewProps) {
         </div>
       </div>
       {/* Logic for only showing on Unroll Thread that contains tweets */}
-      {threadCount && <div className="unroll-thread-count">And {`{16}`} more tweets</div>}
+      {threadCount && <div className="unroll-thread-count">And {threadCount} more tweets</div>}
     </div>
   );
 }
@@ -140,7 +140,6 @@ function Quote({ quote }) {
               <p
                 key={index}
                 className={sentence.length < 1 ? "line-break" : ""}
-
               >
                 {sentence}
               </p>
