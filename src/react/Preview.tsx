@@ -1,17 +1,17 @@
-import React, { useMemo, useState } from "react";
-import { Tweet, Poll, TweetEntity } from "../api/client";
-import { pollOptions } from "../utils/parsing";
+import React, { useMemo, useState } from 'react';
+import { Tweet, Poll, TweetEntity } from '../api/client';
+import { pollOptions } from '../utils/parsing';
 
 const placeholder = {
   author: {
-    name: "",
-    handle: "",
-    avatar: "",
+    name: '',
+    handle: '',
+    avatar: '',
   },
   pics: [],
-  time: "1d",
+  time: '1d',
   video: null,
-  text: "",
+  text: '',
   quote: null,
   poll: null,
 };
@@ -25,19 +25,20 @@ const generateMapKey = () => {
 
 interface PreviewProps {
   tweet: Tweet;
+  threadCount: number;
 }
 
 const parseText = (text: String, entities?: TweetEntity[]) => {
   let output = text;
 
   if (!entities) {
-    return [...text].join("").split(/\r?\n/);
+    return [...text].join('').split(/\r?\n/);
   }
 
   for (let i = 0; i < entities.length; i++) {
     const current = entities[i];
 
-    if ('url' in current ) {
+    if ('url' in current) {
       output = output.replace(
         current.url,
         `<a href="${current.expanded_url}" target="_blank" rel="noopener noreferrer"<span>${current.display_url}</span></a>`
@@ -45,86 +46,73 @@ const parseText = (text: String, entities?: TweetEntity[]) => {
       continue;
     }
     if (`screen_name` in current) {
-      output = output.replace(
-        `@${current.screen_name}`,
-        `<span>@${current.screen_name}</span>`
-      );
+      output = output.replace(`@${current.screen_name}`, `<span>@${current.screen_name}</span>`);
       continue;
     }
-    if (current.entity_type === "hashtag") {
-      output = output.replace(
-        `#${current.text}`,
-        `<span>#${current.text}</span>`
-      );
+    if (current.entity_type === 'hashtag') {
+      output = output.replace(`#${current.text}`, `<span>#${current.text}</span>`);
       continue;
     }
-    if (current.entity_type === "symbol") {
-      output = output.replace(
-        `$${current.text}`,
-        `<span>$${current.text}</span>`
-      );
+    if (current.entity_type === 'symbol') {
+      output = output.replace(`$${current.text}`, `<span>$${current.text}</span>`);
     }
   }
 
-  return [...output].join("").split(/\r?\n/);
+  return [...output].join('').split(/\r?\n/);
 };
 
-const imageOrientation = (pics) => {
+const imageOrientation = pics => {
   const currentImage = new Image();
   currentImage.src = pics[0].href;
 
-  if (currentImage.width === currentImage.height) return "";
+  if (currentImage.width === currentImage.height) return '';
 
-  return currentImage.width > currentImage.height ? "landscape" : "portrait";
+  return currentImage.width > currentImage.height ? 'landscape' : 'portrait';
 };
 
-function Preview({ tweet }: PreviewProps) {
+function Preview({ tweet, threadCount }: PreviewProps) {
   const parsedText = parseText(tweet.text, tweet.entities);
 
   return (
     <div
       id="tweet-preview"
-      className={
-        tweet.pics.length > 0 && !tweet.quote && !tweet.poll
-          ? "tweet-contains-pics"
-          : ""
-      }
+      className={tweet.pics.length > 0 && !tweet.quote && !tweet.poll ? 'tweet-contains-pics' : ''}
     >
-      <div className="left-column">
-        <div className="tweet-author-wrapper">
-          <img className="avatar" src={tweet.author.avatar} alt="" />
-          <div className="tweet-author-date-wrapper">
-            <div className="tweet-author-name-wrapper">
-              <span className="tweet-author-name">{tweet.author.name}</span>
-              <span className="tweet-author-handle">
-                @{tweet.author.handle}
-              </span>
+      <div className="preview-container">
+        <div className="left-column">
+          <div className="tweet-author-wrapper">
+            <img className="avatar" src={tweet.author.avatar} alt="" />
+            <div className="tweet-author-date-wrapper">
+              <div className="tweet-author-name-wrapper">
+                <span className="tweet-author-name">{tweet.author.name}</span>
+                <span className="tweet-author-handle">@{tweet.author.handle}</span>
+              </div>
+              <p className="tweet-date">posted: {tweet.time}</p>
             </div>
-            <p className="tweet-date">posted: {tweet.time}</p>
+          </div>
+          <div id="tweet-body">
+            <div className="tweet-text">
+              {parsedText.map(sentence => (
+                <p
+                  key={generateMapKey()}
+                  className={sentence.length < 1 ? 'line-break' : null}
+                  dangerouslySetInnerHTML={{ __html: sentence }}
+                ></p>
+              ))}
+            </div>
+            {tweet.poll && <Poll poll={tweet.poll} />}
+            {tweet.quote && <Quote quote={tweet.quote} />}
           </div>
         </div>
-        <div id="tweet-body">
-          <div className="tweet-text">
-            {parsedText.map((sentence) => (
-              <p
-                key={generateMapKey()}
-                className={sentence.length < 1 ? "line-break" : null}
-                dangerouslySetInnerHTML={{ __html: sentence }}
-              ></p>
-            ))}
+        <div className="right-column">
+          <div id={tweet.video ? 'video-tweet' : ''} className="cropped">
+            {tweet.pics.length > 0 && !tweet.video && <Pics pics={tweet.pics} isVideo={false} />}
+            {tweet.video && <Pics pics={tweet.pics} isVideo={true} />}
           </div>
-          {tweet.poll && <Poll poll={tweet.poll} />}
-          {tweet.quote && <Quote quote={tweet.quote} />}
         </div>
       </div>
-      <div className="right-column">
-        <div id={tweet.video ? "video-tweet" : ""} className="cropped">
-          {tweet.pics.length > 0 && !tweet.video && (
-            <Pics pics={tweet.pics} isVideo={false} />
-          )}
-          {tweet.video && <Pics pics={tweet.pics} isVideo={true} />}
-        </div>
-      </div>
+      {/* Logic for only showing on Unroll Thread that contains tweets */}
+      {threadCount && <div className="unroll-thread-count">And {threadCount} more tweets</div>}
     </div>
   );
 }
@@ -134,19 +122,14 @@ function Quote({ quote }) {
   console.log(parsedText, "parsed text")
 
   return (
-    <div
-      id="tweet-quote"
-      className={quote.pics.length > 0 ? "tweet-contains-pics" : ""}
-    >
+    <div id="tweet-quote" className={quote.pics.length > 0 ? 'tweet-contains-pics' : ''}>
       <div className="left-column">
         <div className="tweet-author-wrapper">
           <img className="avatar" src={quote.author.avatar} alt="" />
           <div className="tweet-author-date-wrapper">
             <div className="tweet-author-name-wrapper">
               <span className="tweet-author-name">{quote.author.name}</span>
-              <span className="tweet-author-handle">
-                @{quote.author.handle}
-              </span>
+              <span className="tweet-author-handle">@{quote.author.handle}</span>
             </div>
             <p className="tweet-date">posted: {quote.time}</p>
           </div>
@@ -166,10 +149,8 @@ function Quote({ quote }) {
         </div>
       </div>
       <div className="right-column">
-        <div id={quote.video ? "video-tweet" : ""} className="cropped">
-          {quote.pics.length > 0 && (
-            <Pics pics={quote.pics} isVideo={quote.video ? true : false} />
-          )}
+        <div id={quote.video ? 'video-tweet' : ''} className="cropped">
+          {quote.pics.length > 0 && <Pics pics={quote.pics} isVideo={quote.video ? true : false} />}
         </div>
       </div>
     </div>
@@ -180,19 +161,14 @@ function Pics({ pics, isVideo }) {
   const [loaded, setLoaded] = useState(false);
 
   const imageClass = useMemo(() => {
-    return loaded ? `img-${pics.length} ${imageOrientation(pics)}` : "";
+    return loaded ? `img-${pics.length} ${imageOrientation(pics)}` : '';
   }, [loaded]);
 
   return (
-    <div id="tweet-pictures" className={pics.length > 1 ? "multi-pics" : ""}>
+    <div id="tweet-pictures" className={pics.length > 1 ? 'multi-pics' : ''}>
       {pics && (
         <>
-          <img
-            className={imageClass}
-            src={pics[0]}
-            alt=""
-            onLoad={() => setLoaded(true)}
-          />
+          <img className={imageClass} src={pics[0]} alt="" onLoad={() => setLoaded(true)} />
           {pics.length > 1 && (
             <>
               <div className="plus-sign">+</div>
@@ -224,7 +200,7 @@ function Pics({ pics, isVideo }) {
 }
 
 function numberWithCommas(n) {
-  return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 }
 
 function calculateVotePercent(choiceVotes, totalVotes): string {
@@ -234,7 +210,7 @@ function calculateVotePercent(choiceVotes, totalVotes): string {
 function Poll({ poll }) {
   const options = pollOptions(poll);
   const totalVotes = options
-    .map((item) => parseInt(item.count, 10))
+    .map(item => parseInt(item.count, 10))
     .reduce((prev, next) => prev + next);
   const majorityVote = options.reduce((prev, current) =>
     parseInt(prev.count) > parseInt(current.count) ? prev.count : current.count
@@ -244,23 +220,19 @@ function Poll({ poll }) {
     <div id="twitter-poll">
       {options.map((opt, i) => {
         const barPercentage = {
-          width: calculateVotePercent(opt.count, totalVotes) + "%",
+          width: calculateVotePercent(opt.count, totalVotes) + '%',
         };
 
         return (
           <div
             key={i}
             className={
-              opt.count === majorityVote
-                ? "twitter-poll-option majority"
-                : "twitter-poll-option"
+              opt.count === majorityVote ? 'twitter-poll-option majority' : 'twitter-poll-option'
             }
           >
             <div style={barPercentage} className="vote-percentage-bar"></div>
             <p className="vote-label">{opt.label}</p>
-            <p className="vote-count">
-              {calculateVotePercent(opt.count, totalVotes)}%
-            </p>
+            <p className="vote-count">{calculateVotePercent(opt.count, totalVotes)}%</p>
           </div>
         );
       })}
