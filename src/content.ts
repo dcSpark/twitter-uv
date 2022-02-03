@@ -1,4 +1,4 @@
-import { injectButtons } from './button/button';
+import { injectButtons, injectUnrollButton } from './button/button';
 import { urbitVisor } from '@dcspark/uv-core';
 import React from 'react';
 import ReactDOM from 'react-dom';
@@ -56,10 +56,10 @@ function init() {
   require(['shipName', 'scry', 'subscribe', 'poke']);
 }
 
-function wipeData(){
+function wipeData() {
   ok = null;
   keySub = null;
-  metaSub = null
+  metaSub = null;
   keys = [];
   metadata = {};
 }
@@ -78,7 +78,7 @@ function require(perms) {
         const ok = ['shipName', 'scry', 'subscribe', 'poke'].every(perm =>
           res.response.includes(perm)
         );
-        if (ok) setData()
+        if (ok) setData();
         else showWelcomeScreen();
       });
     } else urbitVisor.promptConnection();
@@ -118,8 +118,12 @@ function setData() {
   urbitVisor.on('sse', ['graph-update', 'keys'], updateKeys);
   urbitVisor.subscribe({ app: 'graph-store', path: '/keys' }).then(res => (keySub = res.response));
   urbitVisor.on('sse', ['metadata-update', 'associations'], updateMetadata);
-  urbitVisor.subscribe({ app: 'metadata-store', path: '/all' })
-  .then(res => metaSub = res.response);
+  urbitVisor.subscribe({ app: 'metadata-store', path: '/all' }).then(res => {
+    metaSub = res.response;
+    injectButtons();
+    injectUnrollButton();
+  });
+
 }
 function updateKeys(keyUpdate: Key[]) {
   keys = keyUpdate; // this gives you the whole keys again, not incremental
