@@ -55,7 +55,12 @@ export default function ShareModal(props: ModalProps) {
       if (leakingMemory) {
         // error handling here, shit happens
         setTweet(tweet);
-        setPreview(<Preview tweet={tweet.parent} />);
+        if (props.unrolling) {
+          setPreview(<Preview tweet={tweet.parent}/>); 
+        }
+        else {
+          setPreview(<Preview tweet={tweet.parent} />);
+        }
         setTitle('Tweet ' + titleFromTweet(tweet.parent));
         setLoading(false);
       }
@@ -160,7 +165,7 @@ export default function ShareModal(props: ModalProps) {
         </div>
         <div className="preview-tab-container">
           <div
-            className="tweet-preview-tab active-tab"
+            className={props.unrolling? "tweet-preview-tab": "tweet-preview-tab active-tab"}
             onClick={event => {
               setLinkOnly();
               applyActiveTab(event);
@@ -172,7 +177,7 @@ export default function ShareModal(props: ModalProps) {
         </div>
         <div className="preview-tab-container">
           <div
-            className="tweet-preview-tab"
+            className={props.unrolling? "tweet-preview-tab active-tab": "tweet-preview-tab"}
             onClick={event => {
               setUnroll();
               applyActiveTab(event);

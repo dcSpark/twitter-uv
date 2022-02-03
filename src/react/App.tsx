@@ -10,7 +10,8 @@ import { urbitVisor } from '@dcspark/uv-core';
 export interface TwitterProps {
   url: URL;
   id: number;
-  screenshot: any;
+  unrolling?: boolean;
+  // screenshot: any;
 }
 
 export function query({ action }) {
