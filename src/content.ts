@@ -67,8 +67,8 @@ function wipeData() {
 function require(perms) {
   const sub = urbitVisor.on('connected', [], () => require(perms));
   const sub2 = urbitVisor.on('disconnected', [], () => {
-    wipeData();
-    require(perms);
+    wipeData()
+    // require(perms)
   });
   urbitVisor.isConnected().then(res => {
     if (res.response) {
@@ -115,9 +115,6 @@ function listenerFromTabToContent() {
 
 function setData() {
   ok = true;
-  urbitVisor.getShip().then(res => {
-    ship = res.response;
-  });
   urbitVisor.on('sse', ['graph-update', 'keys'], updateKeys);
   urbitVisor.subscribe({ app: 'graph-store', path: '/keys' }).then(res => (keySub = res.response));
   urbitVisor.on('sse', ['metadata-update', 'associations'], updateMetadata);
@@ -126,6 +123,7 @@ function setData() {
     injectButtons();
     injectUnrollButton();
   });
+
 }
 function updateKeys(keyUpdate: Key[]) {
   keys = keyUpdate; // this gives you the whole keys again, not incremental
@@ -136,6 +134,7 @@ function updateMetadata(metadataUpdate: any) {
   metadata = metadataUpdate;
   urbitVisor.unsubscribe(metaSub);
   console.log('metadata set');
+  injectButtons();
 }
 
 async function inject() {
