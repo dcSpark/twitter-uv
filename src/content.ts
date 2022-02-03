@@ -67,13 +67,8 @@ function wipeData() {
 function require(perms) {
   const sub = urbitVisor.on('connected', [], () => require(perms));
   const sub2 = urbitVisor.on('disconnected', [], () => {
-<<<<<<< HEAD
     wipeData()
     // require(perms)
-=======
-    wipeData();
-    require(perms);
->>>>>>> 350cc39f0fd6decc54e2905c952b5f32f0324f12
   });
   urbitVisor.isConnected().then(res => {
     if (res.response) {
@@ -128,6 +123,10 @@ function setData() {
     injectButtons();
     injectUnrollButton();
   });
+<<<<<<< HEAD
+=======
+
+>>>>>>> 8fa50e771e81d61313efca401b10527e34a8539a
 }
 function updateKeys(keyUpdate: Key[]) {
   keys = keyUpdate; // this gives you the whole keys again, not incremental

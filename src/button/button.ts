@@ -54,6 +54,7 @@ const createUnrollButton = () => {
   urbitButton.innerHTML = `${urbitSvg}<span>Unroll</span>`;
 
   unrollAction.append(urbitButton);
+  unrollAction.onclick = handleUnroll;
 
   return unrollAction;
 };
@@ -126,10 +127,36 @@ async function handleClick(event) {
   ReactDOM.render(react, div);
 }
 
-export const injectUnrollButton = () => {
-  const columnTop = document.querySelector('[data-testid="primaryColumn"]');
-  const unrollAction = createUnrollButton();
-  columnTop.prepend(unrollAction);
+async function handleUnroll(event){
+  const firstTweet = document.querySelector('article');
+  const url = Array.from(firstTweet.closest('article').querySelectorAll('a'))
+    .map((el: HTMLAnchorElement) => el.href)
+    .find(el => el.includes('status'));
+  const strings = url.split('/');
+  const statusAt = strings.indexOf('status');
+  const id = strings[statusAt + 1];
+  const div = document.getElementById('uv-twitter-extension-container');
+  const react = React.createElement(App, { id: id, url: new URL(url), unrolling: true });
+  ReactDOM.render(react, div);
+}
+
+export const injectUnrollButton = (count = 0) => {
+  let timeout;
+  clearTimeout(timeout);
+  const buttonsPresent = document.getElementsByClassName('urbit-visor-unroll-tweet-button');
+  if (!buttonsPresent.length) {
+    const header = document.querySelector('h2').innerText;
+    const columnTop = document.querySelector('[data-testid="primaryColumn"]');
+    const unrollAction = createUnrollButton();
+    if (header.toLowerCase() === 'thread') {
+      columnTop.prepend(unrollAction);
+    } else if (header.toLowerCase() === 'tweet' && count < 5) {
+      setTimeout(() => {
+        injectUnrollButton(count + 1);
+      }, 1000);
+    }
+  }
+  timeout = setTimeout(injectUnrollButton, 3000);
 };
 
 export const injectButtons = () => {
