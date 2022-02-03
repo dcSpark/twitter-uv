@@ -2,6 +2,7 @@ import React from 'react';
 import { useState, useEffect, useRef } from 'react';
 import { urbitVisor } from '@dcspark/uv-core';
 import { liveCheckPatp } from '../utils/utils';
+import { query } from './App';
 interface UrbitKey {
   ship: string;
   name: string;
@@ -12,34 +13,6 @@ interface UrbitChannel {
   group: string;
   ship: string;
   name: string;
-}
-
-function referenceMetadata(channel: any, metadata: any): UrbitChannel {
-  const url: string | undefined = Object.keys(metadata).find(el =>
-    el.includes(`${channel.ship}/${channel.name}`)
-  );
-
-  if (url) {
-    const title = metadata[url].metadata.title;
-    const type = metadata[url].metadata.config.graph;
-    const group = metadata[url].group;
-    const groupMetadata = metadata[`${group}/groups${group}`];
-    const groupTitle = groupMetadata?.metadata?.title;
-    return {
-      title: title,
-      type: type,
-      group: groupTitle || channel.name,
-      ship: channel.ship,
-      name: channel.name,
-    };
-  } else
-    return {
-      title: '',
-      group: '',
-      type: null,
-      ship: channel.ship,
-      name: channel.name,
-    };
 }
 
 interface ChannelBoxProps {
@@ -53,29 +26,13 @@ export function ChannelSelectBox({ exclude, selected, setSelected }: ChannelBoxP
     let leakingMemory = true;
     let sub: number;
     setLoading(true);
-    const subscription = urbitVisor.on(
-      'sse',
-      ['metadata-update', 'associations'],
-      async (data: any) => {
-        if (leakingMemory) {
-          const keys = await urbitVisor.scry({
-            app: 'graph-store',
-            path: '/keys',
-          });
-          setLoading(false);
-          const list = keys.response['graph-update'].keys.map((channel: any) =>
-            referenceMetadata(channel, data)
-          );
-          const channels = list.filter(chan => chan.name !== 'dm-inbox' && chan.group !== '');
-          setChannels(channels);
-          setOptions(channels);
-          setLoading(false);
-          urbitVisor.unsubscribe(sub).then(res => console.log(res, 'unsubscribed'));
-        }
-      }
-    );
-    urbitVisor.subscribe({ app: 'metadata-store', path: '/all' }).then(res => {
-      if (leakingMemory) sub = res.response;
+    query({ action: 'fetch_keys' }).then(res => {
+      const channels = (res as any).channels.filter(
+        chan => chan.name !== 'dm-inbox' && chan.group !== ''
+      );
+      setChannels(channels);
+      setOptions(channels);
+      setLoading(false);
     });
     return () => (leakingMemory = false);
   }, []);
@@ -119,7 +76,7 @@ export function ChannelSelectBox({ exclude, selected, setSelected }: ChannelBoxP
       const filtered = channels.filter(chan => {
         return (
           chan.title.toLowerCase().includes(inp) ||
-          chan.name.toLowerCase().includes(inp)  ||
+          chan.name.toLowerCase().includes(inp) ||
           chan.group.toLowerCase().includes(inp) ||
           chan.ship.includes(inp)
         );
@@ -161,7 +118,7 @@ export function ChannelSelectBox({ exclude, selected, setSelected }: ChannelBoxP
   return (
     <div id="uv-channel-selector">
       <div id="uv-channel-selector-title">
-        <h4>Select Channels ({selected.length}/{options.filter(chan => !exclude.includes(chan.type)).length})</h4>
+        <h4>Select Channels ({selected.length}/3)</h4>
       </div>
       <div id="uv-channel-selector-searchbox">
         <div onClick={focusOnInput} id="uv-channel-selector-searchbox-wrapper">

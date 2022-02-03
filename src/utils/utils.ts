@@ -92,7 +92,6 @@ function tokenizeString(text: string){
     const urls = text.match(MD_regex) || [];
     const urlc = urls.map(u => {
         const url = u.match(URL_REGEX)[0];
-        console.log(url, "url")
         return {url: url}
     })
     const newtext = urls.reduce((acc, item) => {

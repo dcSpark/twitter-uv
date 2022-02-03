@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Twitter UV</title>
+    <meta charset="utf-8" />
+  </head>
+
+  <body>
+    <div id="popup">
+    <div ref={ref} id="uv-twitter-extension-welcome">
+      <div id="uv-twitter-extension-welcome-icon">
+          <img src="public/images/icon128.png" alt="" />
+        </div>
+        <h4>Twitter UV</h4>
+        <p>To use Twitter UV you need to have  <a
+            href="https://chrome.google.com/webstore/detail/urbit-visor/oadimaacghcacmfipakhadejgalcaepg"
+            target="”_blank”"
+            >Urbit Visor</a
+          > installed.</p>
+        <p>
+          Once you have Urbit Visor installed, click the button below to head over to
+          Twitter to get started with the onboarding workflow.
+        </p>
+      <div className="button-container">
+        <a href = "https://twitter.com/dcspark_urbit" target="_blank">
+        <button id="uv-twitter-extension-welcome-button">
+          <svg
+            width="24"
+            height="24"
+            viewBox="0 0 32 32"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            className="urbit-icon"
+          >
+            <circle cx="16" cy="16" r="13" fill="white" stroke="currentcolor" strokeWidth="2" />
+            <path
+              d="M22 14.0488H19.6306C19.4522 15.0976 18.9936 15.7317 18.1783 15.7317C16.7006 15.7317 15.8599 14 13.5669 14C11.3503 14 10.1783 15.3659 10 17.9756H12.3694C12.5478 16.9024 13.0064 16.2683 13.8471 16.2683C15.3248 16.2683 16.1146 18 18.4586 18C20.6242 18 21.8217 16.6341 22 14.0488Z"
+              fill="black"
+            />
+          </svg>
+          <p>Start Using Twitter UV</p>
+        </button></a>
+      </div>
+    </div>
+  </body>
+
+  <style>
+    #popup {
+      height: 600px;
+      width: 357px;
+    }
+    #uv-twitter-extension-welcome {
+      /* margin: 32px auto 0; */
+      background-color: white;
+      color: black;
+      padding: 40px 40px 32px;
+      font-family: 'Inter', sans-serif;
+      margin: 0;
+    }
+
+    #uv-twitter-extension-welcome h4 {
+      padding-bottom: 8px;
+      text-align: center;
+      font-size: 24px;
+      color: #182024;
+    }
+    #uv-twitter-extension-welcome p {
+      margin: 24px 0;
+      font-size: 16px;
+      line-height: 22px;
+      color: #182024;
+    }
+
+    #uv-twitter-extension-welcome-icon {
+      text-align: center;
+    }
+
+    #uv-twitter-extension-welcome-icon img {
+      width: 50px;
+    }
+  </style>
+</html>

@@ -119,6 +119,7 @@ function Preview({ tweet, threadCount }: PreviewProps) {
 
 function Quote({ quote }) {
   const parsedText = parseText(quote.text);
+  console.log(parsedText, "parsed text")
 
   return (
     <div id="tweet-quote" className={quote.pics.length > 0 ? 'tweet-contains-pics' : ''}>
@@ -135,10 +136,10 @@ function Quote({ quote }) {
         </div>
         <div id="tweet-body">
           <div className="tweet-text">
-            {parsedText.map(sentence => (
+            {parsedText.map((sentence, index) => (
               <p
-                key={parsedText.indexOf(sentence)}
-                className={sentence.length < 1 ? 'line-break' : ''}
+                key={index}
+                className={sentence.length < 1 ? "line-break" : ""}
               >
                 {sentence}
               </p>

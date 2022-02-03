@@ -10,12 +10,17 @@
 
 #uv-twitter-extension-welcome {
   width: 400px;
-  margin: 32px auto 0;
+  /* margin: 32px auto 0; */
   border-radius: 16px;
   background-color: white;
   color: black;
   padding: 40px 40px 32px;
   font-family: 'Inter', sans-serif;
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 
 #uv-twitter-extension-welcome h4 {
@@ -485,6 +490,7 @@ div#twitter-link p {
   border: 1px solid #dee4e6;
   border-radius: 16px;
   display: flex;
+  overflow: hidden;
   position: relative;
   justify-content: space-between;
   margin: 4px;

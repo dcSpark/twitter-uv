@@ -1,13 +1,34 @@
 import React from 'react';
 import { urbitVisor } from '@dcspark/uv-core';
+import { useEffect, useRef } from 'react';
 import mainLogo from './icon128.png';
+import { unmountComponentAtNode } from 'react-dom';
 
 function Welcome() {
+  const ref = useRef();
+  useEffect(() => {
+    urbitVisor.on('permissions_granted', [], quit);
+    let leakingMemory = true;
+    const checkIfClickedOutside = e => {
+      if (ref.current && !ref.current.contains(e.target)) quit();
+    };
+    document.addEventListener('mousedown', checkIfClickedOutside);
+    return () => {
+      document.removeEventListener('mousedown', checkIfClickedOutside);
+      leakingMemory = false;
+    };
+  }, []);
+
   async function requestPerms(): Promise<void> {
     await urbitVisor.requestPermissions(['shipName', 'scry', 'subscribe', 'poke']);
   }
+
+  function quit() {
+    unmountComponentAtNode(document.getElementById('uv-twitter-extension-container'));
+  }
+
   return (
-    <div id="uv-twitter-extension-welcome">
+    <div ref={ref} id="uv-twitter-extension-welcome">
       <div id="uv-twitter-extension-welcome-icon">
         <img src={mainLogo} alt="" />
       </div>

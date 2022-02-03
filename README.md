@@ -4,15 +4,23 @@
 </h1>
 <p align="center">Twitter UV is a web extension which bridges Twitter and Urbit. It allows users to easily share tweets and unroll whole threads at the click of a button directly onto their ships for sharing with others or archival purposes.
 
-<p align="center"><img src="https://img.shields.io/badge/version-v0.1.0-blue?style=for-the-badge&logo=none" />&nbsp;&nbsp;<img src="https://img.shields.io/badge/license-mit-blue?style=for-the-badge&logo=none" alt="license" /></p>
+<p align="center"><img src="https://img.shields.io/badge/version-v0.1.1-blue?style=for-the-badge&logo=none" />&nbsp;&nbsp;<img src="https://img.shields.io/badge/license-mit-blue?style=for-the-badge&logo=none" alt="license" /></p>
+
+## Getting Started
+
+The fastest way to get started using Twitter UV is via [the Chrome Web Store](https://chrome.google.com/webstore/detail/twitter-uv/dfidmeghmgfhhflhfopoeinniomenjlf?hl=en&authuser=0).
+
+This will provide you with a seamless install process and allow you to get up and running instantly. Once you have installed the extension simply open Twitter on a new tab to be introduced to the welcome screen.
 
 ## FAQ
 
-#### After using Twitter UV for a while, why do the list of Group channels randomly stop loading and the spinner is stuck?
+#### Why do I not see the welcome screen after installing Twitter UV?
 
-This happens due to the fact that Eyre appears to have an unfortunate bug where calls via a given airlock session appear to randomly get "stuck" and take a very long time to respond. We look forward to this issue being fixed in the near future by the core devs so that users of Twitter UV and other app in the UV ecosystem can have a seamless experience.
+The Twitter UV welcome screen is shown on the first new page load of Twitter have the extension has been installed. Simply do a hard refresh of your currently open Twitter page, or open a new tab and visit Twitter.
 
-**Temporary Fix:** Simply disconnect/reconnect to your ship on Urbit Visor and refresh the page.
+#### Why can I can only select three channels to share in?
+
+This was purposefully implemented inside of the extension to prevent users from spamming every group at the exact same time. This doesn't prevent them from doing so completely, but makes it less friendly from a UX perspective while not impeding on normal users at all.
 
 ## Building Locally
 

@@ -1,4 +1,4 @@
-import { Tweet, Thread, Poll } from '../api/client';
+import { Tweet, Thread, Poll, UrlEntity } from '../api/client';
 
 const URL_REGEX = new RegExp(
   String(
@@ -32,11 +32,16 @@ export function titleFromTweet(tweet: Tweet): string {
 }
 
 function tweetToMarkdown(tweet: Tweet): string {
-  console.log(tweet, 'parsing tweet');
-  // const urls = tweet.urls.map(u => {
-  //   return { url: new URL(u) };
-  // });
-  const text = tweet.text + '\n\n';
+  const urls = tweet.entities.filter(entity => {
+    return ("expanded_url" in entity)
+  });
+  const txt = urls.reduce((acc: string, item: UrlEntity)=>{
+    if (item.expanded_url.includes("twitter.com"))
+      return acc.replace(item.url, "")
+    else 
+      return acc.replace(item.url, `[${item.expanded_url}](${item.expanded_url})`)
+  },tweet.text);
+  const text = txt + '\n\n';
   const withMedia = tweet.video
     ? text + `![](${tweet.video.href.replace(/\?.+/, '')})`
     : tweet.pics.reduce((acc, picURL) => acc + `![](${picURL.href})`, text);
