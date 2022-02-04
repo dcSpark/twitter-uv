@@ -138,7 +138,7 @@ export const injectUnrollButton = (count = 0) => {
   const buttonsPresent = document.getElementsByClassName('urbit-visor-unroll-tweet-button');
   if (!buttonsPresent.length) {
     const headers = document.querySelectorAll('h2');
-    const theHeader = Array.from(headers).find(el => el.dir === "auto"); // they don't make it easy do they
+    const theHeader = Array.from(headers).find(el => el.innerText.toLowerCase() === "tweet" || el.innerText.toLowerCase() === "thread"); // they don't make it easy do they
     const container = theHeader.parentElement.parentElement.parentElement;
     const unrollAction = createUnrollButton();
     if (theHeader.innerText.toLowerCase() === 'thread') {
