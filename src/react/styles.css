@@ -7,19 +7,11 @@
   cursor: pointer;
   background-color: rgba(0, 186, 124, 0.3) !important;
 }
-.urbit-visor-unroll-tweet-action {
-  z-index: 10;
-  height: 0;
-}
 .urbit-visor-unroll-tweet-button {
   cursor: pointer;
-  display: inline-flex;
+  display: flex;
   width: 84px;
   height: 32px;
-  align-items: center;
-  position: absolute;
-  top: 11px;
-  right: 12px;
   background-color: #131b1f;
   color: white;
   border-radius: 50px;
@@ -31,15 +23,15 @@
   border-left-color: white;
   border-right-color: white;
   border-top-color: white;
-  line-height: 32px;
 }
 .urbit-visor-unroll-tweet-button svg {
-  position: absolute;
-  top: 7px;
-  left: 9px;
+  display: block;
+  margin: auto;
+
 }
 .urbit-visor-unroll-tweet-button span {
-  padding-left: 22px;
+  display: block;
+  margin: auto 5px auto auto;
   font-weight: bold;
   font-size: 14px;
   font-family: 'Inter', sans-serif;
