@@ -137,12 +137,13 @@ export const injectUnrollButton = (count = 0) => {
   clearTimeout(timeout);
   const buttonsPresent = document.getElementsByClassName('urbit-visor-unroll-tweet-button');
   if (!buttonsPresent.length) {
-    const header = document.querySelector('h2');
-    const container = header.parentElement.parentElement.parentElement;
+    const headers = document.querySelectorAll('h2');
+    const theHeader = Array.from(headers).find(el => el.dir === "auto"); // they don't make it easy do they
+    const container = theHeader.parentElement.parentElement.parentElement;
     const unrollAction = createUnrollButton();
-    if (header.innerText.toLowerCase() === 'thread') {
+    if (theHeader.innerText.toLowerCase() === 'thread') {
       container.appendChild(unrollAction);
-    } else if (header.innerText.toLowerCase() === 'tweet' && count < 5) {
+    } else if (theHeader.innerText.toLowerCase() === 'tweet' && count < 5) {
       setTimeout(() => {
         injectUnrollButton(count + 1);
       }, 1000);
