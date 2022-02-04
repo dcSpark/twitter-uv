@@ -41,22 +41,14 @@ function unhoverButton(e) {
 }
 
 const createUnrollButton = () => {
-  const unrollAction = document.createElement('div');
-  unrollAction.className = 'urbit-visor-unroll-tweet-action';
-  unrollAction.setAttribute('role', 'button');
-  unrollAction.setAttribute('tabindex', '0');
-
   // Create the Twitter UV unroll button
   const urbitButton = document.createElement('button');
   const urbitSvg = `<svg width="14" height="14" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" class="urbit-icon"><circle cx="16" cy="16" r="13" fill="white" stroke="currentcolor" stroke-width="2"></circle><path d="M22 14.0488H19.6306C19.4522 15.0976 18.9936 15.7317 18.1783 15.7317C16.7006 15.7317 15.8599 14 13.5669 14C11.3503 14 10.1783 15.3659 10 17.9756H12.3694C12.5478 16.9024 13.0064 16.2683 13.8471 16.2683C15.3248 16.2683 16.1146 18 18.4586 18C20.6242 18 21.8217 16.6341 22 14.0488Z" fill="black"></path></svg>`;
   urbitButton.className = 'urbit-visor-unroll-tweet-button';
   urbitButton.type = 'button';
   urbitButton.innerHTML = `${urbitSvg}<span>Unroll</span>`;
-
-  unrollAction.append(urbitButton);
-  unrollAction.onclick = handleUnroll;
-
-  return unrollAction;
+  urbitButton.onclick = handleUnroll;
+  return urbitButton;
 };
 
 const createVisorButton = (tweet: Element, hasUserActions: boolean) => {
@@ -115,8 +107,8 @@ const createVisorButton = (tweet: Element, hasUserActions: boolean) => {
 };
 
 async function handleClick(event) {
-  const tweet = event.target.closest("article");
-  const url = Array.from(tweet.closest("article").querySelectorAll("a"))
+  const tweet = event.target.closest('article');
+  const url = Array.from(tweet.closest('article').querySelectorAll('a'))
     .map((el: HTMLAnchorElement) => el.href)
     .find(el => el.includes('status'));
   const strings = url.split('/');
@@ -145,12 +137,13 @@ export const injectUnrollButton = (count = 0) => {
   clearTimeout(timeout);
   const buttonsPresent = document.getElementsByClassName('urbit-visor-unroll-tweet-button');
   if (!buttonsPresent.length) {
-    const header = document.querySelector('h2').innerText;
-    const columnTop = document.querySelector('[data-testid="primaryColumn"]');
+    const headers = document.querySelectorAll('h2');
+    const theHeader = Array.from(headers).find(el => el.innerText.toLowerCase() === "tweet" || el.innerText.toLowerCase() === "thread"); // they don't make it easy do they
+    const container = theHeader.parentElement.parentElement.parentElement;
     const unrollAction = createUnrollButton();
-    if (header.toLowerCase() === 'thread') {
-      columnTop.prepend(unrollAction);
-    } else if (header.toLowerCase() === 'tweet' && count < 5) {
+    if (theHeader.innerText.toLowerCase() === 'thread') {
+      container.appendChild(unrollAction);
+    } else if (theHeader.innerText.toLowerCase() === 'tweet' && count < 5) {
       setTimeout(() => {
         injectUnrollButton(count + 1);
       }, 1000);

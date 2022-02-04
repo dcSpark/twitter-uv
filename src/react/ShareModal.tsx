@@ -55,15 +55,8 @@ export default function ShareModal(props: ModalProps) {
       if (leakingMemory) {
         // error handling here, shit happens
         setTweet(tweet);
-        if (props.unrolling) {
-          setPreview(<Preview tweet={tweet.parent}/>); 
-        }
-        else {
-          setPreview(<Preview tweet={tweet.parent} />);
-        }
-        setChildren(tweet.children.length)
-
-        setTitle('Tweet ' + titleFromTweet(tweet.parent));
+        if (props.unrolling) setUnroll(tweet)
+        else setLinkOnly(tweet)
         setLoading(false);
       }
     });
@@ -85,7 +78,6 @@ export default function ShareModal(props: ModalProps) {
   const [ship, setShip] = useState<string>(null);
   const [selected, setSelected] = useState<UrbitChannel[]>([]);
   const [channelFilters, setChannelFilters] = useState([]);
-  const [children, setChildren] = useState(0);
   const [preview, setPreview] = useState(
     <div className="loading-container">
       <div className="loader"></div>
@@ -106,21 +98,21 @@ export default function ShareModal(props: ModalProps) {
     true
   );
 
-  function setFullTweet() {
+  function setFullTweet(tweet) {
     setChannelFilters(['link']);
     setPreview(<Preview tweet={tweet.parent}/>);
     setTitle('Tweet ' + titleFromTweet(tweet.parent));
     setPayload(tweetToGraphStore(tweet.parent));
   }
-  function setLinkOnly() {
+  function setLinkOnly(tweet) {
     setChannelFilters([]);
     setPreview(<Preview tweet={tweet.parent}/>);
     setTitle('Tweet ' + titleFromTweet(tweet.parent));
     setPayload(`[${props.url.href}](${props.url.href})`);
   }
-  function setUnroll() {
+  function setUnroll(tweet) {
     setChannelFilters(['chat', 'link', 'post']);
-    setPreview(<Preview tweet={tweet.parent} threadCount={children} />); // (temporary) note: logic should be like => tweet.hasThreadCount ? fullTweetWithCount : fullTweet
+    setPreview(<Preview tweet={tweet.parent} threadCount={tweet.children.length} />); // (temporary) note: logic should be like => tweet.hasThreadCount ? fullTweetWithCount : fullTweet
     setTitle('Unrolled Thread ' + titleFromTweet(tweet.parent));
     setPayload(threadToGraphStore(tweet));
   }
@@ -156,7 +148,7 @@ export default function ShareModal(props: ModalProps) {
           <div
             className="tweet-preview-tab"
             onClick={event => {
-              setFullTweet();
+              setFullTweet(tweet);
               applyActiveTab(event);
             }}
           >
@@ -166,9 +158,9 @@ export default function ShareModal(props: ModalProps) {
         </div>
         <div className="preview-tab-container">
           <div
-            className={props.unrolling? "tweet-preview-tab": "tweet-preview-tab active-tab"}
+            className={props.unrolling ? "tweet-preview-tab" : "tweet-preview-tab active-tab"}
             onClick={event => {
-              setLinkOnly();
+              setLinkOnly(tweet);
               applyActiveTab(event);
             }}
           >
@@ -178,9 +170,9 @@ export default function ShareModal(props: ModalProps) {
         </div>
         <div className="preview-tab-container">
           <div
-            className={props.unrolling? "tweet-preview-tab active-tab": "tweet-preview-tab"}
+            className={props.unrolling ? "tweet-preview-tab active-tab" : "tweet-preview-tab"}
             onClick={event => {
-              setUnroll();
+              setUnroll(tweet);
               applyActiveTab(event);
             }}
           >
