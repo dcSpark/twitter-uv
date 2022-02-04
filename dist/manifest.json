@@ -25,6 +25,7 @@
       "48": "./public/images/icon48.png",
       "128": "./public/images/icon128.png"
     },
+     "default_popup": "./popup.html",
      "default_title": "Twitter UV"
   },
   "permissions": [],
