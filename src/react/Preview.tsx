@@ -111,15 +111,20 @@ function Preview({ tweet, threadCount }: PreviewProps) {
           </div>
         </div>
       </div>
-      {/* Logic for only showing on Unroll Thread that contains tweets */}
-      {threadCount && <div className="unroll-thread-count">And {threadCount} more tweets</div>}
+      {threadCount > 0 ? (
+        <div className="unroll-thread-count">
+          And {threadCount} more {threadCount > 1 ? 'tweets' : 'tweet'}{' '}
+        </div>
+      ) : (
+        ''
+      )}
     </div>
   );
 }
 
 function Quote({ quote }) {
   const parsedText = parseText(quote.text);
-  console.log(parsedText, "parsed text")
+  console.log(parsedText, 'parsed text');
 
   return (
     <div id="tweet-quote" className={quote.pics.length > 0 ? 'tweet-contains-pics' : ''}>
@@ -137,10 +142,7 @@ function Quote({ quote }) {
         <div id="tweet-body">
           <div className="tweet-text">
             {parsedText.map((sentence, index) => (
-              <p
-                key={index}
-                className={sentence.length < 1 ? "line-break" : ""}
-              >
+              <p key={index} className={sentence.length < 1 ? 'line-break' : ''}>
                 {sentence}
               </p>
             ))}
