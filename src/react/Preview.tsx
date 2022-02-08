@@ -25,7 +25,7 @@ const generateMapKey = () => {
 
 interface PreviewProps {
   tweet: Tweet;
-  threadCount: number;
+  threadCount?: number;
 }
 
 const parseText = (text: String, entities?: TweetEntity[]) => {
