@@ -1,6 +1,6 @@
 {
   "name": "Twitter UV",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Browser Extension which enhances Twitter with Urbit Visor integration.",
   "manifest_version": 3,
   "icons": {

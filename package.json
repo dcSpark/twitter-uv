@@ -1,6 +1,6 @@
 {
   "name": "twitter-uv",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Browser Extension which enhances Twitter with Urbit Visor integration.",
   "scripts": {
     "start": "esbuild src/content.ts --outfile=dist/dev.js --bundle --watch --loader:.png=dataurl",
