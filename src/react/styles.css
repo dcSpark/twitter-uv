@@ -9,15 +9,15 @@
   --uv-off-black: #566470;
 }
 
-.urbit-visor-share-tweet-button:hover {
+.uv-share-tweet-button:hover {
   cursor: pointer;
 }
-.urbit-visor-share-tweet-button:active {
+.uv-share-tweet-button:active {
   cursor: pointer;
   background-color: rgba(0, 186, 124, 0.3) !important;
 }
 
-.urbit-visor-unroll-tweet-button {
+.uv-unroll-tweet-button {
   cursor: pointer;
   display: flex;
   width: 84px;
@@ -34,11 +34,11 @@
   border-right-color: #fff;
   border-top-color: #fff;
 }
-.urbit-visor-unroll-tweet-button svg {
+.uv-unroll-tweet-button svg {
   display: block;
   margin: auto;
 }
-.urbit-visor-unroll-tweet-button span {
+.uv-unroll-tweet-button span {
   display: block;
   margin: auto 5px auto auto;
   font-weight: bold;
@@ -342,7 +342,7 @@
   color: var(--uv-off-black);
 }
 
-#tweet-body {
+.tweet-body {
   overflow: hidden;
 }
 

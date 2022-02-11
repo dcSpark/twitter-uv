@@ -90,7 +90,7 @@ function Preview({ tweet, threadCount }: PreviewProps) {
               <p className="tweet-date">posted: {tweet.time}</p>
             </div>
           </div>
-          <div id="tweet-body">
+          <div className="tweet-body">
             <div className="tweet-text">
               {parsedText.map(sentence => (
                 <p
@@ -106,8 +106,9 @@ function Preview({ tweet, threadCount }: PreviewProps) {
         </div>
         <div className="right-column">
           <div id={tweet.video ? 'video-tweet' : ''} className="cropped">
-            {tweet.pics.length > 0 && !tweet.video && <Pics pics={tweet.pics} isVideo={false} />}
-            {tweet.video && <Pics pics={tweet.pics} isVideo={true} />}
+            {tweet.pics.length > 0 && (
+              <Pics pics={tweet.pics} isVideo={tweet.video ? true : false} />
+            )}
           </div>
         </div>
       </div>
@@ -139,10 +140,10 @@ function Quote({ quote }) {
             <p className="tweet-date">posted: {quote.time}</p>
           </div>
         </div>
-        <div id="tweet-body">
+        <div className="tweet-body">
           <div className="tweet-text">
             {parsedText.map((sentence, index) => (
-              <p key={index} className={sentence.length < 1 ? 'line-break' : ''}>
+              <p key={index} className={sentence.length < 1 ? 'line-break' : null}>
                 {sentence}
               </p>
             ))}
