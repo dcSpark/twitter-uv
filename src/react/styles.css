@@ -1,47 +1,56 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@700&display=swap');
 
-.urbit-visor-share-tweet-button:hover {
+:root {
+  --uv-black-button: #131b1f;
+  --uv-success-green: #089136;
+  --uv-failure-red: #bb0000;
+  --uv-outline-gray: #dee4e6;
+  --uv-main-black: #182024;
+  --uv-off-black: #566470;
+}
+
+.uv-share-tweet-button:hover {
   cursor: pointer;
 }
-.urbit-visor-share-tweet-button:active {
+.uv-share-tweet-button:active {
   cursor: pointer;
   background-color: rgba(0, 186, 124, 0.3) !important;
 }
-.urbit-visor-unroll-tweet-button {
+
+.uv-unroll-tweet-button {
   cursor: pointer;
   display: flex;
   width: 84px;
   height: 32px;
-  background-color: #131b1f;
-  color: white;
+  background-color: var(--uv-black-button);
+  color: #fff;
   border-radius: 50px;
   border-bottom-width: 1px;
   border-left-width: 1px;
   border-right-width: 1px;
   border-top-width: 1px;
-  border-bottom-color: white;
-  border-left-color: white;
-  border-right-color: white;
-  border-top-color: white;
+  border-bottom-color: #fff;
+  border-left-color: #fff;
+  border-right-color: #fff;
+  border-top-color: #fff;
 }
-.urbit-visor-unroll-tweet-button svg {
+.uv-unroll-tweet-button svg {
   display: block;
   margin: auto;
-
 }
-.urbit-visor-unroll-tweet-button span {
+.uv-unroll-tweet-button span {
   display: block;
   margin: auto 5px auto auto;
   font-weight: bold;
   font-size: 14px;
   font-family: 'Inter', sans-serif;
 }
+
 #uv-twitter-extension-welcome {
   width: 400px;
-  /* margin: 32px auto 0; */
   border-radius: 16px;
-  background-color: white;
-  color: black;
+  background-color: #fff;
+  color: #000;
   padding: 40px 40px 32px;
   font-family: 'Inter', sans-serif;
   margin: 0;
@@ -50,32 +59,24 @@
   left: 50%;
   transform: translate(-50%, -50%);
 }
-
 #uv-twitter-extension-welcome h4 {
   padding-bottom: 8px;
   text-align: center;
   font-size: 24px;
-  color: #182024;
+  color: var(--uv-main-black);
 }
 #uv-twitter-extension-welcome p {
   margin: 24px 0;
   font-size: 16px;
   line-height: 22px;
-  color: #182024;
+  color: var(--uv-main-black);
 }
 
 #uv-twitter-extension-welcome-icon {
   text-align: center;
 }
-
 #uv-twitter-extension-welcome-icon img {
   width: 50px;
-}
-
-.permission-button-container {
-  display: flex;
-  justify-content: center;
-  margin-top: 40px;
 }
 
 #uv-twitter-extension-welcome-button {
@@ -90,53 +91,72 @@
   border-radius: 32px;
   border-style: none;
 }
-
 #uv-twitter-extension-welcome-button p {
   margin: 0;
   padding-left: 1px;
-  color: #ffffff;
+  color: #fff;
+}
+
+.permission-button-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 40px;
 }
 
 #uv-twitter-share-modal {
   display: flex;
   flex-direction: column;
   width: 540px;
-  border: 1px solid white;
+  border: 1px solid #fff;
   border-radius: 1rem;
-  background-color: white;
-  color: black;
+  background-color: #fff;
+  color: #000;
   margin: auto;
   height: calc(90% - 80px);
   font-family: 'Inter', sans-serif;
   position: relative;
   padding-bottom: 80px;
 }
-
+#uv-twitter-share-modal .active-tab h4 {
+  color: var(--uv-main-black);
+}
+#uv-twitter-share-modal .active-tab .tab-underline {
+  position: absolute;
+  height: 3px;
+  background-color: #009af0;
+  width: 100%;
+  bottom: 0;
+  border-radius: 1000px;
+}
 #uv-twitter-share-modal h4 {
   display: inline-block;
   margin: 0;
-  color: #566470;
+  color: var(--uv-off-black);
 }
+
 .preview-container {
   display: flex;
   justify-content: space-between;
   padding: 16px;
 }
+
 .left-column {
   width: 100%;
 }
 .right-column {
   display: none;
 }
+
 .unroll-thread-count {
   padding: 10px 0;
   text-align: center;
-  border-top: 1px solid #dee4e6;
+  border-top: 1px solid var(--uv-outline-gray);
   border-radius: 0 0px 16px 16px;
   background-color: #f7f9f9;
-  color: #182024;
+  color: var(--uv-main-black);
   font-size: 12px;
 }
+
 .tweet-contains-pics .left-column {
   width: 74.681%;
 }
@@ -144,9 +164,34 @@
   display: block;
   width: 25.319%;
 }
+.tweet-contains-pics .tweet-author-name {
+  max-width: 155px;
+}
+#tweet-quote.tweet-contains-pics .tweet-author-name {
+  max-width: 125px;
+}
+.tweet-contains-pics .tweet-text {
+  padding-right: 16px;
+}
+
+#tweet-quote {
+  display: flex;
+  width: 100%;
+  margin: 0;
+  border: 1px solid var(--uv-outline-gray);
+  border-radius: 16px;
+  padding: 16px;
+  box-sizing: border-box;
+}
+
 .tweet-text + #tweet-quote {
   margin-top: 16px;
 }
+
+#tweet-preview::-webkit-scrollbar {
+  display: none;
+}
+
 .quote-contains-pics .right-column {
   display: block;
   width: 25.319%;
@@ -156,7 +201,7 @@
   height: 120px;
   overflow: hidden;
   border-radius: 16px;
-  border: 1px solid #dee4e6;
+  border: 1px solid var(--uv-outline-gray);
   box-sizing: border-box;
 }
 #tweet-quote .right-column .cropped {
@@ -164,12 +209,10 @@
   height: 110px;
   overflow: hidden;
   border-radius: 16px;
-  border: 1px solid #dee4e6;
+  border: 1px solid var(--uv-outline-gray);
   box-sizing: border-box;
 }
-#tweet-preview::-webkit-scrollbar {
-  display: none;
-}
+
 #tweet-preview-header {
   display: flex;
   position: relative;
@@ -184,15 +227,18 @@
   font-family: 'Inter', sans-serif;
   font-size: 16px;
   font-weight: 700;
-  color: #566470;
+  color: var(--uv-off-black);
 }
+
 #visor-icon {
   width: 30px;
   height: auto;
 }
+
 #scroll-wrapper {
   overflow-y: scroll;
 }
+
 #tweet-preview-tabs {
   display: flex;
   justify-content: space-between;
@@ -200,11 +246,10 @@
   border-bottom: 1px solid #edf2f3;
   padding: 0 32px;
 }
-.preview-tab-container {
-  width: calc(100% / 3);
-}
+
 .preview-tab-container {
   display: flex;
+  width: calc(100% / 3);
 }
 .preview-tab-container:first-child {
   justify-content: flex-start;
@@ -215,6 +260,7 @@
 .preview-tab-container:last-child {
   justify-content: flex-end;
 }
+
 .tweet-preview-tab {
   position: relative;
   line-height: 50px;
@@ -226,17 +272,7 @@
   cursor: pointer;
   text-decoration: underline;
 }
-#uv-twitter-share-modal .active-tab h4 {
-  color: #182024;
-}
-#uv-twitter-share-modal .active-tab .tab-underline {
-  position: absolute;
-  height: 3px;
-  background-color: #009af0;
-  width: 100%;
-  bottom: 0;
-  border-radius: 1000px;
-}
+
 #tweet-share-payload-wrapper {
   border-bottom: 1px solid #edf2f3;
   padding: 16px;
@@ -244,8 +280,9 @@
 #tweet-share-payload-wrapper::-webkit-scrollbar {
   display: none;
 }
+
 #tweet-share-payload {
-  border: 1px solid #dee4e6;
+  border: 1px solid var(--uv-outline-gray);
   border-radius: 16px;
 }
 
@@ -270,55 +307,52 @@
   height: 41px;
   border-radius: 50%;
 }
+
 .tweet-author-date-wrapper {
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
   padding-left: 12px;
 }
+
 .tweet-author-name-wrapper {
   display: flex;
   line-height: 18px;
   font-size: 14px;
 }
+
 .tweet-author-name {
   overflow: hidden;
   text-overflow: ellipsis;
   max-width: 250px;
   font-weight: 700;
-  color: #182024;
+  color: var(--uv-main-black);
   white-space: nowrap;
 }
-.tweet-contains-pics .tweet-author-name {
-  max-width: 155px;
-}
-#tweet-quote.tweet-contains-pics .tweet-author-name {
-  max-width: 125px;
-}
+
 .tweet-author-handle {
   padding-left: 4px;
-  color: #566470;
+  color: var(--uv-off-black);
 }
+
 .tweet-date {
   margin: 0;
   line-height: 20px;
   font-size: 12px;
-  color: #566470;
+  color: var(--uv-off-black);
 }
-#tweet-body {
+
+.tweet-body {
   overflow: hidden;
 }
+
 .tweet-text {
   overflow: hidden;
   padding-top: 18px;
   font-size: 14px;
   font-weight: 400;
   line-height: 18px;
-  color: #182024;
-}
-
-.tweet-contains-pics .tweet-text {
-  padding-right: 16px;
+  color: var(--uv-main-black);
 }
 .tweet-text p {
   margin: 0 0 2px;
@@ -335,6 +369,7 @@
 .tweet-text a {
   color: #5699e4;
 }
+
 #tweet-pictures {
   width: 100%;
   display: flex;
@@ -361,9 +396,11 @@
 #tweet-pictures.multi-pics img {
   filter: brightness(60%);
 }
+
 #video-tweet img {
   filter: brightness(60%);
 }
+
 .play-button {
   position: absolute;
   top: 37px;
@@ -373,6 +410,7 @@
   top: 30px;
   left: 42px;
 }
+
 #tweet-pictures.multi-pics .pics-count {
   display: block;
   position: absolute;
@@ -381,7 +419,7 @@
   font-size: 24px;
   font-weight: 700;
   font-family: 'Inter', sans-serif;
-  color: white;
+  color: #fff;
 }
 #tweet-pictures.multi-pics .plus-sign {
   display: block;
@@ -390,9 +428,10 @@
   left: 43px;
   font-size: 24px;
   font-weight: 700;
-  font-family: Inter, sans-serif;
-  color: white;
+  font-family: 'Inter', sans-serif;
+  color: #fff;
 }
+
 #twitter-poll {
   margin-top: 16px;
 }
@@ -400,8 +439,9 @@
   display: flex;
   align-items: center;
   margin: 0;
-  color: #182024;
+  color: var(--uv-main-black);
 }
+
 .twitter-poll-option {
   display: flex;
   position: relative;
@@ -409,6 +449,7 @@
   height: 39px;
   margin-bottom: 8px;
 }
+
 .vote-percentage-bar {
   z-index: 0;
   position: absolute;
@@ -419,52 +460,43 @@
 .majority .vote-percentage-bar {
   background-color: #86c3f2;
 }
+
 #twitter-poll .majority p {
   font-weight: 600;
 }
+
 p.vote-label {
   z-index: 10;
   padding-left: 16px;
 }
+
 #total-votes {
   margin-top: 16px;
-  color: #566470;
+  color: var(--uv-off-black);
 }
-#tweet-quote {
-  display: flex;
-  width: 100%;
-  margin: 0;
-  border: 1px solid #dee4e6;
-  border-radius: 16px;
-  padding: 16px;
-  box-sizing: border-box;
-}
-div#twitter-link p {
-  margin: 0;
-  font-family: 'Inter', sans-serif;
-  font-size: 14px;
-  font-weight: 300;
-  letter-spacing: 0.03rem;
-  color: #3e99ea;
-}
+
 #tweet-share-buttons {
   margin-top: 0.5rem;
 }
+
 #uv-channel-selector {
   flex: 1 1 1px;
   overflow: auto;
   padding: 16px;
 }
+
 #uv-channel-selector-title {
   padding-bottom: 16px;
   text-align: center;
   font-family: 'Inter', sans-serif;
   font-size: 14px;
 }
+
 #uv-channel-selector-searchbox {
   width: 100%;
   padding-bottom: 16px;
 }
+
 #uv-channel-selector-searchbox-wrapper {
   display: flex;
   position: relative;
@@ -490,21 +522,23 @@ div#twitter-link p {
   right: 16px;
   top: 8px;
 }
+
 .dm-candidate-chip {
   border-radius: 1rem;
-  background-color: black;
-  color: white;
+  background-color: #000;
+  color: #fff;
   cursor: pointer;
 }
+
 #urbit-key-container {
   display: flex;
   flex-wrap: wrap;
   width: 100%;
 }
+
 .urbit-key-wrapper {
   width: 50%;
 }
-
 .urbit-key-wrapper:nth-child(odd) .urbit-key {
   margin: 4px 4px 4px 0;
 }
@@ -515,7 +549,7 @@ div#twitter-link p {
 .urbit-key {
   height: 56px;
   position: relative;
-  border: 1px solid #dee4e6;
+  border: 1px solid var(--uv-outline-gray);
   border-radius: 16px;
   display: flex;
   overflow: hidden;
@@ -524,28 +558,34 @@ div#twitter-link p {
   margin: 4px;
   box-sizing: border-box;
 }
-.urbit-key > input[type='checkbox']:checked {
-  background-color: antiquewhite;
-}
 .urbit-key input[type='checkbox'] {
-  position: absolute;
   opacity: 0;
-  cursor: pointer;
   height: 0;
   width: 0;
-  border-radius: 4px;
 }
 .urbit-key input[type='checkbox']:checked ~ .check-mark {
   background-color: #3e99ea;
   border: 1px solid #3e99ea;
 }
+.urbit-key input[type='checkbox']:checked ~ .check-mark:after {
+  display: block;
+}
+.urbit-key label {
+  cursor: pointer;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
 .check-mark {
   position: absolute;
   top: 18px;
   left: 16px;
   height: 16px;
   width: 16px;
-  background-color: #ffffff;
+  background-color: #fff;
   border: 1px solid #b0b9bb;
   border-radius: 4px;
 }
@@ -554,27 +594,18 @@ div#twitter-link p {
   position: absolute;
   display: none;
 }
-.urbit-key input[type='checkbox']:checked ~ .check-mark:after {
-  display: block;
-}
 .check-mark:after {
   top: 2px;
   left: 6px;
   width: 3px;
   height: 8px;
-  border: solid white;
+  border: solid #fff;
   border-width: 0 2px 2px 0;
   -webkit-transform: rotate(45deg);
   -ms-transform: rotate(45deg);
   transform: rotate(45deg);
 }
-.urbit-key label {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-}
+
 .urbit-key-name {
   display: flex;
   flex-direction: column;
@@ -584,26 +615,26 @@ div#twitter-link p {
   box-sizing: border-box;
   font-family: 'Inter', sans-serif;
 }
+
 .urbit-key-title {
   margin: 0;
   padding-bottom: 4px;
   font-size: 14px;
   font-weight: 500;
-  color: #182024;
+  color: var(--uv-main-black);
 }
+
 .urbit-key-group {
   margin: 0;
   font-size: 12px;
-  color: #566470;
+  color: var(--uv-off-black);
 }
+
 .urbit-key-type-icon {
   display: flex;
   width: 8%;
   padding-right: 10px;
-}
-
-.urbit-key-type-icon {
-  fill: #566470;
+  fill: var(--uv-off-black);
 }
 
 #tweet-share-button-wrapper {
@@ -611,28 +642,24 @@ div#twitter-link p {
   position: absolute;
   width: inherit;
   bottom: 0;
-  background-color: white;
+  background-color: #fff;
   border-radius: 0px 0px 16px 16px;
   padding: 16px;
   border-top: 0.5px solid #eef3f4;
 }
+
 #tweet-share-button {
   display: flex;
   align-items: center;
   width: 100%;
   height: 48px;
   padding: 0;
-  background-color: #131b1f;
+  background-color: var(--uv-black-button);
   border-radius: 32px;
   border: none;
   justify-content: center;
-  color: white;
+  color: #fff;
   cursor: pointer;
-}
-svg.urbit-icon {
-  width: 21.23px;
-  padding-right: 4px;
-  box-sizing: border-box;
 }
 #tweet-share-button p {
   margin: 0;
@@ -641,9 +668,17 @@ svg.urbit-icon {
   font-weight: 700;
   font-size: 16px;
 }
+
+svg.urbit-icon {
+  width: 21.23px;
+  padding-right: 4px;
+  box-sizing: border-box;
+}
+
 .tweet-author-wrapper {
   display: flex;
 }
+
 #extension-icon {
   width: auto;
   height: 28px;
@@ -655,12 +690,10 @@ svg.urbit-icon {
 ::-webkit-scrollbar {
   width: 5px;
 }
-
 ::-webkit-scrollbar-thumb {
   background: #d0d3d4;
   border-radius: 20px;
 }
-
 ::-webkit-scrollbar-track {
   background: transparent;
 }
@@ -675,14 +708,14 @@ svg.urbit-icon {
   top: 40px;
   right: 40px;
   border-radius: 8px;
-  background-color: #eeeeee;
+  background-color: #eee;
   overflow: hidden;
 }
 #uv-twitter-mini-modal.success-modal {
-  border: 1px solid #089136;
+  border: 1px solid var(--uv-success-green);
 }
 #uv-twitter-mini-modal.failure-modal {
-  border: 1px solid #bb0000;
+  border: 1px solid var(--uv-failure-red);
 }
 #uv-twitter-mini-modal-icon {
   width: 48px;
@@ -697,17 +730,14 @@ svg.urbit-icon {
   font-size: 15px;
   color: #3b3b3b;
 }
+
 .success-modal #uv-twitter-mini-modal-icon {
-  background-color: #089136;
+  background-color: var(--uv-success-green);
 }
 .failure-modal #uv-twitter-mini-modal-icon {
-  background-color: #bb0000;
+  background-color: var(--uv-failure-red);
 }
 
-:root {
-  --borderWidth: 5px;
-  --borderColor: #089136;
-}
 .success-mark {
   z-index: 10;
   position: absolute;
@@ -716,9 +746,10 @@ svg.urbit-icon {
   left: 17px;
   width: 7px;
   height: 9px;
-  border-bottom: var(--borderWidth) solid #089136;
-  border-right: var(--borderWidth) solid #089136;
+  border-bottom: 5px solid var(--uv-success-green);
+  border-right: 5px solid var(--uv-success-green);
 }
+
 .success-circle {
   position: absolute;
   top: 18px;
@@ -728,16 +759,18 @@ svg.urbit-icon {
   background-color: #cde5d5;
   border-radius: 50px;
 }
+
 .failure-mark:after {
   position: absolute;
   z-index: 10;
   content: '\00d7'; /* This will render the 'X' */
   top: 15px;
   left: 15px;
-  color: #bb0000;
+  color: var(--uv-failure-red);
   font-size: 26px;
   line-height: 26px;
 }
+
 .failure-circle {
   display: block;
   position: absolute;
@@ -756,7 +789,9 @@ svg.urbit-icon {
   justify-content: center;
   width: 100%;
   padding-top: 16px;
+  padding-bottom: 16px;
 }
+
 .loader {
   border: 3px solid #b7e9d7;
   border-radius: 50%;
