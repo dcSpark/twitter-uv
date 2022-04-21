@@ -141,14 +141,16 @@ export const injectUnrollButton = (count = 0) => {
     const theHeader = Array.from(headers).find(
       el => el.innerText.toLowerCase() === 'tweet' || el.innerText.toLowerCase() === 'thread'
     ); // they don't make it easy do they
-    const container = theHeader.parentElement.parentElement.parentElement;
-    const unrollAction = createUnrollButton();
-    if (theHeader.innerText.toLowerCase() === 'thread') {
-      container.appendChild(unrollAction);
-    } else if (theHeader.innerText.toLowerCase() === 'tweet' && count < 5) {
-      setTimeout(() => {
-        injectUnrollButton(count + 1);
-      }, 1000);
+    if (theHeader) {
+      const container = theHeader.parentElement.parentElement.parentElement;
+      const unrollAction = createUnrollButton();
+      if (theHeader.innerText.toLowerCase() === 'thread') {
+        container.appendChild(unrollAction);
+      } else if (theHeader.innerText.toLowerCase() === 'tweet' && count < 5) {
+        setTimeout(() => {
+          injectUnrollButton(count + 1);
+        }, 1000);
+      }
     }
   }
   timeout = setTimeout(injectUnrollButton, 3000);
