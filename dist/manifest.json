@@ -13,7 +13,8 @@
       "matches": [
         "*://www.twitter.com/*",
         "*://twitter.com/*",
-        "*://mobile.twitter.com/*"
+        "*://mobile.twitter.com/*",
+        "*://nitter.42l.fr/*"
         ],
       "js": ["dev.js"],
       "css": ["dev.css"]
@@ -32,6 +33,7 @@
   "host_permissions": [
       "*://www.twitter.com/*",
       "*://twitter.com/*",
-      "*://mobile.twitter.com/*"
+      "*://mobile.twitter.com/*",
+      "*://nitter.42l.fr/*"
     ]
 }

@@ -20,12 +20,17 @@ function hoverButton(e) {
   action.style.borderRadius = '50%';
   action.style.transitionDuration = '0.2s';
   action.style.transitionProperty = 'background-color, box-shadow';
-  action.style.position = 'absolute !important';
-  action.style.paddingTop = '2px';
-  action.style.top = '-6px';
-  action.style.left = '-7px';
-  action.style.width = '32px';
-  action.style.height = '32px';
+  if(isNitter) {
+    // action.style.width = '20px';
+    // action.style.height = '20px';
+  } else {
+    action.style.position = 'absolute !important';
+    action.style.paddingTop = '2px';
+    action.style.top = '-6px';
+    action.style.left = '-7px';
+    action.style.width = '32px';
+    action.style.height = '32px';
+  }
   const circle = e.target.closest('.uv-share-tweet-action').querySelector('circle');
   const path = e.target.closest('.uv-share-tweet-action').querySelector('path');
   circle.style.stroke = 'rgb(0, 186, 124)';
@@ -54,35 +59,55 @@ const createUnrollButton = () => {
 const createVisorButton = (tweet: Element, hasUserActions: boolean) => {
   // Create the Twitter UV action
   const shareAction = document.createElement('div');
-  shareAction.className = 'uv-share-tweet-action';
   shareAction.style.display = 'flex';
-  shareAction.style.width = '38px';
+  if(isNitter){
+    shareAction.style.height = '24px';
+    shareAction.style.width = '24px';
+    shareAction.className = 'uv-share-tweet-action tweet-stat';
+  } else {
+    shareAction.style.width = '38px';
+    shareAction.className = 'uv-share-tweet-action';
+  }
   shareAction.style.textAlign = hasUserActions ? 'center' : 'start';
   shareAction.setAttribute('role', 'button');
   shareAction.setAttribute('tabindex', '0');
 
+
   // Create the Twitter UV button
   const urbitButton = document.createElement('button');
-  urbitButton.className = 'uv-share-tweet-button';
-  urbitButton.style.background = 'transparent';
   urbitButton.style.border = '0';
-  urbitButton.style.color = '#657786';
+  urbitButton.style.outline = '0';
+  urbitButton.style.padding = '0';
+  urbitButton.style.background = 'transparent';
   urbitButton.style.display = 'inline-block';
   urbitButton.style.fontSize = '16px';
   urbitButton.style.lineHeight = '1';
-  urbitButton.style.outline = '0';
-  urbitButton.style.padding = '0';
-  urbitButton.style.width = '24px';
-  urbitButton.style.height = '24px';
-  urbitButton.style.position = 'absolute';
-  urbitButton.style.top = '-1px';
-  urbitButton.style.left = '-3px';
+  urbitButton.className = 'uv-share-tweet-button';
   urbitButton.type = 'button';
-  urbitButton.innerHTML = `<svg class="uv-share-tweet-button-img" width="20" height="20" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-     <circle cx="16" cy="16" r="13" fill="transparent" stroke="currentcolor" stroke-width="2"/>
-     <path d="M22 14.0488H19.6306C19.4522 15.0976 18.9936 15.7317 18.1783 15.7317C16.7006 15.7317 15.8599 14 13.5669 14C11.3503 14 10.1783 15.3659 10 17.9756H12.3694C12.5478 16.9024 13.0064 16.2683 13.8471 16.2683C15.3248 16.2683 16.1146 18 18.4586 18C20.6242 18 21.8217 16.6341 22 14.0488Z" fill="currentcolor"/>
-     </svg>
-     `;
+
+  if (isNitter) {
+    urbitButton.style.pointerEvents = 'all';
+    urbitButton.style.width = '22px';
+    urbitButton.style.height = '22px';
+    urbitButton.style.color = '#888889';
+    urbitButton.innerHTML = `<svg class="uv-share-tweet-button-img" width="16" height="16" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="16" cy="16" r="13" fill="transparent" stroke="currentcolor" stroke-width="2"/>
+      <path d="M22 14.0488H19.6306C19.4522 15.0976 18.9936 15.7317 18.1783 15.7317C16.7006 15.7317 15.8599 14 13.5669 14C11.3503 14 10.1783 15.3659 10 17.9756H12.3694C12.5478 16.9024 13.0064 16.2683 13.8471 16.2683C15.3248 16.2683 16.1146 18 18.4586 18C20.6242 18 21.8217 16.6341 22 14.0488Z" fill="currentcolor"/>
+      </svg>
+      `;
+  } else {
+    urbitButton.style.width = '24px';
+    urbitButton.style.height = '24px';
+    urbitButton.style.position = 'absolute';
+    urbitButton.style.top = '-1px';
+    urbitButton.style.left = '-3px';
+    urbitButton.style.color = '#657786';
+    urbitButton.innerHTML = `<svg class="uv-share-tweet-button-img" width="20" height="20" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="16" cy="16" r="13" fill="transparent" stroke="currentcolor" stroke-width="2"/>
+      <path d="M22 14.0488H19.6306C19.4522 15.0976 18.9936 15.7317 18.1783 15.7317C16.7006 15.7317 15.8599 14 13.5669 14C11.3503 14 10.1783 15.3659 10 17.9756H12.3694C12.5478 16.9024 13.0064 16.2683 13.8471 16.2683C15.3248 16.2683 16.1146 18 18.4586 18C20.6242 18 21.8217 16.6341 22 14.0488Z" fill="currentcolor"/>
+      </svg>
+      `;
+  }
 
   urbitButton.onmouseover = hoverButton;
   urbitButton.onmouseout = unhoverButton;
@@ -106,11 +131,18 @@ const createVisorButton = (tweet: Element, hasUserActions: boolean) => {
   return shareAction;
 };
 
+const isNitter = location.host.includes("nitter");
+
+const tweetClass = isNitter ? '.timeline-item': 'article';
+
 async function handleClick(event) {
-  const tweet = event.target.closest('article');
-  const url = Array.from(tweet.closest('article').querySelectorAll('a'))
+  const tweet = event.target.closest(tweetClass);
+  console.log(tweet);
+  const url = Array.from(tweet.closest(tweetClass).querySelectorAll('a'))
     .map((el: HTMLAnchorElement) => el.href)
     .find(el => el.includes('status'));
+  console.log("grabbedd url");
+  console.log(url);
   const strings = url.split('/');
   const statusAt = strings.indexOf('status');
   const id = strings[statusAt + 1];
@@ -141,40 +173,43 @@ export const injectUnrollButton = (count = 0) => {
     const theHeader = Array.from(headers).find(
       el => el.innerText.toLowerCase() === 'tweet' || el.innerText.toLowerCase() === 'thread'
     ); // they don't make it easy do they
-    if (theHeader) {
-      const container = theHeader.parentElement.parentElement.parentElement;
-      const unrollAction = createUnrollButton();
-      if (theHeader.innerText.toLowerCase() === 'thread') {
-        container.appendChild(unrollAction);
-      } else if (theHeader.innerText.toLowerCase() === 'tweet' && count < 5) {
-        setTimeout(() => {
-          injectUnrollButton(count + 1);
-        }, 1000);
-      }
+    const container = theHeader.parentElement.parentElement.parentElement;
+    const unrollAction = createUnrollButton();
+    if (theHeader.innerText.toLowerCase() === 'thread') {
+      container.appendChild(unrollAction);
+    } else if (theHeader.innerText.toLowerCase() === 'tweet' && count < 5) {
+      setTimeout(() => {
+        injectUnrollButton(count + 1);
+      }, 1000);
     }
   }
   timeout = setTimeout(injectUnrollButton, 3000);
 };
 
+const tweetSelector = isNitter ? ".timeline-item" : '[role="article"]';
+const tweetActionsSelector = isNitter ? ".tweet-stats" : '[role="group"]';
+const numActionSelector = isNitter ? ".tweet-stat" : ":scope > div";
+
 export const injectButtons = () => {
+  console.log("trying to inject");
   let timeout;
   clearTimeout(timeout);
 
   // Reset page state since first run of this function may have
   // been pre-content
-  let tweets = document.querySelectorAll('[role="article"]');
-
+  let tweets = document.querySelectorAll(tweetSelector);
   for (let i = 0; i < tweets.length; ++i) {
-    const actions = tweets[i].querySelector('[role="group"]');
+    const actions = tweets[i].querySelector(tweetActionsSelector);
 
     if (!actions) {
       continue;
     }
 
     const uvIcons = actions.getElementsByClassName('uv-share-tweet-action');
-
     if (uvIcons.length === 0) {
-      const numActions = actions.querySelectorAll(':scope > div').length || 0;
+      console.log("here again");
+      const numActions = actions.querySelectorAll(numActionSelector).length || 0;
+      console.log(numActions);
       const hasUserActions = numActions > 3;
       const shareAction = createVisorButton(tweets[i], hasUserActions);
       actions.prepend(shareAction);
