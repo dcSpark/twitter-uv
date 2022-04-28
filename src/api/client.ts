@@ -19,7 +19,9 @@ function headers() {
       'Bearer AAAAAAAAAAAAAAAAAAAAANRILgAAAAAAnNwIzUejRCOuH5E6I8xnZz4puTs%3D1Zv7ttfk8LF81IUq16cHjhLTvJu4FA33AGWWjCpTnA',
     'x-csrf-token': csrfs,
     'x-guest-token': twids || gts,
-      "Access-Control-Allow-Origin": "https://twitter.com",
+      "Access-Control-Allow-Origin": "no-cors",
+      "Access-Control-Allow-Methods": "*",
+      "Access-Control-Allow-Headers": "*"
   };
   const meta: RequestInit = {
     credentials: 'include',
@@ -54,7 +56,7 @@ const fetchThread = async (id: string, cursor: string = null) => {
   const variables = cursor
     ? { ...baseVariables, ...{ focalTweetId: id, cursor: cursor } }
     : { ...baseVariables, ...{ focalTweetId: id } };
-  const url = window.location.origin + threadsURL + encodeURIComponent(JSON.stringify(variables));
+  const url = threadsURL + encodeURIComponent(JSON.stringify(variables));
   const res = await fetch(url, headers());
   if (res.status === 200) return await res.json();
   else return null;
